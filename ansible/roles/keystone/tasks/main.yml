@@ -1,0 +1,103 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Installing Keystone Server
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - keystone
+    - python-openstackclient
+  register: keystone_installed
+
+
+- name: Stopping Keystone
+  service: name=keystone state=stopped
+  when: keystone_installed|changed
+  register: keystone_stopped
+
+
+- name: Disabling Keystone Upstart Service, it now runs under Apache WSGI
+  lineinfile: dest=/etc/init/keystone.override
+              line="manual"
+              state=present
+              create=true
+
+
+- name: Removing non-used sqlite database
+  file: path=/var/lib/keystone/keystone.db state=absent
+  when: keystone_installed|changed
+  register: keystone_cleaned
+
+
+- name: Updating keystone.conf
+  template: src=keystone.conf
+            dest=/etc/keystone/keystone.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+  when: keystone_stopped|success and item.os_project == "keystone"
+  with_items: mysql_databases
+  register: keystone_cfg_updated
+
+
+- name: Populating Keystone Database
+  shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
+  when: keystone_cfg_updated|changed
+  register: keystone_populated
+
+
+- name: Creating Apache Keystone Virtual Host - Public
+  template: src=wsgi-keystone-public.conf
+            dest=/etc/apache2/sites-available/wsgi-keystone-public.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+- name: Creating Apache Keystone Virtual Host - Internal
+  template: src=wsgi-keystone-internal.conf
+            dest=/etc/apache2/sites-available/wsgi-keystone-internal.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+- file: src=/etc/apache2/sites-available/wsgi-keystone-public.conf
+        dest=/etc/apache2/sites-enabled/wsgi-keystone-public.conf
+        owner=root
+        group=root
+        state=link
+  register: keystone_pub_vhost_cfg_updated
+
+- file: src=/etc/apache2/sites-available/wsgi-keystone-internal.conf
+        dest=/etc/apache2/sites-enabled/wsgi-keystone-internal.conf
+        owner=root
+        group=root
+        state=link
+  register: keystone_intra_vhost_cfg_updated
+
+
+- name: Restarting Apache
+  service: name=apache2 state=restarted
+  when: keystone_pub_vhost_cfg_updated|changed and keystone_intra_vhost_cfg_updated|changed
+  register: keystone_started
+
+
+- include: openstack-services.yml
+
+- include: openstack-endpoints.yml
+
+- include: openstack-pur.yml
+
+- include: openrc-files.yml

@@ -1,0 +1,62 @@
+#
+# OpenStack Definitions
+#
+# Automaically managed by os-deploy*.sh
+#
+
+br_mode: "LBR"
+
+linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"
+neutron_interface_driver: "neutron.agent.linux.interface.BridgeInterfaceDriver"
+mechanism_drivers: "linuxbridge"
+firewall_driver: "neutron.agent.linux.iptables_firewall.IptablesFirewallDriver"
+
+public_addr: "controller-1.yourdomain.com"
+controller_addr: "controller-1.yourdomain.com"
+
+your_domain: "yourdomain.com"
+
+region: "ca-east-1"
+
+admin_token: "ADMIN_TOKEN"
+
+admin_password: "admin_pass"
+service_password: "service_pass"
+demo_password: "demo_pass"
+
+rabbit_userid: "openstack"
+rabbit_password: "RABBIT_PASS"
+
+metadata_secret: "UltraMeta13"
+
+openstack_env:
+  OS_TOKEN: "{{admin_token}}"
+  OS_URL: "http://{{controller_addr}}:35357/v3"
+  OS_IDENTITY_API_VERSION: "3"
+
+admin_openrc_env:
+  OS_PROJECT_DOMAIN_ID: "default"
+  OS_USER_DOMAIN_ID: "default"
+  OS_PROJECT_NAME: "admin"
+  OS_TENANT_NAME: "admin"
+  OS_USERNAME: "admin"
+  OS_PASSWORD: "admin_pass"
+  OS_AUTH_URL: "http://controller-1.yourdomain.com:35357/v3"
+  OS_IDENTITY_API_VERSION: "3"
+  OS_IMAGE_API_VERSION: "1"
+
+ext_net_subnet: "172.31.254.128/25"
+ext_net_gateway: "172.31.254.129"
+ext_net_start: "172.31.254.130"
+ext_net_end: "172.31.254.254"
+
+heat_domain_pass: "calor_do_heat"
+
+mysql_databases:
+  - { os_project: "heat", db_name: "heat", db_host: "%", db_user: "heatUser", db_pass: "heatPass" }
+  - { os_project: "keystone", db_name: "keystone", db_host: "%", db_user: "keystoneUser", db_pass: "keystonePass" }
+  - { os_project: "glance", db_name: "glance", db_host: "%", db_user: "glanceUser", db_pass: "glancePass" }
+  - { os_project: "nova", db_name: "nova", db_host: "%", db_user: "novaUser", db_pass: "novaPass" }
+  - { os_project: "neutron", db_name: "neutron", db_host: "%", db_user: "neutronUser", db_pass: "neutronPass" }
+  - { os_project: "cinder", db_name: "cinder", db_host: "%", db_user: "cinderUser", db_pass: "cinderPass" }
+  - { os_project: "trove", db_name: "trove", db_host: "%", db_user: "troveUser", db_pass: "trovePass" }
