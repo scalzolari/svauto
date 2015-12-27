@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# etc-hosts-fix Starts/stop the "etc-hosts-fix" daemon
+#
+# chkconfig:   2345 56 5
+# description: Etc Hosts Workaround
+
+### BEGIN INIT INFO
+# Provides: etc-hosts-fix at batch
+# Required-Start: $local_fs
+# Required-Stop: $local_fs
+# Default-Start: 345
+# Default-Stop: 95
+# Short-Description: Starts/stop the "etc-hosts-fix" daemon
+# description: Workaround a problem on Cloud Init
+### END INIT INFO
+
+case "$1" in
+        start)
+            HOSTNAME=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 1) ; DOMAIN=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
+            ;;
+        stop)
+            /bin/true
+            ;;
+        status)
+            /bin/true
+            ;;
+        restart)
+            /bin/true
+            ;;
+        *)
+            echo $"Usage: $0 {start|stop|restart|status}"
+            exit 1
+esac

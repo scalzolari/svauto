@@ -1,0 +1,11 @@
+# Sandvine-Main.repo
+#
+#
+
+[sandvine]
+name=Sandvine-$releasever - Main
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos-main/$releasever/os/$basearch
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

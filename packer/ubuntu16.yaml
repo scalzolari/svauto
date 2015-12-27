@@ -1,0 +1,61 @@
+{
+  "builders":
+  [
+    {
+      "type": "qemu",
+      "iso_urls": [
+        "/var/lib/libvirt/ISO/xenial-server-amd64.iso",
+        "http://cdimage.ubuntu.com/ubuntu-server/daily/current/xenial-server-amd64.iso"
+      ],
+      "iso_checksum": "15b17c0d95b73081aaf25bb163a0530c",
+      "iso_checksum_type": "md5",
+      "output_directory": "packer/ubuntu16-tmpl",
+      "vm_name": "xenial-server-amd64.raw",
+      "ssh_wait_timeout": "30s",
+      "shutdown_command": "echo 'sandvine' | sudo -S -E shutdown -P now",
+      "qemu_binary":"/usr/bin/qemu-system-x86_64",
+      "qemuargs": [
+        ["-m","2048M"]
+      ],
+      "disk_size": 4096,
+      "format": "raw",
+      "headless": false,
+      "accelerator": "kvm",
+      "http_directory": "packer/http",
+      "http_port_min": 10082,
+      "http_port_max": 10089,
+      "ssh_host_port_min": 2222,
+      "ssh_host_port_max": 2229,
+      "ssh_username": "root",
+      "ssh_password": "sandvine",
+      "ssh_port": 22,
+      "ssh_wait_timeout": "90m",
+      "net_device": "virtio-net",
+      "disk_interface": "virtio",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><wait>",
+        "<esc><wait>",
+        "<enter><wait>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_hostname=ubuntu16<wait>",
+        " netcfg/get_domain=sandvine.rocks<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ubuntu16-preseed.cfg<wait>",
+        " -- <wait>",
+        "<enter><wait>"
+       ]
+    }
+  ]
+}

@@ -1,0 +1,283 @@
+#!/bin/bash
+#
+# svsde         Sandvine Delivery Engine
+#
+# Author:       Sandvine 
+#
+# chkconfig:    345 99 01
+#
+# description: sde
+#
+# processname:  sde
+# config:
+#
+
+### BEGIN INIT INFO
+# Provides: sde
+# Required-Start: $local_fs $network
+# Required-Stop: $local_fs $network
+# Should-Start:
+# Should-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: start and stop SDE services 
+# Description: Dummy service which is responsible of running the whole SDE services set
+### END INIT INFO
+
+SDE_DIR=/usr/local/sandvine
+SVLOG=$SDE_DIR/scripts/svlog.sh
+COMMON_FUNC_DIR=$SDE_DIR/scripts/svreload_common_functions
+
+if [ -f /etc/init.d/sde56 ] ; then
+SDE56=sde56
+fi
+
+if [ -f /etc/init.d/msd ] ; then
+MSDsrv=msd
+fi
+
+#LIST="servicelauncher scdpd sdeagent svsde hpmd $SDE56"
+LIST="servicelauncher scdpd svlmd $MSDsrv ecd svsde $SDE56"
+
+#STOP_LIST="$SDE56 hpmd svsde sdeagent scdpd servicelauncher"
+STOP_LIST="$SDE56 svsde ecd $MSDsrv svlmd scdpd servicelauncher"
+
+package_list=$SDE_DIR/.packages_list
+
+RETVAL=0
+
+# Sanity checks.
+
+if [ -f /etc/init.d/functions-centos6 ]; then
+    #when "service <process> start/stop/status" command is issued, we want the output to be redirected to the stdout instead of systemctl controling it.
+    #SYSTEMCTL_SKIP_REDIRECT=false
+    # source function library
+    . /etc/init.d/functions-centos6
+fi
+
+. $SVLOG
+
+print_se_warning()
+{
+printf "
+SELinux is enabled on this server and avoid SDE applications to run properly.
+You need to disable it by setting SELINUX=disabled into /etc/selinux/config.
+Effective on next reboot.
+
+To switch off the current enforcement run the command:
+echo 0 > /selinux/enforce\n\n"
+}
+
+print_atd_warning()
+{
+printf "\natd service found down. Trying to start.\n"
+}
+
+print_hostname_warning()
+{
+    printf "Machine name '$(hostname)' has no IP address, please check DNS configuration in /etc/resolv.conf or host configuration in /etc/hosts\n"
+}
+
+function _selinux_check ()
+{
+	set -- $(/usr/sbin/sestatus | awk  '/SELinux status|Current mode/{print $3}')
+
+	if [ "$1" == "enabled" ];then
+	        if [ "$2" == "enforcing" ];then
+			print_se_warning
+	                return 1
+	        fi
+	fi
+	return 0
+
+}
+
+function _atd_check ()
+{
+        if ! service atd status > /dev/null ; then
+                print_atd_warning
+                service atd start
+                printf "\n"
+                if ! service atd status > /dev/null ; then 
+                        printf "Failed to start atd service. SDE will not run properly.\n"
+                        return 1
+                fi
+        fi
+        return 0
+}
+
+# Costumer Issue - reqst00404572 if the hostanme not configured correctly this could happen(from the cq):
+# In an SDE cluster containing 2 SDEs, Policy load failed at SDE restart and was succeeding at reload around 30 second after the original start. 
+# The SDE failure at startup was putting this SDE box in a bad state not being able to take VIP ownership in case of failover.
+function _hostname_check ()
+{
+    if ! getent hosts $(hostname) &>/dev/null ; then
+        print_hostname_warning
+        return 1
+    fi
+    return 0
+}
+
+function _run_command () 
+{
+	local retval=0
+	local action=$1
+	shift
+	
+	for module in $*
+	do
+		[ -f /etc/init.d/$module ] && service $module $action
+		retval=$(( $retval + $? ))
+	done
+	return $retval
+}
+
+start() {
+	_atd_check && \
+	_selinux_check && \
+        _hostname_check && \
+		_run_command start $LIST
+	local retval=$?
+	if [ $retval -eq 0 ];then
+		echo "All applications were successfully started"
+	fi
+	return $retval
+}
+
+stop() {
+	_run_command stop $STOP_LIST
+	local retval=$?
+	return $retval
+}
+
+status() {
+	_run_command status $LIST
+	local retval=$?
+	return $retval
+}
+
+mreload() {
+	_run_command reload $LIST
+	local retval=$?
+	
+	#remove the cache file generated for MSD to be used by CLI (i.e policy tables,measurment,etc) 
+	rm -rf /usr/local/sandvine/cli/list/cache/*  >/dev/null 2>&1
+	
+	if [ $retval -eq 0 ];then
+            echo "All applications were successfully reloaded"
+            Svlog 18133 22574 $SVLOG_FACILITY.info  
+	fi
+	return $retval
+}
+
+version() {
+        local result=$( rpm -qa --qf '[%{VENDOR} ==%{NAME}-%{VERSION}-%{RELEASE}\n]' | awk -F== '/Sandvine/{print $2}' |sort )
+        echo "------------------------"
+        echo "$result" | grep ^sde\-
+        echo "------------------------"
+        echo "$result" | grep -v ^sde\-
+}
+
+nversion(){
+	
+        echo "------------------------"
+        rpm -q sde 2>/dev/null | sed 's/.el[0-9]//' | sed 's/.x86_64\|.i686\|.noarch//'
+        echo "------------------------"
+#parse the rpm list, col1 is thename of the RPM and 
+#col2 is the full name with the build number the version is composes
+#here we want to take the BUILD number which is really installed and not a simple list which not reflect
+#for sure what is installed
+	for nrpm in $(cat $package_list | awk '{print $1}' |sort )
+	do
+		rpmname=$( rpm -q --qf '%{NAME}' ${nrpm%%.rpm} |grep -v "not installed" )	
+		if [ -n "rpmname" ]; then
+			rpm -q $rpmname | sed 's/.el[0-9]//' | sed 's/.x86_64\|.i686\|.noarch//'
+		fi
+	done
+    if [ -n "$SDE56" ] ; then
+        echo "------------------------"
+        service $SDE56 version
+    fi
+	return 0
+}
+restart() {
+        stop
+        start
+        return $?
+}
+
+reload_cli_grammar_tree(){
+        if [ -f /var/run/msd.pid ] ; then
+                local msd_pid=$(cat /var/run/msd.pid)
+                if [ -d /proc/$msd_pid ] ; then
+                        #echo "reload cli grammar"
+                        kill -USR1 $msd_pid
+                fi
+        fi
+}
+
+# This line will exit from the script if the user is not root or not run via sudo
+if [ "$1" != "status" ]; then
+    . $SDE_DIR/scripts/check_is_root.sh
+fi
+
+ret_val=0
+case "$1" in
+  start)
+    start
+	ret_val=$?
+	;;
+  stop)
+    stop
+	;;
+  restart)
+	stop
+	start
+	ret_val=$?
+        ;;
+  status)
+	status
+	ret_val=$?
+	;;
+  version|Version)
+	[ -f $package_list ] && nversion || version	
+	;;
+  reload)
+    if [ -r $COMMON_FUNC_DIR ] ; then
+		. $COMMON_FUNC_DIR
+	else
+		msg="File $COMMON_FUNC_DIR is missing."
+		Svlog 18133 18137 $SVLOG_FACILITY.err "$msg"
+		echo  $msg
+		exit 1
+    fi
+    if [ -z "$2" ]
+    then
+    	mreload
+	else
+		case "$2" in
+		    -cli)
+		        reload_cli_grammar_tree
+		        ;;
+		    -maps)
+		        reloadHitlessPolicyMaps
+		        ;;
+		    *)
+		        echo "svreload: Unsupported option '$2'"
+		        ;;
+		esac
+	 fi
+	 ret_val=$?
+	 ;;
+
+   fullrestart)
+        service $SDE56 fullrestart
+    	ret_val=$?
+        ;;
+  *)
+	echo $"Usage: $0 {start|reload|stop|status|version|restart}"
+	exit 1
+	;;
+esac
+
+exit $ret_val

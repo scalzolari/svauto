@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE diameter-peer SYSTEM "diam_peer_config.dtd">
+<diameter-peer>
+    <peers>
+        <peer>
+            <identity>pts</identity>
+            <hostname>{{ pts_srvc_ip }}</hostname>
+            <realm>sandvine.com</realm>
+            <dictionaries>
+                <dictionary>CS</dictionary>
+                <dictionary>Rf</dictionary>
+            </dictionaries>
+            <security>
+                <ca-file>CApath</ca-file>
+                <cert-file>CERTpath</cert-file>
+                <key-file>KEYpath</key-file>
+            </security>
+            <reachable-realms>
+                <realm>sandvine.com</realm>
+            </reachable-realms>
+        </peer>
+         <peer>
+            <identity>cs</identity>
+            <hostname>{{ csd_srvc_ip }}</hostname>
+            <realm>sandvine.com</realm>
+            <port>3869</port>
+            <bias>2</bias>
+            <dictionaries>
+                <dictionary>CS</dictionary>
+            </dictionaries>
+            <security>
+                <ca-file>CApath</ca-file>
+                <cert-file>CERTpath</cert-file>
+                <key-file>KEYpath</key-file>
+            </security>
+            <reachable-realms>
+                <realm>sandvine.com</realm>
+            </reachable-realms>
+        </peer>
+    </peers>
+    <identities>
+        <local-identity>
+            <identity>sde</identity>
+            <display-name>sde</display-name>
+            <realm>sandvine.com</realm>
+            <dictionaries>
+                <dictionary>CS</dictionary>
+                <dictionary>Rf</dictionary>
+            </dictionaries>
+            <security>
+                <ca-file>CApath</ca-file>
+                <cert-file>CERTpath</cert-file>
+                <key-file>KEYpath</key-file>
+            </security>
+            <server-config>
+                <ip>{{ sde_srvc_ip }}</ip>
+                <port>3868</port>
+                <watchdog-timeout>20</watchdog-timeout>
+                <cer-timeout>10</cer-timeout>
+                <accept>
+                    <remote-peer>pts</remote-peer>
+                </accept>
+            </server-config>
+        </local-identity>
+        <local-identity>
+            <identity>sde</identity>
+            <display-name>sde</display-name>
+            <realm>sandvine.com</realm>
+            <dictionaries>
+                <dictionary>CS</dictionary>
+            </dictionaries>
+            <security>
+                <ca-file>CApath</ca-file>
+                <cert-file>CERTpath</cert-file>
+                <key-file>KEYpath</key-file>
+            </security>
+            <client-config>
+                <watchdog-timeout>10</watchdog-timeout>
+                <cea-timeout>5</cea-timeout>
+                <connection-timeout>1</connection-timeout>
+                <connect>
+                    <remote-peer>cs</remote-peer>
+                </connect>
+            </client-config>
+        </local-identity>
+    </identities>
+</diameter-peer>

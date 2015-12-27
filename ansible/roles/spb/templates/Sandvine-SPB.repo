@@ -1,0 +1,11 @@
+# Sandvine-SPB.repo
+#
+#
+
+[sandvine-spb]
+name=Sandvine-$releasever - SPB
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svspb
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

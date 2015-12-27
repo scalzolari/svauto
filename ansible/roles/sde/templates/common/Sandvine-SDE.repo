@@ -1,0 +1,11 @@
+# Sandvine-SDE.repo
+#
+#
+
+[sandvine-sde]
+name=Sandvine-$releasever - SDE (Service Delivery Engine)
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svsde
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

@@ -1,0 +1,107 @@
+#
+#  For running the Linux PTS on CentOS 7, without any systemd support, while
+# preserving Sandvine Init Scripts as expected.
+#
+#  Minimum changes are needed to run the Linux PTS on CentOS 7 without systemd.
+#
+#  As we can see on this small automation playbook
+#
+# NOTES:
+#
+#   This is for using with the Linux PTS version: "svpts-LNX-7.20.0101"
+#
+
+
+# First thing to run Linux PTS on CentOS 7, without systemd, will be to copy the
+# CentOS 6 "/etc/init.d/functions" file, to centOS 7 (it works like a charm).
+#
+# Remember, CentOS 6 "functions" file does not have systemd! That's ALL we need!
+- name: Creating new "/etc/init.d/functions-centos6" script, CentOS 7 functions without systemd
+  copy: src=c6_7-no-systemd/functions-centos6
+        dest=/etc/init.d/functions-centos6
+        owner=root
+        group=root
+        mode=0644
+
+
+# Second thing, now, a Sandvine's script, called "service_wrapper.subr", needs to
+# use new "/etc/init.d/functions-centos6" file, here we go:
+- name: Creating new "service_wrapper.subr" script, that makes use of "functions-centos6" on CentOS 7
+  copy: src=c6_7-no-systemd/service_wrapper.subr
+        dest=/usr/local/sandvine/scripts/service_wrapper.subr
+        owner=sv
+        group=sv_operator
+        mode=0755
+        backup=yes
+
+
+# Third, take back from Linux PTS on CentOS, the original svpts Init Script,
+# plus a few small updates:
+- name: Creating new "svpts" init script, from Linux PTS on CentOS 6
+  copy: src=c6_7-no-systemd/svpts
+        dest=/etc/init.d/svpts
+        owner=root
+        group=root
+        mode=0755
+        backup=yes
+
+
+# Oh, the svstunnel script also needs to call "/etc/init.d/functions-centos6"
+# as well:
+- name: Creating new "svstunnel" init script, that makes use of "functions-centos6" on CentOS 7
+  copy: src=c6_7-no-systemd/svstunnel
+        dest=/etc/init.d/svstunnel
+        owner=root
+        group=root
+        mode=0755
+        backup=yes
+
+
+# Make servicelauncher to boot as if it was on CentOS 6...
+- file: src=/etc/init.d/servicelauncher
+        dest=/etc/rc3.d/S15servicelauncher
+        owner=root
+        group=root
+        state=link
+
+# Make scdpd to boot as if it was on CentOS 6...
+- file: src=/etc/init.d/scdpd
+        dest=/etc/rc3.d/S20scdpd
+        owner=root
+        group=root
+        state=link
+
+
+# Fix a bug that comes from the latest "Linux PTS" RPM packages... Not related
+# about this solution (to run Linux PTS on CentOS 7 without systemd).
+- name: Fixing a RPM package problem, file permissiong of sandvine-svpts sudo config file...
+  file: src=c6_7-no-systemd/sandvine_svpts
+        dest=/etc/sudoers.d/sandvine_svpts
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+
+
+# Since we do not have systemd support by now, lets remove all of our systemd
+# unit files:
+- name: Deleting servicelauncher.service systemd unit file
+  file: path=/usr/lib/systemd/system/servicelauncher.service state=absent
+
+- name: Deleting scdpd.service systemd unit file
+  file: path=/usr/lib/systemd/system/scdpd.service state=absent
+
+- name: Deleting svcnd.service systemd unit file
+  file: path=/usr/lib/systemd/system/svcnd.service state=absent
+
+- name: Deleting msd.service systemd unit file
+  file: path=/usr/lib/systemd/system/msd.service state=absent
+
+- name: Deleting svbgpd.service systemd unit file
+  file: path=/usr/lib/systemd/system/svbgpd.service state=absent
+
+- name: Deleting svptsd.service systemd unit file
+  file: path=/usr/lib/systemd/system/svptsd.service state=absent
+
+- name: Deleting svptsm.service systemd unit file
+  file: path=/usr/lib/systemd/system/svptsm.service state=absent

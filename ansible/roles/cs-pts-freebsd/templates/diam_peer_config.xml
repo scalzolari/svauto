@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE diameter-peer SYSTEM "diam_peer_config.dtd">
+<diameter-peer>
+	<peers>
+		<peer>
+			<identity>sde</identity>
+			<hostname>{{ sde_srvc_ip }}</hostname>
+			<realm>sandvine.com</realm>
+			<port>3868</port>
+			<bias>2</bias>
+			<dictionaries>
+				<dictionary>CS</dictionary>
+				<dictionary>Rf</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<reachable-realms>
+				<realm>sandvine.com</realm>
+			</reachable-realms>
+		</peer>
+		<peer>
+			<identity>cs</identity>
+			<hostname>{{ csd_srvc_ip }}</hostname>
+			<realm>sandvine.com</realm>
+			<port>3869</port>
+			<bias>2</bias>
+			<dictionaries>
+				<dictionary>CS</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<reachable-realms>
+				<realm>sandvine.com</realm>
+			</reachable-realms>
+		</peer>
+		<peer>
+			<identity>ga</identity>
+		        <hostname>{{ ga_srvc_ip }}</hostname>
+		        <realm>ga.sandvine.com</realm>
+		        <port>3870</port>
+		        <bias>2</bias>
+                        <dictionaries>
+                                <dictionary>CS</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<reachable-realms>
+				<realm>ga.sandvine.com</realm>
+			</reachable-realms>
+		</peer>
+	</peers>
+	<identities>
+		<local-identity>
+			<identity>pts</identity>
+			<display-name>pts</display-name>
+			<realm>sandvine.com</realm>
+			<dictionaries>
+				<dictionary>CS</dictionary>
+				<dictionary>Rf</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<client-config>
+				<watchdog-timeout>10</watchdog-timeout>
+				<cea-timeout>5</cea-timeout>
+				<connection-timeout>1</connection-timeout>
+				<connect>
+					<remote-peer>sde</remote-peer>
+					<remote-peer>cs</remote-peer>
+					<remote-peer>ga</remote-peer>
+				</connect>
+			</client-config>
+		</local-identity>
+	</identities>
+</diameter-peer>

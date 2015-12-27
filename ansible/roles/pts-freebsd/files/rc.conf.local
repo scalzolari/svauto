@@ -1,0 +1,4 @@
+ifconfig_em0="DHCP"
+ifconfig_em1="DHCP"
+fetchlabify_skip_dhcp="YES"
+fetchlabify_verify_hostname="YES"

@@ -1,0 +1,135 @@
+#!/bin/sh
+
+# PROVIDE: fetch-labify
+# REQUIRE: NETWORKING
+# KEYWORD: nojail
+
+. /etc/rc.subr
+
+name="fetchlabify"
+start_cmd="fetchlabify_start"
+thisscript="/etc/rc.d/fetchlabify"
+
+# Default skip DHCP to NO, but don't override it if it's already set
+: ${fetchlabify_skip_dhcp:=NO}
+
+# Default force to NO, but don't override it if it's already set
+: ${fetchlabify_force:=NO}
+
+# Default to not verifying the hostname
+: ${fetchlabify_verify_hostname:=NO}
+
+url="ftp://fbsd-ftp/pub/labify.sh"
+
+fetchlabify_dhcp()
+{
+	local iface ifaces ifup
+
+	ifaces=
+	ifup=
+
+	if checkyesno fetchlabify_skip_dhcp
+	then
+		return
+	fi
+
+	# Bring interfaces up and wait for them to link
+	for iface in `ifconfig -l`; do
+		case $iface in
+		lo*|ipfw*|ix*)
+			continue;
+			;;
+		esac
+		ifaces="$ifaces $iface"
+		if ! ifconfig $iface | egrep -q 'flags.*UP'; then
+			ifconfig $iface up
+			ifup="$ifup $iface"
+		fi
+	done
+	if [ -n "$ifup" ]; then
+		echo "Attempted to bring up interfaces$ifup"
+		sleep 5
+	fi
+
+	# Try DHCP on each interface that has link
+	for iface in $ifaces; do
+		if ifconfig $iface | grep -q 'status: no carrier'; then
+			echo "Skipping $iface: no carrier"
+			continue
+		fi
+		echo "Attempting DHCP on $iface"
+		dhclient $iface 2>&1 | tee /tmp/dhclient.$iface.log
+		if grep -q "bound to" /tmp/dhclient.$iface.log; then
+			echo "Got DHCP config from $iface"
+			return
+		fi
+		echo "No DHCP config received from $iface"
+	done
+	echo "No DHCP config received from any interface"
+}
+
+
+fetchlabify_start()
+{
+	if [ "`sysctl -n pts14k.is_ppu 2>/dev/null`" = 1 ]; then
+		return 0
+	fi
+
+	case "`kenv -q run_labify`" in
+	[Nn][Oo])
+		echo "kenv run_labify=NO: Skipping labify"
+		return 0
+		;;
+	esac
+
+	if checkyesno fetchlabify_verify_hostname; then
+		# Don't try to labify outside of the lab, unless we are configured to 
+		# force labify to run.
+		case "$(hostname)" in
+		*.sandvine.com)
+			;;
+		*)
+			if ! checkyesno fetchlabify_force; then
+				rm $thisscript
+				return 0
+			fi
+			;;
+		esac
+	fi
+
+	echo "******************************************************"
+	echo "fetch-labify: workaround for FreeBSD images in the lab"
+	echo "******************************************************"
+
+	if [ -f /etc/labify-done ]; then
+		echo "exit since labify already run"
+		return 0
+	fi
+
+	tries=0
+	while true; do
+		fetchlabify_dhcp
+		if fetch -p -o /tmp/labify.sh "$url"; then
+			break;
+		fi
+		tries=`expr $tries + 1`
+		if [ $tries -gt 12 ]; then
+			echo "Could not fetch $url"
+			return 1
+		fi
+		sleep 5
+	done
+
+	chmod +x /tmp/labify.sh
+
+	/tmp/labify.sh
+
+	/sbin/pfctl -d
+
+	rm $thisscript
+
+	return 0
+}
+
+load_rc_config $name
+run_rc_command "$1"

@@ -1,0 +1,133 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Creating Cloud Services Main Repository - Production
+  template: src=common/Sandvine-CS-Main.repo
+            dest=/etc/yum.repos.d/Sandvine-CS-Main.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_main_repo_in_place
+  when: release == 'prod'
+
+- name: Creating Cloud Services Main Repository - Development
+  template: src=common/Sandvine-CS-Main_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-Main.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_main_repo_in_place
+  when: release == 'dev'
+
+
+- name: Installing required packages and the CSD
+  yum: pkg={{item}} state=installed
+  with_items:
+    - redis
+    - mysql
+    - mysql-server
+    - MySQL-python
+    - influxdb
+    - cloud-services-daemon
+    - global-attributes-broker
+  register: csd_installed
+
+
+- name: Managing Local Firewall Rules
+  command: "{{item}}"
+  with_items:
+  - lokkit --port=22:tcp --update
+  - lokkit --port=80:tcp --update
+  - lokkit --port=443:tcp --update
+  - lokkit -t eth1
+  - service iptables save
+  when: is_container != 'yes'
+
+
+- name: Ensure CSD is running (and enable it at boot)
+  service: name=csd state=started enabled=yes
+  when: csd_installed|success
+  register: csd_running
+
+
+- name: Ensure InfluxDB is running (and enable it at boot)
+  service: name=influxdb state=started enabled=yes
+  when: csd_installed|success
+  register: influxdb_running
+
+
+- name: Ensure Redis is running (and enable it at boot)
+  service: name=redis state=started enabled=yes
+  when: csd_installed|success
+  register: redis_running
+
+
+- name: Ensure MySQL is running (and enable it at boot)
+  service: name=mysqld state=started enabled=yes
+  register: mysql_running
+
+
+- name: Creating Cloud Services MySQL database
+  mysql_db: name=cs state=present
+  register: cs_db_created
+  when: mysql_running|changed
+
+- name: Creating Cloud Services MySQL user and permissions
+  mysql_user:
+    host="{{cs_db_host}}"
+    name="{{cs_db_user}}"
+    password="{{cs_db_pass}}"
+    priv="cs.*:ALL,GRANT"
+    state=present
+  when: cs_db_created|changed
+
+- copy: src=mysql-schema.sql dest=/tmp
+  when: cs_db_created|changed
+
+- mysql_db: name=cs state=import target=/tmp/mysql-schema.sql
+  when: cs_db_created|changed and csd_installed|changed
+
+
+- name: Configuring Cloud Services Daemon
+  template: src=csd.conf
+            dest=/etc/csd.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+
+- name: Configuring Redis
+  copy: src=redis.conf
+        dest=/etc/redis.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+
+
+- name: Configuring InfluxDB for Cloud Services
+  copy: src=config.toml
+        dest=/opt/influxdb/shared/config.toml
+        owner=influxdb
+        group=influxdb
+        mode=0644
+        backup=yes
+
+- name: Workaround for InfluxDB Issue 3944
+  file: src=/lib64/libbz2.so.1.0.4 dest=/lib64/libbz2.so.1.0 state=link
+
+
+- name: Cleanup YUM local cache
+  command: yum clean all

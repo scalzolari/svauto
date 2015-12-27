@@ -1,0 +1,11 @@
+# Sandvine-UM.repo
+#
+#
+
+[sandvine-um]
+name=Sandvine Usage Management policy definition elements package
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svusagemanagement
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

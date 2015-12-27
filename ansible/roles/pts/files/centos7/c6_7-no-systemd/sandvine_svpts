@@ -1,0 +1,14 @@
+####### SANDVINE USERS PERMISSIONS START #######
+####### PLEASE DO NOT EDIT THIS SECTION MANUALLY #######
+
+Cmnd_Alias SV_OPERATOR_SERVICES_SVPTS = /sbin/service svpts status, /sbin/service svpts version, /bin/systemctl status svpts, /bin/systemctl version svpts
+
+Cmnd_Alias SV_SERVICE_SERVICES_SVPTS = /sbin/service svpts reload, /bin/systemctl reload svpts
+
+Cmnd_Alias SV_ADMIN_SERVICES_SVPTS = /sbin/service svpts stop, /sbin/service svpts start, /sbin/service svpts restart, /bin/systemctl stop svpts, /bin/systemctl start svpts, /bin/systemctl restart svpts
+
+SV_OPERATOR ALL = SV_OPERATOR_SERVICES_SVPTS
+SV_SERVICE  ALL = SV_SERVICE_SERVICES_SVPTS
+SV_ADMIN    ALL = SV_ADMIN_SERVICES_SVPTS
+
+####### SANDVINE USERS PERMISSIONS END   #######

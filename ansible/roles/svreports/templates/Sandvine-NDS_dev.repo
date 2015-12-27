@@ -1,0 +1,16 @@
+# Sandvine-NDS.repo
+#
+#
+
+[sandvine-svreports]
+name=Sandvine-$releasever - NDS
+# New, sane URL, for Yum Repo:
+# DEV URL:
+baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svreports
+#baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svreports
+# Packages are from (old URL format):
+# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/NDS/svreports-6.65.0005
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

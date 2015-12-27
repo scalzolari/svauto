@@ -1,0 +1,70 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Installing extra Sandvine's packages, plus Cloud Services
+  shell: pkg_add {{ item }}
+  with_items:
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/DIAMETER/svdiameter-BSD-5.60.0501.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/DIAMETER/svonline_charging-BSD-5.00.0203.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/DIAMETER/svpolicy_enforcement-BSD-5.00.0203.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/PTS_POLICY_COMMON/svpts_policy_common-BSD-3.00.2035.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/HTTP_AUDIT/svhttp_audit-BSD-5.00.0203.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/QUOTA_MANAGER/svquota_manager-BSD-5.00.0203.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/RECORD_GENERATOR/svrecord_generator-BSD-5.00.0203.tbz
+     - ftp://fbsd-ftp.sandvine.com/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0203.tbz
+     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-15.12.0018.tbz
+  register: cloud_services_installed
+  ignore_errors: yes
+
+
+- name: Customizing "rc.conf.default.ptsd" file
+  copy: src=rc.conf.default.ptsd
+        dest=/usr/local/sandvine/etc/rc.conf.default.ptsd
+        owner=root
+        group=sv_service
+        mode=0644
+
+
+- name: Customizing "rc.conf.default.diameter" file
+  copy: src=rc.conf.default.diameter
+        dest=/usr/local/sandvine/etc/rc.conf.default.diameter
+        owner=root
+        group=sv_service
+        mode=0644
+
+
+- name: Customizing "rc.conf.default.cs" file
+  copy: src=rc.conf.default.cs
+        dest=/usr/local/sandvine/etc/rc.conf.default.cs
+        owner=root
+        group=sv_service
+        mode=0644
+
+
+- name: Creating new "policy.conf" file
+  copy: src=policy.conf
+        dest=/usr/local/sandvine/etc/policy.conf
+        owner=root
+        group=sv_service
+        mode=0644
+        backup=yes
+
+
+- name: Creating new "diam_peer_config.xml" file
+  template: src=diam_peer_config.xml
+            dest=/usr/local/sandvine/etc/diam_peer_config.xml
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes

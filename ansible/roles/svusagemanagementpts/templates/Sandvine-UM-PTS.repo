@@ -1,0 +1,11 @@
+# Sandvine-UM-PTS.repo
+#
+#
+
+[sandvine-um-pts]
+name=Sandvine-$releasever - UM (Usage Management) - PTS
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svusagemanagementpts
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

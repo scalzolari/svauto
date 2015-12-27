@@ -1,0 +1,14 @@
+# Sandvine-Main.repo
+#
+#
+
+[sandvine]
+name=Sandvine-$releasever - Main Experimental
+# DEV URL:
+baseurl=ftp://10.128.243.172/cloudservices/centos-main-experimental/$releasever/os/$basearch
+# PROD URL:
+#baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos-main/$releasever/os/$basearch
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

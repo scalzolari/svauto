@@ -1,0 +1,11 @@
+# Sandvine-SM.repo
+#
+#
+
+[sandvine-sm]
+name=Sandvine - Subscriber Mapping - SM
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svsubscribermapping
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

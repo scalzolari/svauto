@@ -1,0 +1,72 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Adjusting /etc/hosts
+  shell: HOSTNAME=$(cat /etc/hostname | cut -d \. -f 1) ; DOMAIN=$(cat /etc/hostname | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
+
+- name: Creating new "etc-hosts-fix" init script
+  copy: src=centos7/etc-hosts-fix
+        dest=/etc/init.d/etc-hosts-fix
+        owner=root
+        group=root
+        mode=0755
+
+- name: Ensure etc-hosts-fix gets executed (and enable it at boot)
+  service: name=etc-hosts-fix state=started enabled=yes
+
+
+- name: Configuring eth0
+  copy: src=centos7/ifcfg-eth0
+        dest=/etc/sysconfig/network-scripts/ifcfg-eth0
+        owner=root
+        group=root
+        mode=0644
+
+- name: Configuring eth1
+  copy: src=centos7/ifcfg-eth1
+        dest=/etc/sysconfig/network-scripts/ifcfg-eth1
+        owner=root
+        group=root
+        mode=0644
+  register: ifcfg_eth1_in_place
+
+- name: Enabling eth1
+  shell: ifup eth1
+  when: ifcfg_eth1_in_place|changed
+  ignore_errors: yes
+
+
+- name: Installing CentOS Operation Tools
+  yum: pkg={{item}} state=installed
+  with_items:
+    - at
+    - git
+    - vim
+    - wget
+    - tmux
+    - lsof
+    - iotop
+    - iftop
+    - parted
+    - mlocate
+    - bind-utils
+    - pciutils
+    - rsyslog
+    - sysstat
+    - tcpdump
+    - telnet
+    - psmisc
+    - cronie
+    - acpid
+    - which

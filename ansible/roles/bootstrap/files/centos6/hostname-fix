@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# hostname-fix Starts/stop the "hostname-fix" daemon
+#
+# chkconfig:   2345 55 5
+# description: Hostname Workaround
+
+### BEGIN INIT INFO
+# Provides: hostname-fix at batch
+# Required-Start: $local_fs
+# Required-Stop: $local_fs
+# Default-Start: 345
+# Default-Stop: 95
+# Short-Description: Starts/stop the "hostname-fix" daemon
+# description: Workaround a bug on CentOS / Cloud Init
+### END INIT INFO
+
+case "$1" in
+        start)
+		HOST_NAME=$(hostname)
+		
+		if [ "$HOST_NAME" == "localhost.localdomain.localdomain" ]
+		then
+			echo "Fixing hostname..."
+		        sed -i -e 's/localdomain\.localdomain/localdomain/g' /etc/sysconfig/network
+		        hostname localhost.localdomain
+		fi
+		;;
+        stop)
+		/bin/true
+		;;
+        status)
+		/bin/true
+		;;
+        restart)
+		/bin/true
+		;;
+        *)
+            echo $"Usage: $0 {start|stop|restart|status}"
+            exit 1
+esac

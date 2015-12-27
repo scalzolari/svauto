@@ -1,0 +1,45 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: Creating Sandvine Subscriber Mapping Repository - Production
+  template: src=Sandvine-SM.repo
+            dest=/etc/yum.repos.d/Sandvine-SM.repo
+            owner=root
+            group=root
+            mode=0644
+  when: release == 'prod'
+
+
+- name: Creating Sandvine Subscriber Mapping Repository - Development
+  template: src=Sandvine-SM_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SM.repo
+            owner=root
+            group=root
+            mode=0644
+  when: sde_version == '7.20' and release == 'dev'
+
+
+- name: Creating Sandvine Subscriber Mapping Repository - Development - Versioned
+  template: src=Sandvine-SM_versioned.repo
+            dest=/etc/yum.repos.d/Sandvine-SM.repo
+            owner=root
+            group=root
+            mode=0644
+  when: sde_versioned == 'true' and release == 'dev'
+
+
+- name: Installing Usage Management packages
+  yum: pkg={{item}} state=installed
+  with_items:
+    - subscriber_mapping

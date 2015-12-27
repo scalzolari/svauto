@@ -1,0 +1,12 @@
+
+level_distribution_enable=true
+pdb_level_distribution_enable="policy.1.levelDistribution.enabled"
+
+max_instances_per_worker=2
+pdb_max_instances_per_worker="policy.1.levelDistribution.config.maxInstancesPerWorker"
+
+transmit_backlog=350000
+pdb_transmit_backlog="connectionInfo.1.config.transmitConfigTable.transmitConfigRow.backlog.3"
+
+controller_server_config_min_sample_interval=5
+

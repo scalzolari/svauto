@@ -1,0 +1,125 @@
+#!/bin/bash
+
+if [ -f /etc/init.d/functions-centos6 ]; then
+    #when "service <process> start/stop/status" command is issued, we want the output to be redirected to the stdout instead of systemctl controling it.
+    #SYSTEMCTL_SKIP_REDIRECT=false
+    . /etc/init.d/functions-centos6
+fi
+
+# Check status 
+checkStatus()
+{
+    local pidFilePrefix=$1
+    local print=$2
+    # For status, we depend only on the pid file
+    # status -p /var/run/${name}.pid $name
+    # exit $? 
+    local found=0
+    local exitCode=0
+    local suppressPrint=
+    if [ "$print" != "true" ]; then
+        suppressPrint="> /dev/null" 
+    fi
+    shopt -s nullglob
+    for pidFile in /var/run/$pidFilePrefix*.pid
+    do
+        # For status, we depend only on the pid file
+        eval status -p ${pidFile} $pidFilePrefix $suppressPrint
+        exitCode=$?
+        found=1
+    done
+    # if nothing matched,attempt to directly get the name of the pid file
+    if [ $found -eq 0 ]; then
+        pidFile="/var/run/${pidFilePrefix}.pid"
+        eval status -p ${pidFile} $pidFilePrefix $suppressPrint
+        exitCode=$?
+    fi
+    return $exitCode
+}
+
+# This function is used in Linux as a wrapper to call the scripts and print 
+# success or failure during the action performed
+# $1: Service script to be called
+# $2: Action that the service script needs to be called with
+# $3: Name of the service
+service_wrapper()
+{
+    if [ $# -lt 3 ]; then
+        echo "All arguments are not passed to service_wrap" 
+        return 1
+    fi
+
+    local serviceScript=$1
+    if [ ! -x $serviceScript ]; then
+        echo "Cannot execute $serviceScript. Check execute permissions."
+        return 2
+    fi
+
+    local name=$2
+    [ $3 = "true" ] && sync="_sync"
+    local action=$4
+    local pidFilePrefix=${5:-${name}}
+    local errorString="Please refer to /var/log/svlog for more information"
+    local printExitStatus=true
+
+    # All service commands, except for status,  need root permission to execute
+    if [ "$action" != "status" ]; then
+        . /usr/local/sandvine/scripts/check_is_root.sh
+    fi
+
+    case "$action" in
+    "start")
+        checkStatus $pidFilePrefix
+        ret=$?
+        if [ $ret -eq 0 ]; then
+            echo "${name} is already running ..."
+            exit $ret
+        fi
+        svcstr="Starting $name"
+        action="start${sync}"
+        ;;
+    "stop")
+        checkStatus $pidFilePrefix
+        ret=$?
+        if [ $ret -ne 0 ]; then
+            echo "${name} is not running"
+            exit $ret
+        fi
+        svcstr="Stopping $name"
+        action="stop${sync}"
+        ;;
+    "restart")
+        svcstr="Restarting $name"
+        action="restart${sync}"
+        ;;
+    "reload")
+        svcstr="Reloading $name"
+        action="reload${sync}"
+        ;;
+    "status")
+        checkStatus $pidFilePrefix true
+        exit $?
+        ;;
+    "")
+        errorString=
+        printExitStatus=false
+        ;;
+    *)
+        svcstr="Executing $serviceScript with action $action"
+        ;;
+    esac
+    
+    echo -n $svcstr
+
+    $serviceScript $action
+    exitStatus=$?
+
+    if [ $exitStatus -eq 0 ]; then
+        [ $printExitStatus = true ] && success && echo
+    else
+        echo
+        [ $printExitStatus = true ] && failure && echo >&2 $errorString
+    fi 
+    return $exitStatus 
+}
+

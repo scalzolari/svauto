@@ -1,0 +1,71 @@
+#!/bin/bash
+# chkconfig: 345 86 14
+# description: Sandvine PTS service.
+
+ALL_SERVICES="servicelauncher scdpd svlmd svcnd msd svptsm svptsd svcnd svbgpd"
+START_SERVICES="servicelauncher scdpd"
+STOP_SERVICES="svptsd svcnd svptsm msd svlmd svcnd svlmd scdpd servicelauncher"
+
+function _run_command ()
+{
+    local retval=0
+    local action=$1
+    shift
+
+    for module in $*
+    do
+        /etc/init.d/$module $action
+        retval=$(( $retval + $? ))
+    done
+    return $retval
+}
+
+start() {
+    _run_command start $START_SERVICES
+    local retval=$?
+    if [ $retval -eq 0 ];then
+        echo "All applications were successfully started"
+    fi
+    return $retval
+}
+
+stop() {
+    _run_command stop $STOP_SERVICES
+    local retval=$?
+    return $retval
+}
+
+status() {
+    _run_command status $STOP_SERVICES
+    local retval=$?
+    return $retval
+}
+
+
+ret_val=0
+case "$1" in
+    start)
+        start
+        ret_val=$?
+        ;;
+    stop)
+        stop
+        ret_val=$?
+        ;;
+    restart)
+        stop
+        start
+        ret_val=$?
+        ;;
+    status)
+        status
+        ret_val=$?
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
+
+exit $ret_val
+

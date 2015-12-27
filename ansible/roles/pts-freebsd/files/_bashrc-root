@@ -1,0 +1,7 @@
+PS1="# "
+alias ls="ls -F"
+set -o emacs
+if [ -f /etc/profile ]
+then
+    . /etc/profile
+fi

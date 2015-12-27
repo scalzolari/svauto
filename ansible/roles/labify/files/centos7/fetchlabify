@@ -1,0 +1,72 @@
+#!/bin/sh  
+#
+# Copyright 2016, Sandvine Incorporated.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#
+# Fetch and run labify in lab
+#
+# chkconfig:   345 90 01 
+# description: Fetch and run labify in lab
+#        
+
+
+# Source function library.
+. /etc/init.d/functions
+
+name="fetchlabify"
+thisscript="/etc/init.d/fetchlabify"
+url="https://git.sandvine.com/tmartins/labify/raw/master/labify-centos7.sh"
+labify_script="/tmp/labify-linux.sh"
+
+
+start() {
+
+        case $(hostname) in
+        *.sandvine.com)
+	        if [ -f /etc/labify-done ]; then
+	                echo "exit since labify already run"
+	                return 0
+	        fi
+
+	        wget -O $labify_script $url  
+	        if [ $? -ne 0 ]; then
+	                echo "Could not fetch $url"
+	                return 1
+	        fi
+
+	        if [ -f "$labify_script" ]; then
+	                chmod +x $labify_script
+	                $labify_script
+	                rm $labify_script
+	        fi
+        ;;
+        esac
+
+	chkconfig $name off 2>&1 > /dev/null
+	rm -f /etc/rc3.d/S90fetchlabify 2>&1 > /dev/null
+	rm $thisscript 2>&1 > /dev/null
+
+	return 0
+}
+
+case "$1" in
+    start)
+        $1
+        ;;
+    *) 
+        echo $"Usage: $0 {start}"
+        exit 2
+esac
+exit $?

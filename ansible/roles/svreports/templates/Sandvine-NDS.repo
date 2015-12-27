@@ -1,0 +1,11 @@
+# Sandvine-NDS.repo
+#
+#
+
+[sandvine-svreports]
+name=Sandvine-$releasever - NDS
+baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svreports
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

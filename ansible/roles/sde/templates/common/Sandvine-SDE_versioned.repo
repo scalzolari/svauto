@@ -1,0 +1,14 @@
+# Sandvine-SDE.repo
+#
+#
+
+[sandvine-sde]
+name=Sandvine-$releasever - SDE (Service Delivery Engine)
+# New, sane URL, for Yum versioned Repo:
+baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svsde-{{sde_version}}
+# Packages are from (old URL format):
+# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/SDE/svsde-LNX-X.XX.XXXX
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

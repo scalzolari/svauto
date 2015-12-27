@@ -1,0 +1,65 @@
+#
+# OpenStack Definitions
+#
+# Automaically managed by svauto.sh
+#
+
+# Username and password for authenticated YUM Repos.
+ftp_username: customer.sandvine.com
+ftp_password: lerolero
+
+# Goes to PTS subnets.txt
+int_subnet: "10.192.0.0/16"
+ext_subnet: "0.0.0.0/0"
+
+# IPs
+spb_ctrl_ip: "192.168.192.10"
+spb_srvc_ip: "192.168.192.130"
+
+sde_ctrl_ip: "192.168.192.20"
+sde_srvc_ip: "192.168.192.140"
+
+pts_ctrl_ip: "192.168.192.30"
+pts_srvc_ip: "192.168.192.150"
+
+csd_ctrl_ip: "192.168.192.20"
+csd_srvc_ip: "192.168.192.140"
+
+ga_srvc_ip: "192.168.192.140"
+
+# Cloud Services MySQL initial setup
+cs_db: "cs"
+cs_db_host: "%"
+cs_db_user: "svadmin"
+cs_db_pass: "sandvine"
+
+# Is Experimental Repo:
+is_experimental: "no"
+
+# Is Linux Container (LXD / Docker):
+is_container: "no"
+
+# Base O.S.:
+# Ubuntu: ubuntu14, ubuntu16
+# Debian: jessie, stretch
+# CentOS: centos67, centos72
+base_os: centos67
+
+# Upgrade Base OS:
+base_os_upgrade: "no"
+
+# Release ver: ca, dev
+release: dev
+
+# Products and versions
+pts_version: "7.20"
+pts_versioned: false
+
+sde_version: "7.20"
+sde_versioned: false
+
+spb_version: "6.60"
+spb_versioned: false
+
+csd_version: "1.00"
+csd_versioned: false
