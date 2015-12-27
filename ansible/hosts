@@ -1,4 +1,27 @@
+#
+# List of servers to deploy the Sandvine Platform
+#
+
+[sde-servers]
+#SDE_IP
+#ec2-54-16X-Y3-1Z1.compute-1.amazonaws.com
+
+[pts-servers]
+#PTS_IP
+#FREEBSD_PTS_IP ansible_python_interpreter=/usr/local/bin/python2.7
+#alex+instance+nubo
+
+[spb-servers]
+#SPB_IP
+#10.128.243.249
+
+[csd-servers]
+#CSD_IP
+#10.128.243.2
+
+#
 # List of servers to deploy OpenStack
+#
 
 [all-in-one]
 localhost ansible_connection=local

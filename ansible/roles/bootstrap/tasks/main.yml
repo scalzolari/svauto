@@ -12,100 +12,79 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Ubuntu Trusty default sources.list
-  copy: src=sources.list
-        dest=/etc/apt/sources.list
+- name: Creating Sandvine Main Repository - Production
+  template: src=common/Sandvine-Main.repo
+            dest=/etc/yum.repos.d/Sandvine-Main.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_main_repo_in_place
+  when: release == 'prod'
+
+- name: Creating Sandvine Main Repository - Development
+  template: src=common/Sandvine-Main_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-Main.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_main_repo_in_place
+  when: release == 'dev'
+
+- name: Creating Sandvine Main Repository - Development
+  template: src=common/Sandvine-Main_dev_experimental.repo
+            dest=/etc/yum.repos.d/Sandvine-Main.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_main_repo_in_place
+  when: release == 'dev' and is_experimental == 'yes'
+
+
+- selinux: policy=targeted state=permissive
+  when: is_container != 'yes'
+
+- selinux: state=disabled
+  when: is_container != 'yes'
+
+
+- name: Adjusting /etc/sudores
+  lineinfile: "dest=/etc/sudoers state=present regexp='^%wheel' line='%wheel ALL=(ALL) NOPASSWD: ALL'"
+
+
+- name: Disabling ZeroConf
+  lineinfile: dest=/etc/sysconfig/network line="NOZEROCONF=yes"
+
+
+- include: main-centos6.yml
+  when: base_os == 'centos67' or base_os == 'centos66'
+
+
+- include: main-centos7.yml
+  when: base_os == 'centos72'
+
+
+- name: Customizing root's Bash RC 
+  copy: src=common/_bashrc-root
+        dest=/root/.bashrc
         owner=root
         group=root
-        mode=0644
+        mode=0640
+        backup=yes
 
-- name: Ubuntu Cloud Archive for OpenStack Liberty
-  apt_repository: repo='deb http://ubuntu-cloud.archive.canonical.com/ubuntu trusty-updates/liberty main'
-
-- name: Installing Cloud Archive Keyring before first update
-  apt: name=ubuntu-cloud-keyring state=present
-
-
-- name: Running apt-get update
-  apt: update_cache=yes
-
-- name: Running apt-get dist-upgrade
-  apt: upgrade=dist
-
-
-- name: Installing base packages
-  action: apt pkg={{item}} state=installed
-  with_items:
-    - curl
-    - chrony
-    - openssl
-    - iptables
-    - htop
-    - iftop
-    - iotop
-    - iptraf-ng
-    - iperf3
-    - logtop
-    - mtr-tiny
-    - ngrep
-    - sysstat
-    - tcpdump
-    - tcpick
-    - psmisc
-    - tmux
-    - tzdata
-    - vim-nox
-    - patch
-    - python-mysqldb
-
-
-- name: Installing Linux 4.2 for Ubuntu LTS
-  action: apt pkg={{item}} state=installed
-  with_items:
-    - linux-generic-lts-wily
-
-
-#- name: Blacklist nf_conntrack module
-#  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist nf_conntrack"
-
-
-- lineinfile: dest=/etc/modules line="br_netfilter"
-
-- name: Loading br_netfilter network module
-  command: 'modprobe br_netfilter'
-
-
-- lineinfile: dest=/etc/modules line="dummy numdummies=6"
-
-- name: Loading dummy network module
-  command: 'modprobe dummy numdummies=6'
-
-
-# blockinfile not support by Ansible upstream, need a cool solution for this
-#- name: Configuring Dummy interfaces
-#  blockinfile:
-#    dest: /etc/network/interfaces
-#    content: |
-#      allow-hotplug dummy0
-#      iface dummy0 inet manual
-#        up ip link set dev $IFACE up
-#        down ip link set dev $IFACE down
-#      
-#      allow-hotplug dummy1
-#      iface dummy1 inet static
-#        mtu 9000
-#        address 10.0.0.1
-#        netmask 24
-#  when: dummy_loaded
-
-
-- name: Check root's htop config directory
-  file: path=/root/.config/htop
-        state=directory
-
-- name: Write root's htoprc
-  copy: src=htoprc
-        dest=/root/.config/htop/htoprc
+- name: Customizing root's Bash Profile
+  copy: src=common/_bash_profile-root
+        dest=/root/.bash_profile
         owner=root
         group=root
-        mode=0644
+        mode=0640
+        backup=yes
+
+
+- name: Ensure ACPID is running (and enable it at boot)
+  service: name=acpid state=started enabled=yes
+  when: is_container != 'yes'
+
+
+- name: Upgrading CentOS
+  yum: name=* state=latest
+  when: base_os_upgrade == 'yes'

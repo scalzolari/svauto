@@ -1,4 +1,56 @@
-# This Playbook deploys OpenStack
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#
+# The following hosts definitions, deploys Sandvine Platform:
+#
+
+- hosts: spb-servers
+  user: sandvine
+  sudo: yes
+  roles:
+  - role: bootstrap
+  - role: spb
+  - role: power-cycle
+
+- hosts: sde-servers
+  user: sandvine
+  sudo: yes
+  roles:
+  - role: bootstrap
+  - role: sde
+  - role: power-cycle
+
+- hosts: pts-servers
+  user: sandvine
+  sudo: yes
+  roles:
+  - role: bootstrap
+  - role: pts
+  - role: power-cycle
+
+- hosts: csd-servers
+  user: sandvine
+  sudo: yes
+  roles:
+  - role: bootstrap
+  - role: csd
+  - role: power-cycle
+
+#
+# The following hosts definitions, deploys OpenStack:
+#
 
 - hosts: all-in-one
   user: administrative

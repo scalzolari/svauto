@@ -1,168 +1,106 @@
-﻿# Ansible Playbook for OpenStack
 
-# os-ansible-deployment-lite
+# SVAuto, the Sandvine's Automation!
 
-Ansible playbooks for deploying `OpenStack`.  http://openstack.org
+SVAuto is a set of Open Source tools, that brings together, a series of external tools for building immutable servers images and for Data Center Automation.
 
-# Overview
+With SVAuto, you can create QCoWs, VMDKs, OVAs, and much more, with Packer and Ansible! Using only official Linux distribution ISO files as a base!
 
-You'll need an `Ubuntu Trusty` up and running, fully upgraded, before deploying `OpenStack` on top of it.
+Also, you can deploy Sandvine's RPM Packages on top of any supported CentOS 6 or 7, be it bare-metal, Cloud-based images, regular KVM, VMWare, Xen, Hyper-V and etc.
 
-Our `Ansible` playbooks provides two ways to deploy `OpenStack`, first and quick mode, is by running it on your local computer, the second mode is a bit more advanced, where you'll be deploying `OpenStack` on remote computers.
+Looking forward to add support for Linux Containers.
 
-This procedure will deploy `OpenStack` (bare metal highly recommended, server or laptop) in a fashion called `all-in-one`. It follows `OpenStack` official documentation `docs.openstack.org`.
+It uses the following Open Source projects:
 
-The `default` setup builds an `all-in-one` environment, it might be used mostly for demonstration purposes. Only a few environments can use this topology in production.
+* Ansible
+* Packer
+* QEmu
+* VirtualBox
+* Vagrant
+* Docker
+* LXD
 
-To begin with, and to reduce the learning curve, we're using `Linux Bridges`, instead of `Open vSwitch`. Because it is very easy to fully understand `OpenStack Neutron` internals with `Linux Bridges`, it is easier to debug and simpler (`KISS Principle`).
+It contains Ansible Playbooks for Automated deployments of:
 
-Nevertheless, for a future `multi-node` deployments, `Open vSwitch` will be preferred. Specially for higly performance networks, when we'll be using `Open vSwitch` with `DPDK`.
+* Ubuntu
+* CentOS
+* Sandvine Platform RPM Packages
+* OpenStack on Ubuntu LTS
 
-In the next version of our `Ansible` playbooks, `Open vSwitch` will be supported for the `default` `all-in-one` deployments.
+*NOTE: For using Ansible against remore locations, make sure you can ssh to your instances using key authentication.*
 
-## Before start, keep in mind that:
+## Downloading
 
-A- A fresh installation and fully upgraded `Ubuntu Trusty`, with Linux 3.19, is required.
+Download SVAuto into your home directory (Designed for Ubuntu LTS):
 
-B- Make sure you can use `sudo` without password.
+    cd ~
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/raw/dev/misc/svauto-install.sh)
 
-C- Your `/etc/hostname` file must contains ONLY the hostname itself, not the FQDN.
+## SVAuto script usage example
 
-D- Your `IP + FQDN + hostname + aliases` should be configured in your `/etc/hosts` file.
+Resource to build Sandvine's Cloud Services 15.10 Official Images (production quality version).
 
-# Quick Procedure
+    # To build Cloud Services 15.10
+    ./svauto.sh --packer-build-cs --release
 
-## 1- Install Ubuntu 14.04.3 (Server or Desktop), details:
+*NOTE: To build it, you'll need a Sandvine's customer account for ftp.support.sandvine.com.*
 
-* Hostname: "liberty-1"
-* User: "administrative"
-* Password: "whatever"
+This is a resource used to build Sandvine Official Images (development build).
 
-## 2- Upgrade Ubuntu to the latest version, by running:
+    # To build Sandvine's Stock Images
+    ./svauto.sh --packer-build-official
 
-    sudo apt-get update
-    sudo apt-get dist-upgrade -y
-    sudo apt-get install linux-generic-lts-vivid -y
-    sudo reboot
+    # To build Sandvine's Images with Cloud Services
+    ./svauto.sh --packer-build-cs
 
-## 3- Basic requirements:
+*NOTE: It depends on a very specific Yum Repository scructure. Not available on the Internet, only on Sandvine's Intranet but, with a Sandvine's customer account of ftp.support.sandvine.com, it is possible to mirrot and build it from scratch, and host it yourself (TODO - Instructions)*
 
-Install `curl` and `ssh`:
+    # To clean it up
+    ./svauto.sh --clean-all
 
-    sudo apt-get install ssh curl -y
+## Using Image Factory directly
 
-Allow members of `sudo` group to become `root` without requiring password promt:
+Resource to build a clean Ubuntu or CentOS images, without Ansible roles, just Packer and upstream ISO media.
 
-    sudo visudo
+    # Ubuntu Trusty 14.04.3 - Blank server
+    ./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=svserver --version=14.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum
+    
+    # Ubuntu Xenial 16.04 - Blank server
+    ./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=svserver --version=16.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum
+    
+    # CentOS 6.7 - Blank server - Old Linux 2.6
+    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
+    
+    # CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
+    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
+    
+    # CentOS 7.2 - Blank server - Old Linux 3.10
+    ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
+    
+    # CentOS 7.2 - Blank server - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+    ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
 
-The line that starts with `%sudo` must contains:
+Resource to build a clean Ubuntu or CentOS images, with Packer and Ansible, plus upstream ISO media.
 
-    %sudo   ALL=NOPASSWD:ALL
+    # CentOS 6.7 - Blank server - Old Linux 2.6
+    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init,grub-conf
+    
+    # CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
+    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=centos-xen,bootstrap,cloud-init,grub-conf
+    
+    # CentOS 7.2 - Blank server - Old Linux 3.10
+    ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init
+    
+    # CentOS 7.2 - Blank server - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+    ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=centos-xen,bootstrap,cloud-init
 
-## 4- Configure /etc/hostname and /etc/hosts files, like this:
+### AWS (TODO)
 
-One line in `/etc/hostname`:
+In order to setup your environment prior to running ansible, start a new
+bash using `ssh-agent` and add your keys to it:
 
-    liberty-1
+    ssh-agent bash -l
+    ssh-add ~/.ssh/my-aws-key.pem
 
-First two lines of `/etc/hosts` (do not touch IPv6 lines):
+Then use the playbook normally:
 
-    127.0.0.1 localhost.localdomain localhost
-    127.0.1.1 liberty-1.yourdomain.com liberty-1 liberty
-
-*NOTE: If you have fixed IP (v4 or v6), you can use it here (recommended).*
-
-Make sure it is working:
-
-    hostname # Must returns ONLY your Hostname, nothing more.
-    hostname -d # Must returns ONLY your Domain.
-    hostname -f # Must returns your FQDN.
-    hostname -i # Must returns your IP (can be 127.0.1.1).
-    hostname -a # Must returns your aliases.
-
-## 5- Deploy OpenStack Liberty
-
-Then, you'll be able to deploy `OpenStack` by running:
-
-    bash <(curl -s https://raw.githubusercontent.com/sandvine/os-ansible-deployment-lite/liberty/misc/os-install.sh)
-
-Well done!
-
-# Advanced Procedure
-
-1- Add the following entries to your `/etc/network/interfaces` file:
-
-    # Fake External Interface
-    allow-hotplug dummy0
-    iface dummy0 inet static
-      address 172.31.254.129
-      netmask 25
-
-    # VXLAN Data Path
-    allow-hotplug dummy1
-    iface dummy1 inet static
-      mtu 1550
-      address 10.0.0.1
-      netmask 24
-
-## For local deployments:
-
-1- Install Ansible to deploy your `OpenStack`:
-
-    sudo apt-get install git ansible=1.7.2+dfsg-1~ubuntu14.04.1
-
-    git clone -b liberty https://github.com/sandvine/os-ansible-deployment-lite.git
-
-    cd os-ansible-deployment-lite
-
-    ./os-deploy.sh
-
-## For remote deployments:
-
-1- Make sure you can ssh to your servers using key authentication.
-
-2- Install Ansible to deploy your `OpenStack`:
-
-    sudo apt-get install git ansible=1.7.2+dfsg-1~ubuntu14.04.1
-
-    git clone -b liberty https://github.com/sandvine/os-ansible-deployment-lite.git
-
-    cd os-ansible-deployment-lite
-
-Configure the file `group_vars/all` according to your remote computer.
-
-Pay an extra attention to the templates: `nova.conf`, `cinder.conf` and `ml2_conf.ini`, reconfigure those if required.
-
-Add your remote computer `FQDN` or `IP Address` to the `hosts` file, within group `all-in-one`, for example.
-
-Then, run `Ansible`:
-
-    ansible-playbook site.yml
-
-**NOTE:** You can take a look at the script `os-deploy.sh` to see what needs to be changed before running `Ansible`.
-
-# Extra info
-
-There is a few assumptions here, like for example:
-
-A- Your remote server have its *default / primary* interface named `eth0`, the **my_ip** config option at `nova.conf` and `cinder.conf`;
-
-B- The `br-ex` `Neutron` interface is bridged against the `dummy0` interface (`ml2_conf.ini`), it have the subnet `172.31.254.128/25`, so, it is the *default gateway* of ALL `Neutron Namespaces` of this deployment. Usually, we must use a real interface for `br-ex`, where the IP 172.31.254.129 should be configured in an `Upstream Router`, outside of `OpenStack`, and NOT here, at the `dummy0` interface.
-
-Details:
-
-    http://docs.openstack.org/liberty/install-guide/install/apt/content/ch_basic_environment.html#basics-neutron-networking-network-node
-
-C- Because the `br-ex` is bridged against the `dummy0` interface, you'll need to create a `iptables masquerade` rule, so your `Instances` can reach the Internet through real `eth0`.
-
-Example:
-
-    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-
-D- The `vxlan` `Neutron` data network, will be created on top of a `dummy1`, it is really fast but, only works for our `all-in-one` deplyments (`ml2_conf.ini`).
-
-TODO:
-
-- Automate the Network Interfaces management with Ansible.
-
-- Create a "setup / install" script, which will prompt some questions for the user, about local / remote setups, to simplify the instructions presented here.
+    ansible-playbook -u root site.yml
