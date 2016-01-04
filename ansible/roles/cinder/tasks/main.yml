@@ -35,7 +35,6 @@
   register: cinder_cleaned
 
 
-
 - name: Updating cinder.conf
   template: src=cinder.conf
         dest=/etc/cinder/cinder.conf

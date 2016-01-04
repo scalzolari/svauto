@@ -84,6 +84,8 @@ csd_versioned: false
 # OpenStack Definitions
 #
 
+use_dummies: "no"
+
 br_mode: "LBR"
 
 linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"

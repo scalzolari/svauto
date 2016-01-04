@@ -12,24 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: main-centos-common.yml
-  when: base_os == 'centos72' or base_os == 'centos67'
-
-- include: main-centos7.yml
-  when: base_os == 'centos72'
-
-- include: main-centos6.yml
-  when: base_os == 'centos67'
-
-
-- include: main-ubuntu16.yml
-  when: base_os == 'ubuntu16'
-
-- include: main-ubuntu14.yml
-  when: base_os == 'ubuntu14'
-
-- include: main-ubuntu-common.yml
-  when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
-
-- include: main-ubuntu-dummies.yml
-  when: base_os == 'ubuntu16' or base_os == 'ubuntu14' and use_dummies == 'yes' 
+- name: Ubuntu Trusty default sources.list
+  copy: src=ubuntu/trusty_apt_sources.list
+        dest=/etc/apt/sources.list
+        owner=root
+        group=root
+        mode=0644

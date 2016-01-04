@@ -18,9 +18,10 @@
     - mysql-server
   register: mysql_installed
 
-- name: Updating my.cnf
-  copy: src=my.cnf
-        dest=/etc/mysql/my.cnf
+
+- name: Updating mysqld.cnf
+  copy: src=mysqld.cnf
+        dest=/etc/mysql/mysql.conf.d/mysqld.cnf
         owner=root
         group=root
         mode=0644
@@ -28,15 +29,18 @@
   when: mysql_installed|changed
   register: my_cnf_updated
 
+
 - name: Restarting MySQL
   service: name=mysql state=restarted
   when: my_cnf_updated|changed
   register: mysql_ready
 
+
 - name: Creating OpenStack MySQL databases
   mysql_db: name={{item.db_name}} state=present
   when: mysql_ready|changed
   with_items: mysql_databases
+
   
 - name: Creating OpenStack MySQL users 
   mysql_user:

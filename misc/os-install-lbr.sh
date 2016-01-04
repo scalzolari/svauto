@@ -29,14 +29,14 @@ echo
 echo
 echo "Installing Git and Ansible..."
 echo
-sudo apt-get install -y git ansible=1.7.2+dfsg-1~ubuntu14.04.1 python-pycurl
+sudo apt -y install git ansible python-pycurl
 
 
 echo
 echo "Cloning OpenStack Ansible Deployment Lite into your home directory..."
 echo
 cd ~
-git clone -b liberty https://github.com/sandvine/os-ansible-deployment-lite.git
+git clone -b dev https://github.com/tmartinx/svauto.git
 
 
 echo
@@ -44,8 +44,8 @@ echo "Deploying OpenStack..."
 echo
 echo "Bridge Mode: Linux Bridges"
 echo
-cd ~/os-ansible-deployment-lite
-./os-deploy.sh --br-mode=LBR
+cd ~/svauto
+./os-deploy.sh --br-mode=LBR --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes
 
 
 echo
@@ -62,10 +62,10 @@ echo
 echo "source ~/demo-openrc.sh"
 echo
 echo "If you have 8~16G of RAM:"
-echo "heat stack-create demo -f ~/os-ansible-deployment-lite/misc/os-heat-templates/sandvine-stack-0.1-centos.yaml"
+echo "heat stack-create demo -f ~/svauto/misc/os-heat-templates/sandvine-stack-0.1-centos.yaml"
 echo
 echo "If you have 2~4G of RAM:"
-echo "heat stack-create demo -f ~/os-ansible-deployment-lite/misc/os-heat-templates/nfv-l2-bridge-basic-stack-ubuntu.yaml"
+echo "heat stack-create demo -f ~/svauto/misc/os-heat-templates/nfv-l2-bridge-basic-stack-ubuntu.yaml"
 echo
 echo "Enjoy it!"
 echo

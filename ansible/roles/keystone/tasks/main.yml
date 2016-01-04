@@ -58,20 +58,20 @@
 
 
 - name: Creating Apache Keystone Virtual Host - Public
-  template: src=wsgi-keystone-public.conf
-            dest=/etc/apache2/sites-available/wsgi-keystone-public.conf
-            owner=root
-            group=root
-            mode=0644
-            backup=yes
+  copy: src=wsgi-keystone-public.conf
+        dest=/etc/apache2/sites-available/wsgi-keystone-public.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
 
 - name: Creating Apache Keystone Virtual Host - Internal
-  template: src=wsgi-keystone-internal.conf
-            dest=/etc/apache2/sites-available/wsgi-keystone-internal.conf
-            owner=root
-            group=root
-            mode=0644
-            backup=yes
+  copy: src=wsgi-keystone-internal.conf
+        dest=/etc/apache2/sites-available/wsgi-keystone-internal.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
 
 - file: src=/etc/apache2/sites-available/wsgi-keystone-public.conf
         dest=/etc/apache2/sites-enabled/wsgi-keystone-public.conf

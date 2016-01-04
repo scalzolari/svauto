@@ -1,6 +1,6 @@
 ﻿# Ansible Playbook for OpenStack
 
-# os-ansible-deployment-lite
+# svauto
 
 Ansible playbooks for deploying `OpenStack`.  http://openstack.org
 
@@ -34,22 +34,22 @@ D- Your `IP + FQDN + hostname + aliases` should be configured in your `/etc/host
 
 ## 1- Install Ubuntu 14.04.3 (Server or Desktop), details:
 
-* Hostname: "liberty-1"
+* Hostname: "mitaka-1"
 * User: "administrative"
 * Password: "whatever"
 
 ## 2- Upgrade Ubuntu to the latest version, by running:
 
-    sudo apt-get update
-    sudo apt-get dist-upgrade -y
-    sudo apt-get install linux-generic-lts-vivid -y
+    sudo apt update
+    sudo apt dist-upgrade -y
+    sudo apt install linux-generic-lts-vivid -y
     sudo reboot
 
 ## 3- Basic requirements:
 
 Install `curl` and `ssh`:
 
-    sudo apt-get install ssh curl -y
+    sudo apt install ssh curl -y
 
 Allow members of `sudo` group to become `root` without requiring password promt:
 
@@ -63,12 +63,12 @@ The line that starts with `%sudo` must contains:
 
 One line in `/etc/hostname`:
 
-    liberty-1
+    mitaka-1
 
 First two lines of `/etc/hosts` (do not touch IPv6 lines):
 
     127.0.0.1 localhost.localdomain localhost
-    127.0.1.1 liberty-1.yourdomain.com liberty-1 liberty
+    127.0.1.1 mitaka-1.yourdomain.com mitaka-1 mitaka
 
 *NOTE: If you have fixed IP (v4 or v6), you can use it here (recommended).*
 
@@ -80,11 +80,11 @@ Make sure it is working:
     hostname -i # Must returns your IP (can be 127.0.1.1).
     hostname -a # Must returns your aliases.
 
-## 5- Deploy OpenStack Liberty
+## 5- Deploy OpenStack Mitaka
 
 Then, you'll be able to deploy `OpenStack` by running:
 
-    bash <(curl -s https://raw.githubusercontent.com/sandvine/os-ansible-deployment-lite/liberty/misc/os-install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/misc/os-install.sh)
 
 Well done!
 
@@ -109,11 +109,11 @@ Well done!
 
 1- Install Ansible to deploy your `OpenStack`:
 
-    sudo apt-get install git ansible=1.7.2+dfsg-1~ubuntu14.04.1
+    sudo apt install git ansible
 
-    git clone -b liberty https://github.com/sandvine/os-ansible-deployment-lite.git
+    git clone -b dev https://github.com/tmartinx/svauto.git
 
-    cd os-ansible-deployment-lite
+    cd svauto
 
     ./os-deploy.sh
 
@@ -123,11 +123,11 @@ Well done!
 
 2- Install Ansible to deploy your `OpenStack`:
 
-    sudo apt-get install git ansible=1.7.2+dfsg-1~ubuntu14.04.1
+    sudo apt install git ansible
 
-    git clone -b liberty https://github.com/sandvine/os-ansible-deployment-lite.git
+    git clone -b dev https://github.com/tmartinx/svauto.git
 
-    cd os-ansible-deployment-lite
+    cd svauto
 
 Configure the file `group_vars/all` according to your remote computer.
 

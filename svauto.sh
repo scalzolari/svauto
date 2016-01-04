@@ -317,17 +317,17 @@ then
 		echo
 		echo "You must run this script passing the \"Stack Name\" as an argument, like this:"
 		echo
-		echo "Assuming you downloaded it under ~/sandvine-playbook:"
+		echo "Assuming you downloaded it under ~/svauto:"
 		echo
-		echo "cd ~/sandvine-playbook ; ./svauto.sh --stack=demo"
+		echo "cd ~/svauto ; ./svauto.sh --stack=demo"
 		echo
 		echo
 		echo "If you don't have a Sandvine compatible Stack up and running, you can start one"
 		echo "right now by running:"
 		echo
-		echo "heat stack-create demo -f ~/os-ansible-deployment-lite/misc/os-heat-templates/sandvine-stack-0.1-centos.yaml"
+		echo "heat stack-create demo -f ~/svauto/misc/os-heat-templates/sandvine-stack-0.1-centos.yaml"
 		echo
-		echo "And re-run the \`cd ~/sandvine-playbook ; ./svauto.sh\` script again, passing \"--stack=demo\""
+		echo "And re-run the \`cd ~/svauto ; ./svauto.sh\` script again, passing \"--stack=demo\""
 		echo "as an argument to it."
 		echo
 		echo "Aborting!"

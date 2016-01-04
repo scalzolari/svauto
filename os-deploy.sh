@@ -21,14 +21,41 @@
 for i in "$@"
 do
 case $i in
+
         --br-mode=*)
-        BR_MODE="${i#*=}"
-        shift
-	;;
+
+	        BR_MODE="${i#*=}"
+        	shift
+		;;
+
+
+        --base-os=*)
+
+                BASE_OS="${i#*=}"
+                shift
+                ;;
+
+
+	--base-os-upgrade)
+
+		BASE_OS_UPGRADE="yes"
+		shift
+		;;
+
+
+        --use-dummies)
+
+	        USE_DUMMIES="yes"
+		shift
+        	;;
+
+
         --dry-run)
-        DRYRUN="yes"
-	shift
-        ;;
+
+	        DRYRUN="yes"
+		shift
+        	;;
+
 esac
 done
 
@@ -46,46 +73,60 @@ then
 	echo "You need to correctly specify the Bridge Mode for your OpenStack."
 	echo
 	echo "Try:"
-	echo "./os-deploy.sh --br-mode=OVS  # For Open vSwitch."
-	echo "./os-deploy.sh --br-mode=LBR  # For Linux Bridges."
+	echo "./os-deploy.sh --br-mode=OVS --base-os=ubuntu16 --base-os-upgrade=yey  # For Open vSwitch."
+	echo "./os-deploy.sh --br-mode=LBR --base-os=ubuntu16 --base-os-upgrade=yes  # For Linux Bridges."
 	exit 1
 fi
 
 
-# Verifying if you have enough CPU Cores.
-echo
-echo "Verifying if you have enough CPU Cores..."
-
-CPU_CORES=$(grep -c ^processor /proc/cpuinfo)
-
-if [ $CPU_CORES -lt 4 ]
+# Doing CPU checks
+if [ "$DRYRUN" == "yes" ]
 then
-	echo
-        echo "WARNING!!!"
-	echo "You do not have enough CPU Cores to run this system!"
-	echo "ABORTING!!!"
-	exit 1
-else
+
         echo
-	echo "Okay, good, you have enough CPU Cores, proceeding..."
-fi
+	echo "WARNING!!!"
+        echo "Not running CPU checks..."
 
-
-# Verifying if host have Virtualization enabled, abort it if doesn't have.
-echo
-echo "Verifying if your CPU supports Virtualization..."
-
-sudo apt-get install -y cpu-checker 2>&1 > /dev/null
-
-if /usr/sbin/kvm-ok 2>&1 > /dev/null
-then
-	echo
-        echo "OK, Virtualization supported, proceeding..."
 else
-        echo "WARNING!!!"
-	echo "Virtualization NOT supported on this CPU or it is not enabled on your BIOS"
-	echo "ABORTING!!!"
-	exit 1
+ 
+	# Verifying if you have enough CPU Cores.
+	echo
+	echo "Verifying if you have enough CPU Cores..."
+	
+	CPU_CORES=$(grep -c ^processor /proc/cpuinfo)
+	
+	if [ $CPU_CORES -lt 4 ]
+	then
+		echo
+	        echo "WARNING!!!"
+		echo "You do not have enough CPU Cores to run this system!"
+		echo "ABORTING!!!"
+	
+		exit 1
+	else
+	        echo
+		echo "Okay, good, you have enough CPU Cores, proceeding..."
+	fi
+
+
+	# Verifying if host have Virtualization enabled, abort it if doesn't have.
+	echo
+	echo "Verifying if your CPU supports Virtualization..."
+	
+	sudo apt -y install cpu-checker 2>&1 > /dev/null
+	
+	if /usr/sbin/kvm-ok 2>&1 > /dev/null
+	then
+		echo
+	        echo "OK, Virtualization supported, proceeding..."
+	else
+	        echo "WARNING!!!"
+		echo "Virtualization NOT supported on this CPU or it is not enabled on your BIOS"
+		echo "ABORTING!!!"
+	
+		exit 1
+	fi
+
 fi
 
 
@@ -99,16 +140,19 @@ DOMAIN=$(hostname -d)
 # If the hostname and hosts file aren't configured according, abort.
 if [ -z $HOSTNAME ]; then
         echo "Hostname not found... Configure the file /etc/hostname with your hostname. ABORTING!"
+
         exit 1
 fi
 
 if [ -z $DOMAIN ]; then
         echo "Domain not found... Configure the file /etc/hosts with your \"IP + FQDN + HOSTNAME\". ABORTING!"
+
         exit 1
 fi
 
 if [ -z $FQDN ]; then
         echo "FQDN not found... Configure your /etc/hosts according. ABORTING!"
+
         exit 1
 fi
 
@@ -123,121 +167,26 @@ echo "FQDN:" $FQDN
 echo "Domain:" $DOMAIN
 
 
-# Configuring dummy interfaces now and on boot
-DUMMY="dummy"
-
-if grep -q "$DUMMY" /etc/modules
-then
-
-    echo
-    echo "Dummy module already configured..."
-
-else
-
-    echo
-    echo "Configuring dummy module at /etc/modules..."
-    sudo tee --append /etc/modules > /dev/null <<EOF
-dummy numdummies=6
-EOF
-
-    echo
-    echo "Loading dummy module..."
-    sudo modprobe dummy numdummies=3
-
-fi
-
-
-# Configuring /etc/network/interfaces according to the BR_MODE
-if grep -q "$DUMMY" /etc/network/interfaces
-then
-
-    echo
-    echo "Dummy interface(s) already configured, not touching /etc/network/interfaces file!"
-
-else
-
-	if [ "$BR_MODE" = "LBR" ]
-	then
-
-		echo
-		echo "Configuring dummy interfaces for Linux Bridges at /etc/network/interfaces..."
-
-		sudo tee --append /etc/network/interfaces > /dev/null <<EOF
-
-# Fake External Interface
-allow-hotplug dummy0
-iface dummy0 inet static
-	address 172.31.254.129
-	netmask 25
-
-# VXLAN Data Path
-allow-hotplug dummy1
-iface dummy1 inet static
-	mtu 1500
-	address 10.0.0.1
-	netmask 24
-EOF
-
-	echo
-	echo "Enabling dummy interfaces for Linux Bridges..."
-	echo
-	sudo ifup dummy0
-	sudo ifup dummy1
-
-	fi
-
-	if [ "$BR_MODE" = "OVS" ]
-	then
-
-		echo
-		echo "Configuring dummy interfaces for Open vSwitch at /etc/network/interfaces..."
-
-		sudo tee --append /etc/network/interfaces > /dev/null <<EOF
-
-# Fake External Interface
-allow-hotplug br-ex
-iface br-ex inet static
-	address 172.31.254.129
-	netmask 25
-
-# VXLAN Data Path
-allow-hotplug dummy1
-iface dummy1 inet static
-	mtu 1500
-	address 10.0.0.1
-	netmask 24
-EOF
-
-	echo
-	echo "Enabling dummy interfaces for Open vSwitch..."
-	echo
-#	sudo ifup br-ex
-	sudo ip link set dev dummy0 up
-	sudo ifup dummy1
-
-	fi
-
-fi
-
-
 # Configuring Bridge Mode on group_vars/all
 echo
 echo "Configuring Bridge Mode to "$BR_MODE" on ansible/group_vars/all file..."
+
 # http://docs.openstack.org/networking-guide/scenario_legacy_lb.html
 if [ "$BR_MODE" = "LBR" ]
 then
 	sed -i -e 's/br_mode:.*/br_mode: "LBR"/' ansible/group_vars/all
 	sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"/' ansible/group_vars/all
-	sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.BridgeInterfaceDriver"/' ansible/group_vars/all
+	sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "linuxbridge"/' ansible/group_vars/all
 	sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "linuxbridge"/' ansible/group_vars/all
 	sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.linux.iptables_firewall.IptablesFirewallDriver"/' ansible/group_vars/all
 fi
+
 # http://docs.openstack.org/networking-guide/scenario_legacy_ovs.html
 if [ "$BR_MODE" = "OVS" ]
 then 
          sed -i -e 's/br_mode:.*/br_mode: "OVS"/' ansible/group_vars/all
          sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.LinuxOVSInterfaceDriver"/' ansible/group_vars/all
-         sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.OVSInterfaceDriver"/' ansible/group_vars/all
+         sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "openvswitch"/' ansible/group_vars/all
          sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "openvswitch"/' ansible/group_vars/all
          sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver"/' ansible/group_vars/all
 fi
@@ -245,14 +194,22 @@ fi
 
 # Configuring FQDN and Domain on group_vars/all
 echo
-echo "Configuring ansible/group_vars/all file based on current environment..."
+echo "Configuring ansible/group_vars/all & ansible/hosts file based on current environment..."
+
+sed -i -e 's/base_os:.*/base_os: "ubuntu16"/' ansible/group_vars/all
+sed -i -e 's/base_os_upgrade:.*/base_os_upgrade: "yes"/' ansible/group_vars/all
+sed -i -e 's/use_dummies:.*/use_dummies: "yes"/' ansible/group_vars/all
+
 sed -i -e 's/controller-1.yourdomain.com/'$FQDN'/g' ansible/group_vars/all
 sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
+
+sed -i -e 's/^#localhost/localhost/g' ansible/hosts
 
 
 # Configuring site.yml and some roles
 echo
 echo "Configuring ansible/site.yml and OpenStack OpenRC files with your current $WHOAMI user..."
+
 sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site.yml
 sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/keystone/tasks/openrc-files.yml
 
@@ -266,6 +223,7 @@ echo "dafault route via:" $DEFAULT_GW_INT
 
 echo
 echo "Preparing Ansible templates based on current default gateway interface..."
+
 sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/nova_aio/templates/nova.conf
 sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/cinder/templates/cinder.conf
 
@@ -279,7 +237,8 @@ then
         echo "Not running Ansible! Just preparing the environment variables..."
 else
         echo
-	cd ~/os-ansible-deployment-lite/ansible
+
+	cd ~/svauto/ansible
         ansible-playbook site.yml
 fi
 
@@ -294,15 +253,16 @@ then
 
 else
 
-	if [ -f ~/.ssh/id_dsa.pub ] && [ -f /usr/bin/nova ]
+	if [ -f ~/.ssh/id_rsa.pub ] && [ -f /usr/bin/nova ]
 	then
 
 		echo
 		echo "Creating and uploding your SSH Keypair into OpenStack..."
 		echo
 		echo "Safe SSH Key found, uploading it to OpenStack."
+
 		source ~/demo-openrc.sh
-		nova keypair-add --pub-key ~/.ssh/id_dsa.pub default
+		nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
 
 	else
 
@@ -311,28 +271,42 @@ else
 		echo
 	        echo "Creating a safe SSH Keypair for you and uploading it to OpenStack."
 		echo
-	        ssh-keygen -t dsa -N "" -f ~/.ssh/id_dsa
+
+	        ssh-keygen -b 2048 -t rsa -N "" -f ~/.ssh/id_rsa
 	        source ~/demo-openrc.sh
-	        nova keypair-add --pub-key ~/.ssh/id_dsa.pub default
+	        nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
 
 	fi
 
 fi
 
 
-# Displaying information about the need for an iptables MASQUERADE rule.
-echo 
-echo "You'll need an iptables MASQUERADE rule to allow your Instances to reach the"
-echo "Internet, so, lets add the following line to your /etc/rc.local file:"
-echo
-echo "iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE"
+# Tell about iptables required rules and configure it at /etc/rc.local:
+if [ "$DRYRUN" == "yes" ]
+then
 
-sudo sed -i -e '/exit/d' /etc/rc.local
+        echo
+	echo "WARNING!!!"
+        echo "Not telling about iptables neither configuring it at /etc/rc.local."
 
-sudo tee --append /etc/rc.local > /dev/null <<EOF
+else
+ 
+	# Displaying information about the need for an iptables MASQUERADE rule.
+	echo 
+	echo "You'll need an iptables MASQUERADE rule to allow your Instances to reach the"
+	echo "Internet, so, lets add the following line to your /etc/rc.local file:"
+	echo
+	echo "iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE"
+	
+	sudo sed -i -e '/exit/d' /etc/rc.local
+	
+	sudo tee --append /etc/rc.local > /dev/null <<EOF
 iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE
 EOF
+	
+	echo
+	echo "Running /etc/rc.local for you..."
+	
+	sudo /etc/rc.local
 
-echo
-echo "Running /etc/rc.local for you..."
-sudo /etc/rc.local
+fi
