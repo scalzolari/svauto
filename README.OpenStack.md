@@ -41,8 +41,8 @@ D- Your `IP + FQDN + hostname + aliases` should be configured in your `/etc/host
 ## 2- Upgrade Ubuntu to the latest version, by running:
 
     sudo apt update
-    sudo apt dist-upgrade -y
-    sudo apt install linux-generic-lts-vivid -y
+    sudo apt -y full-upgrade
+    sudo apt -y install linux-generic-lts-vivid
     sudo reboot
 
 ## 3- Basic requirements:
@@ -109,7 +109,7 @@ Well done!
 
 1- Install Ansible to deploy your `OpenStack`:
 
-    sudo apt install git ansible
+    sudo apt -y install git ansible
 
     git clone -b dev https://github.com/tmartinx/svauto.git
 
@@ -123,7 +123,7 @@ Well done!
 
 2- Install Ansible to deploy your `OpenStack`:
 
-    sudo apt install git ansible
+    sudo apt -y install git ansible
 
     git clone -b dev https://github.com/tmartinx/svauto.git
 
