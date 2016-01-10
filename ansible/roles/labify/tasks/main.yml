@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - include: main-centos6.yml
-  when: base_os == 'centos67' or base_os == 'centos66'
+  when: base_os == 'centos67'
 
 
 - include: main-centos7.yml

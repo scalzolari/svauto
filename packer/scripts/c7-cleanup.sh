@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Remove Ansible.
-yum -y remove ansible
-
 # Clean yum local cache.
 yum clean all
 

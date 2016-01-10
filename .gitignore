@@ -1,1 +1,9 @@
 *.swp
+*.qcow2
+*.qcow2c
+*.vmdk
+build-date.txt
+packer/build*
+packer/ubuntu*-tmpl
+packer/centos*-tmpl
+packer_cache

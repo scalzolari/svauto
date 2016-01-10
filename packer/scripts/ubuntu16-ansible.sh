@@ -1,6 +1,6 @@
-#! /bin/bash
+#!/bin/bash -eux
 
-# Copyright 2016, Sandvine Incorporated.
+# Copyright 2016, Sandvine Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,30 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Updating
+echo 'sandvine' | sudo -S -E apt update
 
-clear
-
-
-echo
-echo "Welcome to Sandvine Platform installation!"
-echo
-
-
-echo
-echo "Installing Git and Ansible..."
-echo
-sudo apt -y install git ansible
-
-
-echo
-echo "Cloning Sandvine's Ansible Deployment into your home directory..."
-echo
-cd ~
-git clone -b dev http://github.com/tmartinx/svauto.git
-
-
-echo
-echo "Deploying Sandvine Platform from its RPM Packages:"
-echo
-cd ~/svauto
-./svauto.sh --freebsd-pts=yes --stack=demo
+# Install Ansible
+echo 'sandvine' | sudo -S -E apt install -y ansible

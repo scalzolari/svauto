@@ -19,25 +19,29 @@ clear
 
 
 echo
-echo "Welcome to Sandvine Platform installation!"
+echo "Welcome to SVAuto, the Sandvine Automation!"
 echo
 
 
 echo
-echo "Installing Git and Ansible..."
+echo "Installing Git..."
 echo
-sudo apt -y install git ansible
+sudo apt -y install git
 
 
 echo
 echo "Cloning Sandvine's Ansible Deployment into your home directory..."
 echo
+
 cd ~
 git clone -b dev http://github.com/tmartinx/svauto.git
 
-
 echo
-echo "Deploying Sandvine Platform from its RPM Packages:"
+echo "You'll need to install all the dependencies for running SVAuto."
+echo "Git is already install by this script, it is a dependency as well."
 echo
-cd ~/svauto
-./svauto.sh --freebsd-pts=yes --stack=demo
+echo "To install everything, run:"
+echo
+echo "cd ~/svauto"
+echo "./svauto.sh --install-dependencies"
+echo

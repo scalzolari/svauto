@@ -53,7 +53,7 @@
 # For CentOS 6:
 - name: Installing PostgreSQL 9.3 RPM Repository package for CentOS 6
   yum: pkg=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm state=present
-  when: base_os == 'centos67' or base_os == 'centos66'
+  when: base_os == 'centos67'
   register: pgsql_repo_in_place
 
 

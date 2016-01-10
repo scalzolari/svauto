@@ -27,7 +27,7 @@
             owner=root
             group=root
             mode=0644
-  when: sde_version == '7.20' and release == 'dev'
+  when: release == 'dev'
 
 
 - name: Creating Sandvine Subscriber Mapping Repository - Development - Versioned

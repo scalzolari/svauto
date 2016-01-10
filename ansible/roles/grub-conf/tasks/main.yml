@@ -16,4 +16,4 @@
   lineinfile: dest=/etc/grub.conf
               insertafter='^hiddenmenu'
               line='serial --unit=0 --speed=115200\nterminal --timeout=5 serial console'
-  when: base_os == 'centos67' or base_os == 'centos66'
+  when: base_os == 'centos67'

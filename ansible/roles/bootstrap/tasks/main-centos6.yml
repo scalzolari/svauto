@@ -55,7 +55,7 @@
 
 - name: Enabling eth1
   shell: ifup eth1
-  when: ifcfg_eth1_in_place|changed
+  when: ifcfg_eth1_in_place|success and activate_eth1 == "yes"
   ignore_errors: yes
 
 
@@ -84,6 +84,7 @@
     - rsyslog
     - tcpdump  
     - mlocate
+    - ansible
     - pciutils 
     - dmidecode
     - bind-utils

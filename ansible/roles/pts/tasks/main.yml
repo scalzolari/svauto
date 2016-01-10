@@ -48,16 +48,16 @@
   register: pts_installed
 
 
+- name: Excluding the kernel from being upgraded (DPDK RPM workarond)
+  lineinfile: dest=/etc/yum.conf line="exclude=kernel"
+
+
 - include: main-centos6.yml
-  when: base_os == 'centos67' or base_os == 'centos66'
+  when: base_os == 'centos67'
 
 
 - include: main-centos7.yml
   when: base_os == 'centos72'
-
-
-- name: Excluding the kernel from being upgraded (old DPDK 1.8 requirement)
-  lineinfile: dest=/etc/yum.conf line="exclude=kernel"
 
 
 - name: Cleanup YUM local cache

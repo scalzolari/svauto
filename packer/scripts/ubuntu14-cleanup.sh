@@ -14,9 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Remove Ansible.
-echo 'sandvine' | sudo -S -E apt-get purge -y ansible
-
 # Clean yum local cache.
 echo 'sandvine' | sudo -S -E apt-get clean
 

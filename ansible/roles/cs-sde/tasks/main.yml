@@ -14,7 +14,7 @@
 
 - name: Force UTC timezone
   file: src=/usr/share/zoneinfo/UTC dest=/etc/localtime state=link force=yes
-  when: base_os == 'centos67' or base_os == 'centos66'
+  when: base_os == 'centos67'
 
 
 - name: Installing Cloud Serivces for SDE plus required packages

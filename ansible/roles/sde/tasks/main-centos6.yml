@@ -35,7 +35,7 @@
             group=root
             mode=0644
   register: sandvine_sde_repo_in_place
-  when: sde_version == '7.20' and release == 'dev'
+  when: release == 'dev'
 
 
 - name: Creating Sandvine SDE Repository - Development - Versioned

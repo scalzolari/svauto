@@ -15,29 +15,25 @@
 # limitations under the License.
 
 
-clear
+#
+# Script for being used as a cronjob to build all available O.S. Images.
+#
 
 
-echo
-echo "Welcome to Sandvine Platform installation!"
-echo
-
-
-echo
-echo "Installing Git and Ansible..."
-echo
-sudo apt -y install git ansible
-
-
-echo
-echo "Cloning Sandvine's Ansible Deployment into your home directory..."
-echo
-cd ~
-git clone -b dev http://github.com/tmartinx/svauto.git
-
-
-echo
-echo "Deploying Sandvine Platform from its RPM Packages:"
-echo
+# SVAuto directory
 cd ~/svauto
-./svauto.sh --freebsd-pts=yes --stack=demo
+
+
+# Sandvine Cloud Services Images for being released to the public
+time ./svauto.sh --packer-build-cs --move2webroot --release
+#exit
+
+
+# Sandvine Cloud Services Images
+time ./svauto.sh --packer-build-cs --move2webroot
+#exit
+
+
+# Sandvine Stock Images
+time ./svauto.sh --packer-build-official --move2webroot
+#exit

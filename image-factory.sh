@@ -333,7 +333,7 @@ fi
 
 
 # Build extra_vars "nicely"!
-EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE""
+EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE" activate_eth1="no""
 
 if [ "$EXPERIMENTAL_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS is_experimental="yes""
@@ -342,6 +342,7 @@ fi
 if [ "$BASE_OS_UPGRADE" == "yes" ]; then
 	EXTRA_VARS="$EXTRA_VARS base_os_upgrade="yes""
 fi
+
 
 case "$PRODUCT" in
 
@@ -378,7 +379,7 @@ case "$PRODUCT" in
 		fi
 		;;
 
-	svcs)
+	svcsd)
 		;;
 
 	centos)
@@ -389,7 +390,7 @@ case "$PRODUCT" in
 
         *)
 		echo
-		echo $"Usage: $0 --product={svpts|svsde|svspb|svcs|centos|ubuntu}"
+		echo $"Usage: $0 --product={svpts|svsde|svspb|svcsd|centos|ubuntu}"
 		exit 1
 		;;
 

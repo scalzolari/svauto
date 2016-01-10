@@ -32,6 +32,7 @@
     - patch
     - chrony
     - openssl
+    - ansible
     - iptables
     - nftables
     - mtr-tiny

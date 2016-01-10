@@ -55,6 +55,9 @@ is_experimental: "no"
 # Is Linux Container (LXD / Docker):
 is_container: "no"
 
+# Activate eth1:
+activate_eth1: "yes"
+
 # Base O.S.:
 # Ubuntu: ubuntu14, ubuntu16
 # Debian: jessie, stretch
@@ -79,6 +82,7 @@ spb_versioned: false
 
 csd_version: "1.00"
 csd_versioned: false
+
 
 #
 # OpenStack Definitions

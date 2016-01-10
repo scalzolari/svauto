@@ -1,6 +1,6 @@
-#! /bin/bash
+#! /bin/bash -eux
 
-# Copyright 2016, Sandvine Incorporated.
+# Copyright 2016, Sandvine Incorporated
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,30 +14,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Clean yum local cache.
+echo 'sandvine' | sudo -S -E apt clean
 
-clear
+# Remove persistent net udev rules.
+#rm -f /etc/udev/rules.d/70-persistent-net.rules
 
+# Remove ssh host keys.
+#rm -f /etc/ssh/ssh_host*
 
-echo
-echo "Welcome to Sandvine Platform installation!"
-echo
+## Zero out the rest of the free space using dd, then delete the written file.
+echo 'sandvine' | sudo -S -E dd if=/dev/zero of=/EMPTY bs=1M && /bin/true
 
+echo 'sandvine' | sudo -S -E rm -f /EMPTY
 
-echo
-echo "Installing Git and Ansible..."
-echo
-sudo apt -y install git ansible
-
-
-echo
-echo "Cloning Sandvine's Ansible Deployment into your home directory..."
-echo
-cd ~
-git clone -b dev http://github.com/tmartinx/svauto.git
-
-
-echo
-echo "Deploying Sandvine Platform from its RPM Packages:"
-echo
-cd ~/svauto
-./svauto.sh --freebsd-pts=yes --stack=demo
+# Add `sync` so Packer doesn't quit too early, before the large file is deleted.
+sync

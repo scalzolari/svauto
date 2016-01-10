@@ -22,6 +22,12 @@ for i in "$@"
 do
 case $i in
 
+	--install-dependencies)
+
+		INSTALL_DEPENDENCIES="yes"
+		shift
+		;;
+
 	--os-project=*)
 
 		OS_PROJECT="${i#*=}"
@@ -54,7 +60,6 @@ case $i in
 
 	--packer-build-cs)
 
-		PACKER_BUILD_OFFICIAL="yes"
 		PACKER_BUILD_CS="yes"
 		shift
 		;;
@@ -65,9 +70,15 @@ case $i in
 		shift
 		;;
 
+	--move2webroot)
+
+		MOVE2WEBROOT="yes"
+		shift
+		;;
+
 	--release)
 
-		RELEASE="yes"
+		PACKER_BUILD_CS_RELEASE="yes"
 		shift
 		;;
 
@@ -75,6 +86,8 @@ case $i in
 
 		echo
 		echo "Cleaning it up..."
+
+		[ -f build-date.txt ] && rm -f build-date.txt
 
 		git checkout ansible/hosts ansible/site.yml ansible/group_vars/all
 
@@ -97,8 +110,67 @@ esac
 done
 
 
+if [ "$INSTALL_DEPENDENCIES" == "yes" ]
+then
 
-if [ "$PACKER_BUILD_CS" == "yes" ] && [ "$RELEASE" == "yes" ]
+	echo
+	echo "Installing SVAuto dependencies via APT:"
+	echo
+
+	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip
+
+
+	echo
+	echo "Installing Packer 0.8.6 into /usr/local/bin:"
+	echo
+
+	cd /usr/local/bin
+	sudo wget -c https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip
+	sudo unzip -q -o packer_0.8.6_linux_amd64.zip
+	sudo rm -f packer_0.8.6_linux_amd64.zip
+
+	exit 1
+
+fi
+
+
+if [ "$MOVE2WEBROOT" == "yes" ]
+then
+
+	DOCUMENT_ROOT="/home/ubuntu/public_dir"
+
+	if  [ ! -f build-date.txt ]; then
+		echo $TODAY > build-date.txt
+		BUILD_DATE=`cat build-date.txt`
+	else
+		echo
+		echo "Warning! Build Date file found, a clean all is recommended..."
+		BUILD_DATE=`cat build-date.txt`
+	fi
+
+	WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
+	WEB_ROOT_STOCK=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE
+	WEB_ROOT_STOCK_LAB=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/lab
+	WEB_ROOT_STOCK_RELEASE=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/to-be-released
+#	WEB_ROOT_STOCK_RELEASE_LAB=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/to-be-released/lab
+
+	WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services
+	WEB_ROOT_CS=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE
+	WEB_ROOT_CS_LAB=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/lab
+	WEB_ROOT_CS_RELEASE=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/to-be-released
+#	WEB_ROOT_CS_RELEASE_LAB=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/to-be-released/lab
+
+
+	mkdir -p $WEB_ROOT_STOCK_LAB
+	mkdir -p $WEB_ROOT_STOCK_RELEASE
+
+	mkdir -p $WEB_ROOT_CS_LAB
+	mkdir -p $WEB_ROOT_CS_RELEASE
+
+fi
+
+
+if [ "$PACKER_BUILD_CS_RELEASE" == "yes" ]
 then
 
 	echo
@@ -112,26 +184,228 @@ then
         sed -i -e 's/ftp_username:.*/ftp_username: '$FTP_USER'/g' ansible/group_vars/all
         sed -i -e 's/ftp_password:.*/ftp_password: '$FTP_PASS'/g' ansible/group_vars/all
 
-	# SDE 7.20 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.10 --product-variant=r2 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+
+	#
+	# Production ready images for being released to the public
+	#
+
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo
 
-	# SDE 7.20 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.10 --product-variant=r2 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo --labify
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo --labify
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.10 --product-variant=r2 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.10 --product-variant=r2 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo --labify
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo --labify
+
+	# PTS 7.20 on CentOS 7 + Cloud Services customizations
+	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo
+
+	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
+#	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify
+
+
+	if [ "$MOVE2WEBROOT" == "yes" ]
+	then
+
+		echo
+		echo "Moving all images created during this build, to the Web Root."
+		echo "Also, doing some clean ups, to free the way for subsequent builds..."
+
+
+		find packer -name "*.raw" -exec rm -f {} \;
+
+
+#		find packer/build-lab* -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#		find packer/build-lab* -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#		find packer/build-lab* -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#		find packer/build-lab* -name "*cs-1*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#		find packer/build-lab* -name "*cs-1*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#		find packer/build-lab* -name "*cs-1*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+		find packer -name "cs*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+
+#		cd $WEB_ROOT_CS_RELEASE_LAB
+#		cat *.md5 > MD5SUMS.txt
+#		rm -f *.md5
+#		cat *.sha1 > SHA1SUMS.txt
+#		rm -f *.sha1
+
+		cd $$WEB_ROOT_CS_RELEASE
+		cat *.md5 > MD5SUMS.txt
+		rm -f *.md5
+		cat *.sha1 > SHA1SUMS.txt
+		rm -f *.sha1
+
+
+		rm -rf packer/build*
+
+	fi
 
 	exit 0
 
 fi
 
+
+if [ "$PACKER_BUILD_CS" == "yes" ]
+then
+
+	if [ "$DRYRUN" == "yes" ]; then
+		export DRY_RUN_OPT="--dry-run"
+	fi
+
+
+	#
+	# STABLE
+	#
+
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools $DRY_RUN_OPT
+
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools $DRY_RUN_OPT --labify
+
+	# SPB 6.60 on CentOS 6 + Cloud Services
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools $DRY_RUN_OPT
+
+	# SPB 6.60 on CentOS 6 + Cloud Services - Labified
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools $DRY_RUN_OPT --labify
+
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=only-sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,vmware-tools $DRY_RUN_OPT
+
+	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=only-csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,grub-conf,csd,vmware-tools $DRY_RUN_OPT
+
+	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
+
+	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
+
+
+	#
+	# EXPERIMENTAL
+	#
+
+	# SDE 7.40 on CentOS 7
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
+
+	# SDE 7.45 on CentOS 7
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+       	# SDE 7.45 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+       	# SDE 7.40 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+	# SPB 7.00 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+
+	if [ "$MOVE2WEBROOT" == "yes" ]
+	then
+
+		echo
+		echo "Moving all images created during this build, to the Web Root."
+		echo "Also, doing some clean ups, to free the way for subsequent builds..."
+
+
+		find packer -name "*.raw" -exec rm -f {} \;
+
+
+		find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS_LAB \;
+#		find packer -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS \;
+
+		find packer/build-lab* -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS_LAB \;
+		find packer -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS \;
+
+
+		echo
+		echo "Merging MD5SUMS files together:"
+
+		cd $WEB_ROOT_CS_LAB
+		cat *.md5 > MD5SUMS.txt
+		rm -f *.md5
+		cat *.sha1 > SHA1SUMS.txt
+		rm -f *.sha1
+		cd -
+
+		echo
+		echo "Merging SHA1SUMS files together:"
+
+		cd $WEB_ROOT_CS
+		cat *.md5 > MD5SUMS.txt
+		rm -f *.md5
+		cat *.sha1 > SHA1SUMS.txt
+		rm -f *.sha1
+		cd -
+
+
+                echo
+                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE":"
+
+		cd $WEB_ROOT_CS_MAIN
+		rm -f current
+		ln -s $BUILD_DATE current
+		cd -
+
+
+		rm -rf packer/build*
+
+	fi
+
+	exit 0
+
+fi
 
 
 if [ "$PACKER_BUILD_OFFICIAL" == "yes" ]
@@ -142,148 +416,159 @@ then
 	fi
 
 
-	if [ "$PACKER_BUILD_CS" == "yes" ]
+	#
+	# Examples
+	#
+
+#	# Ubuntu Trusty 14.04.3 - Blank server
+#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=svserver --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+
+#	# Ubuntu Xenial 16.04 - Blank server
+#	./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=svserver --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+
+#	# CentOS 6.7 - Blank server - Old Linux 2.6
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+#		--roles=bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
+
+#	# CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
+
+#	# CentOS 7 - Blank server - Old Linux 3.10
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+#		--roles=bootstrap,cloud-init $DRY_RUN_OPT
+
+#	# CentOS 7 - Blank server - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,bootstrap,cloud-init $DRY_RUN_OPT
+
+
+	#
+	# STABLE
+	#
+
+	# PTS 7.20 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT
+
+	# PTS 7.20 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT
+
+	# SDE 7.30 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
+
+	# SDE 7.40 on CentOS 7
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
+
+       	# SDE 7.40 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT --versioned-repo
+
+	# SPB 6.60 on CentOS 6 - No NDS
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools $DRY_RUN_OPT
+
+
+	#
+	# EXPERIMENTAL
+	#
+
+	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
+
+	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
+
+	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.2 with Xen Support, no igb_uio
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
+
+	# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.2 with Xen Support, no igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
+
+	# SDE 7.45 on CentOS 7
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+       	# SDE 7.45 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+
+	# SPB 7.00 on CentOS 6 - No NDS
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools $DRY_RUN_OPT --versioned-repo
+
+
+	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-		#
-		# STABLE
-		#
+		echo
+		echo "Moving all images created during this build, to the Web Root."
+		echo "Also, doing some clean ups, to free the way for subsequent builds..."
 
-		# SDE 7.20 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools $DRY_RUN_OPT
 
-		# SDE 7.20 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools $DRY_RUN_OPT --labify
+		find packer -name "*.raw" -exec rm -f {} \;
 
-		# SPB 6.60 on CentOS 6 + Cloud Services
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools $DRY_RUN_OPT
 
-		# SPB 6.60 on CentOS 6 + Cloud Services - Labified
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools $DRY_RUN_OPT --labify
+#		find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK \;
 
-		# SDE 7.20 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.20 --product-variant=cs-sde-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,vmware-tools $DRY_RUN_OPT
+#		find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK \;
 
-		# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcs --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=centos-xen,bootstrap,cloud-init,grub-conf,csd,vmware-tools $DRY_RUN_OPT
+#		find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		# SPB 6.60 on CentOS 6 + Cloud Services - Without NDS / svreports
-#		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=no-nds-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#			--roles=bootstrap,cloud-init,grub-conf,spb,cs-spb,vmware-tools $DRY_RUN_OPT
+#		find packer/build-lab* -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK \;
 
-		# PTS 7.20 on CentOS 6 + Cloud Services - Linux 2.6, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
+#		find packer/build-lab* -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+#		find packer -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK \;
 
-		# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
+#		find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
 
-		# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
+#		find packer/build-lab* -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+		find packer -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK \;
 
-		#
-		# EXPERIMENTAL
-		#
 
-		# SDE 7.45 on CentOS 7
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=centos-xen,bootstrap,cloud-init,sde,vmware-tools $DRY_RUN_OPT
+#		echo
+#		echo "Merging MD5SUMS files together:"
 
-	       	# SDE 7.45 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT --versioned-repo
+#		cd $WEB_ROOT_STOCK_LAB
+#		cat *.md5 > MD5SUMS.txt
+#		rm -f *.md5
+#		cat *.sha1 > SHA1SUMS.txt
+#		rm -f *.sha1
+#		cd -
 
-		# SPB 7.00 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools $DRY_RUN_OPT --versioned-repo
+		echo
+		echo "Merging SHA1SUMS files together:"
 
-	else
+		cd $WEB_ROOT_STOCK
+		cat *.md5 > MD5SUMS.txt
+		rm -f *.md5
+		cat *.sha1 > SHA1SUMS.txt
+		rm -f *.sha1
+		cd -
 
-		#
-		# Examples
-		#
 
-#		# Ubuntu Trusty 14.04.3 - Blank server
-#		./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=svserver --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+                echo
+                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE":"
 
-#		# Ubuntu Xenial 16.04 - Blank server
-#		./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=svserver --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+		rm -f $WEB_ROOT_STOCK/current
+		cd $WEB_ROOT_STOCK_MAIN
+		ln -s $BUILD_DATE current
+		cd -
 
-#		# CentOS 6.7 - Blank server - Old Linux 2.6
-#		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#			--roles=bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
 
-#		# CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
-#		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#			--roles=centos-xen,bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
-
-#		# CentOS 7 - Blank server - Old Linux 3.10
-#		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#			--roles=bootstrap,cloud-init $DRY_RUN_OPT
-
-#		# CentOS 7 - Blank server - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
-#		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#			--roles=centos-xen,bootstrap,cloud-init $DRY_RUN_OPT
-
-		#
-		# STABLE
-		#
-
-		# PTS 7.20 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT
-
-		# PTS 7.20 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT
-
-		# SDE 7.20 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,vmware-tools $DRY_RUN_OPT
-
-		# SDE 7.45 on CentOS 7
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=centos-xen,bootstrap,cloud-init,sde,vmware-tools $DRY_RUN_OPT
-
-	       	# SDE 7.45 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT --versioned-repo
-
-		# SPB 6.60 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools $DRY_RUN_OPT
-
-		# SPB 7.00 on CentOS 6
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,spb,vmware-tools $DRY_RUN_OPT --versioned-repo
-
-		#
-		# EXPERIMENTAL
-		#
-
-		# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
-
-		# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
-
-		# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.2 with Xen Support, no igb_uio
-		./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=centos-xen,bootstrap,cloud-init,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
-
-		# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.2 with Xen Support, no igb_uio
-		./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-			--roles=centos-xen,bootstrap,cloud-init,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
+                rm -rf packer/build*
 
 	fi
 
@@ -349,7 +634,7 @@ then
 	PTS_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-pts | awk $'{print $2}'` | awk $'{print $4}')
 	SDE_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-sde | awk $'{print $2}'` | awk $'{print $4}')
 	SPB_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-spb | awk $'{print $2}'` | awk $'{print $4}')
-	#CSD_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-csd | awk $'{print $2}'` | awk $'{print $4}')
+#	CSD_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-csd | awk $'{print $2}'` | awk $'{print $4}')
 
 
 	if [ -z $PTS_FLOAT ] || [ -z $SDE_FLOAT ] || [ -z $SPB_FLOAT ] #|| [ -z $CSD_FLOAT ]
@@ -374,7 +659,7 @@ then
 	echo PTS: $PTS_FLOAT
 	echo SDE: $SDE_FLOAT
 	echo SPB: $SPB_FLOAT
-	#echo CSD: $CSD_FLOAT
+#	echo CSD: $CSD_FLOAT
 
 fi
 
@@ -394,7 +679,7 @@ then
 	fi
 	sed -i -e 's/^#SDE_IP/'$SDE_FLOAT'/g' ansible/hosts
 	sed -i -e 's/^#SPB_IP/'$SPB_FLOAT'/g' ansible/hosts
-	#sed -i -e 's/^#CSD_IP/'$CSD_FLOAT'/g' ansible/hosts
+#	sed -i -e 's/^#CSD_IP/'$CSD_FLOAT'/g' ansible/hosts
 
 fi
 
@@ -457,7 +742,7 @@ then
 	PTS_CTRL_IP=`host $PTS_FQDN | awk $'{print $4}'`
 	SDE_CTRL_IP=`host $SDE_FQDN | awk $'{print $4}'`
 	SPB_CTRL_IP=`host $SPB_FQDN | awk $'{print $4}'`
-	#CSD_CTRL_IP=`host $PTS_FQDN | awk $'{print $4}'`
+#	CSD_CTRL_IP=`host $PTS_FQDN | awk $'{print $4}'`
 
 
 	echo
@@ -489,7 +774,7 @@ then
 	fi
 	sed -i -e 's/^#SDE_IP/'$SDE_CTRL_IP'/g' ansible/hosts
 	sed -i -e 's/^#SPB_IP/'$SPB_CTRL_IP'/g' ansible/hosts
-	#sed -i -e 's/^#CSD_IP/'$CSD_CTRL_IP'/g' ansible/hosts
+#	sed -i -e 's/^#CSD_IP/'$CSD_CTRL_IP'/g' ansible/hosts
 
 
 	echo
@@ -534,7 +819,7 @@ then
 	echo "ssh sandvine@$PTS_FLOAT # PTS"
 	echo "ssh sandvine@$SDE_FLOAT # SDE"
 	echo "ssh sandvine@$SPB_FLOAT # SPB"
-	#echo "ssh sandvine@$CSD_FLOAT # CSD"
+#	echo "ssh sandvine@$CSD_FLOAT # CSD"
 	echo
 
 fi
