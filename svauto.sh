@@ -117,7 +117,7 @@ then
 	echo "Installing SVAuto dependencies via APT:"
 	echo
 
-	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip
+	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip ec2-ami-tools ec2-api-tools
 
 
 	echo
@@ -137,8 +137,7 @@ fi
 if [ "$MOVE2WEBROOT" == "yes" ]
 then
 
-	DOCUMENT_ROOT="/home/ubuntu/public_dir"
-
+	# Create a file that contains the build date
 	if  [ ! -f build-date.txt ]; then
 		echo $TODAY > build-date.txt
 		BUILD_DATE=`cat build-date.txt`
@@ -148,19 +147,30 @@ then
 		BUILD_DATE=`cat build-date.txt`
 	fi
 
+
+	# Web Public directory details
+
+	# Apache or NGinx DocumentRoot of a Virtual Host:
+	DOCUMENT_ROOT="/home/ubuntu/public_dir"
+
+	# Sandvine Stock images directory:
 	WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
-	WEB_ROOT_STOCK=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE
-	WEB_ROOT_STOCK_LAB=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/lab
-	WEB_ROOT_STOCK_RELEASE=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/to-be-released
-#	WEB_ROOT_STOCK_RELEASE_LAB=$DOCUMENT_ROOT/images/platform/stock/$BUILD_DATE/to-be-released/lab
 
+	WEB_ROOT_STOCK=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE
+	WEB_ROOT_STOCK_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/lab
+	WEB_ROOT_STOCK_RELEASE=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released
+#	WEB_ROOT_STOCK_RELEASE_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released/lab
+
+	# Sandvine Stock mages + Cloud Services directory:
 	WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services
-	WEB_ROOT_CS=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE
-	WEB_ROOT_CS_LAB=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/lab
-	WEB_ROOT_CS_RELEASE=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/to-be-released
-#	WEB_ROOT_CS_RELEASE_LAB=$DOCUMENT_ROOT/images/platform/cloud-services/$BUILD_DATE/to-be-released/lab
+
+	WEB_ROOT_CS=$WEB_ROOT_CS_MAIN/$BUILD_DATE
+	WEB_ROOT_CS_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/lab
+	WEB_ROOT_CS_RELEASE=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released
+#	WEB_ROOT_CS_RELEASE_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released/lab
 
 
+	# Creating the Web directory structure:
 	mkdir -p $WEB_ROOT_STOCK_LAB
 	mkdir -p $WEB_ROOT_STOCK_RELEASE
 
@@ -249,12 +259,14 @@ then
 #		rm -f *.md5
 #		cat *.sha1 > SHA1SUMS.txt
 #		rm -f *.sha1
+#		cd -
 
-		cd $$WEB_ROOT_CS_RELEASE
+		cd $WEB_ROOT_CS_RELEASE
 		cat *.md5 > MD5SUMS.txt
 		rm -f *.md5
 		cat *.sha1 > SHA1SUMS.txt
 		rm -f *.sha1
+		cd - &>/dev/null
 
 
 		rm -rf packer/build*
@@ -370,33 +382,33 @@ then
 
 
 		echo
-		echo "Merging MD5SUMS files together:"
+		echo "Merging MD5SUMS files together..."
 
 		cd $WEB_ROOT_CS_LAB
 		cat *.md5 > MD5SUMS.txt
 		rm -f *.md5
 		cat *.sha1 > SHA1SUMS.txt
 		rm -f *.sha1
-		cd -
+		cd - &>/dev/null
 
 		echo
-		echo "Merging SHA1SUMS files together:"
+		echo "Merging SHA1SUMS files together..."
 
 		cd $WEB_ROOT_CS
 		cat *.md5 > MD5SUMS.txt
 		rm -f *.md5
 		cat *.sha1 > SHA1SUMS.txt
 		rm -f *.sha1
-		cd -
+		cd - &>/dev/null
 
 
                 echo
-                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE":"
+                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
 
 		cd $WEB_ROOT_CS_MAIN
 		rm -f current
 		ln -s $BUILD_DATE current
-		cd -
+		cd - &>/dev/null
 
 
 		rm -rf packer/build*
@@ -539,33 +551,33 @@ then
 
 
 #		echo
-#		echo "Merging MD5SUMS files together:"
+#		echo "Merging MD5SUMS files together..."
 
 #		cd $WEB_ROOT_STOCK_LAB
 #		cat *.md5 > MD5SUMS.txt
 #		rm -f *.md5
 #		cat *.sha1 > SHA1SUMS.txt
 #		rm -f *.sha1
-#		cd -
+#		cd - &>/dev/null
 
 		echo
-		echo "Merging SHA1SUMS files together:"
+		echo "Merging SHA1SUMS files together..."
 
 		cd $WEB_ROOT_STOCK
 		cat *.md5 > MD5SUMS.txt
 		rm -f *.md5
 		cat *.sha1 > SHA1SUMS.txt
 		rm -f *.sha1
-		cd -
+		cd - &>/dev/null
 
 
                 echo
-                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE":"
+                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
 
-		rm -f $WEB_ROOT_STOCK/current
 		cd $WEB_ROOT_STOCK_MAIN
+		rm -f current
 		ln -s $BUILD_DATE current
-		cd -
+		cd - &>/dev/null
 
 
                 rm -rf packer/build*

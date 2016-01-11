@@ -19,6 +19,7 @@ It uses the following Open Source projects:
 * Vagrant
 * Docker
 * LXD
+* Amazon EC2 AMI & API Tools
 
 It contains Ansible Playbooks for Automated deployments of:
 
