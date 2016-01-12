@@ -515,6 +515,8 @@ then
 
 		tar -cf "$PACKER_VM_NAME".ova "$PACKER_VM_NAME".ovf "$PACKER_VM_NAME".mf "$PACKER_VM_NAME"-disk1.vmdk
 
+		rm -f "$PACKER_VM_NAME"-disk1.vmdk
+
 		cd - &>/dev/null
 
 		if [ "$MD5SUM" == "yes" ]; then
