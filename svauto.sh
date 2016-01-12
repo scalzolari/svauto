@@ -333,8 +333,8 @@ then
 		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
 
 	# SDE 7.45 on CentOS 7
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,bootstrap,cloud-init,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.45 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
