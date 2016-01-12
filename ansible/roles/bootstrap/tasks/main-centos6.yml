@@ -69,6 +69,7 @@
     - at
     - git 
     - vim 
+    - man
     - wget 
     - lsof 
     - tmux
@@ -87,6 +88,7 @@
     - ansible
     - pciutils 
     - dmidecode
+    - man-pages
     - bind-utils
 
 

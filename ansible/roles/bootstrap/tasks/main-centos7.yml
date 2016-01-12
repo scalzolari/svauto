@@ -53,6 +53,7 @@
     - at
     - git
     - vim
+    - man
     - wget
     - tmux
     - lsof
@@ -61,6 +62,7 @@
     - parted
     - mlocate
     - ansible
+    - man-pages
     - bind-utils
     - pciutils
     - rsyslog
