@@ -71,3 +71,18 @@
     - cronie
     - acpid
     - which
+
+
+# Lock Kernel upgrade only when building Linux PTS on CentOS 7.
+# It is realy, really required, only if "release == 'prod'".
+# This is a DPDK RPM Package limitation, that we're work arouding it.
+- name: centos72 - Installing an especific Kernel, DPDK RPM workaround
+  yum: pkg={{item}}
+  with_items:
+    - kernel-3.10.0-327.4.4.el7.x86_64
+    - kernel-tools-3.10.0-327.4.4.el7.x86_64
+  when: lock_el7_kernel_upgrade == 'yes'
+
+- name: centos72 - Excluding the Kernel from being upgraded, DPDK RPM workarond
+  lineinfile: dest=/etc/yum.conf line="exclude=kernel"
+  when: lock_el7_kernel_upgrade == 'yes'

@@ -23,7 +23,7 @@
      - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/QUOTA_MANAGER/svquota_manager-BSD-5.00.0402.tbz
      - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/RECORD_GENERATOR/svrecord_generator-BSD-5.00.0402.tbz
      - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0402.tbz
-     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-15.12.0019.tbz
+     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-15.12.0021.tbz
   register: cloud_services_installed
   ignore_errors: yes
 

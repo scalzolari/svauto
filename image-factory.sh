@@ -70,6 +70,12 @@ case $i in
 		shift
 		;;
 
+	--lock-el7-kernel-upgrade)
+
+		LOCK_KERNEL="yes"
+		shift
+		;;
+
 	--versioned-repo)
 
 		VERSIONED_REPO="yes"
@@ -337,6 +343,10 @@ EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE" activate_eth1="no""
 
 if [ "$EXPERIMENTAL_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS is_experimental="yes""
+fi
+
+if [ "$LOCK_KERNEL" == "yes" ]; then
+	EXTRA_VARS="$EXTRA_VARS lock_el7_kernel_upgrade="yes""
 fi
 
 if [ "$BASE_OS_UPGRADE" == "yes" ]; then

@@ -200,27 +200,28 @@ then
 	#
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo --labify
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo --labify
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --product-variant=r1 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo
+	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo \
+		--lock-el7-kernel-upgrade
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --product-variant=r1 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify
 
 

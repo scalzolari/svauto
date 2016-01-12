@@ -58,6 +58,9 @@ is_container: "no"
 # Activate eth1:
 activate_eth1: "yes"
 
+# Lock CentOS 7 Kernel upgrade? This is a DPDK RPM package bug workaround.
+lock_el7_kernel_upgrade: "no"
+
 # Base O.S.:
 # Ubuntu: ubuntu14, ubuntu16
 # Debian: jessie, stretch
