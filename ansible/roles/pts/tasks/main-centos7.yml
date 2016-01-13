@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Creating Sandvine PTS Repository - Protocols - Production
+  template: src=common/Sandvine-SVPROTO.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPROTO.repo
+            owner=root
+            group=root
+            mode=0644
+  when: release == 'prod'
+
 - name: Creating Sandvine PTS Repository - Protocols - Development
   template: src=common/Sandvine-SVPROTO_dev.repo
             dest=/etc/yum.repos.d/Sandvine-SVPROTO.repo
