@@ -137,45 +137,53 @@ fi
 if [ "$MOVE2WEBROOT" == "yes" ]
 then
 
-	# Create a file that contains the build date
-	if  [ ! -f build-date.txt ]; then
-		echo $TODAY > build-date.txt
-		BUILD_DATE=`cat build-date.txt`
-	else
-		echo
-		echo "Warning! Build Date file found, a clean all is recommended..."
-		BUILD_DATE=`cat build-date.txt`
+        if [ "$DRYRUN" == "yes" ]
+        then
+                echo
+                echo "Not creating to web root directory structure! Skipping this step..."
+        else
+
+		# Create a file that contains the build date
+		if  [ ! -f build-date.txt ]; then
+			echo $TODAY > build-date.txt
+			BUILD_DATE=`cat build-date.txt`
+		else
+			echo
+			echo "Warning! Build Date file found, a clean all is recommended..."
+			BUILD_DATE=`cat build-date.txt`
+		fi
+
+
+		# Web Public directory details
+
+		# Apache or NGinx DocumentRoot of a Virtual Host:
+		DOCUMENT_ROOT="/home/ubuntu/public_dir"
+
+		# Sandvine Stock images directory:
+		WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
+
+		WEB_ROOT_STOCK=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE
+		WEB_ROOT_STOCK_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/lab
+		WEB_ROOT_STOCK_RELEASE=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released
+#		WEB_ROOT_STOCK_RELEASE_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released/lab
+
+		# Sandvine Stock mages + Cloud Services directory:
+		WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services
+
+		WEB_ROOT_CS=$WEB_ROOT_CS_MAIN/$BUILD_DATE
+		WEB_ROOT_CS_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/lab
+		WEB_ROOT_CS_RELEASE=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released
+#		WEB_ROOT_CS_RELEASE_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released/lab
+
+
+		# Creating the Web directory structure:
+		mkdir -p $WEB_ROOT_STOCK_LAB
+		mkdir -p $WEB_ROOT_STOCK_RELEASE
+
+		mkdir -p $WEB_ROOT_CS_LAB
+		mkdir -p $WEB_ROOT_CS_RELEASE
+
 	fi
-
-
-	# Web Public directory details
-
-	# Apache or NGinx DocumentRoot of a Virtual Host:
-	DOCUMENT_ROOT="/home/ubuntu/public_dir"
-
-	# Sandvine Stock images directory:
-	WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
-
-	WEB_ROOT_STOCK=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE
-	WEB_ROOT_STOCK_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/lab
-	WEB_ROOT_STOCK_RELEASE=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released
-#	WEB_ROOT_STOCK_RELEASE_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released/lab
-
-	# Sandvine Stock mages + Cloud Services directory:
-	WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services
-
-	WEB_ROOT_CS=$WEB_ROOT_CS_MAIN/$BUILD_DATE
-	WEB_ROOT_CS_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/lab
-	WEB_ROOT_CS_RELEASE=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released
-#	WEB_ROOT_CS_RELEASE_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released/lab
-
-
-	# Creating the Web directory structure:
-	mkdir -p $WEB_ROOT_STOCK_LAB
-	mkdir -p $WEB_ROOT_STOCK_RELEASE
-
-	mkdir -p $WEB_ROOT_CS_LAB
-	mkdir -p $WEB_ROOT_CS_RELEASE
 
 fi
 
@@ -183,16 +191,27 @@ fi
 if [ "$PACKER_BUILD_CS_RELEASE" == "yes" ]
 then
 
-	echo
-	echo "Enter your Sandvine's FTP (ftp.support.sandvine.com) account details:"
-	echo
-	echo -n "Username: "
-	read FTP_USER
-	echo -n "Password: "
-	read -s FTP_PASS
+        if [ "$DRYRUN" == "yes" ]
+        then
+                echo
+                echo "Not requesting FTP account details on dry run! Skipping this step..."
+        else
+		echo
+		echo "Enter your Sandvine's FTP (ftp.support.sandvine.com) account details:"
+		echo
+		echo -n "Username: "
+		read FTP_USER
+		echo -n "Password: "
+		read -s FTP_PASS
 
-        sed -i -e 's/ftp_username:.*/ftp_username: '$FTP_USER'/g' ansible/group_vars/all
-        sed -i -e 's/ftp_password:.*/ftp_password: '$FTP_PASS'/g' ansible/group_vars/all
+        	sed -i -e 's/ftp_username:.*/ftp_username: '$FTP_USER'/g' ansible/group_vars/all
+        	sed -i -e 's/ftp_password:.*/ftp_password: '$FTP_PASS'/g' ansible/group_vars/all
+	fi
+
+
+        if [ "$DRYRUN" == "yes" ]; then
+                export DRY_RUN_OPT="--dry-run"
+        fi
 
 
 	#
@@ -201,76 +220,84 @@ then
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
 	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo
+		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo $DRY_RUN_OPT
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
 #	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo --labify
+#		--roles=bootstrap,cloud-init,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo
+		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
 #	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo --labify
+#		--roles=bootstrap,cloud-init,grub-conf,spb,svreports,cs-spb,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo  $DRY_RUN_OPT \
 		--lock-el7-kernel-upgrade
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
 #	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify
+#		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
 
 
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-		echo
-		echo "Moving all images created during this build, to the Web Root."
-		echo "Also, doing some clean ups, to free the way for subsequent builds..."
+                if [ "$DRYRUN" == "yes" ]
+                then
+                        echo
+                        echo "Not moving to web root! Skipping this step..."
+                else
+
+			echo
+			echo "Moving all images created during this build, to the Web Root."
+			echo "Also, doing some clean ups, to free the way for subsequent builds..."
+	
+	
+			find packer -name "*.raw" -exec rm -f {} \;
+	
+	
+#			find packer/build-lab* -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "*cs-1*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "*cs-1*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "*cs-1*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer -name "cs*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
 
-		find packer -name "*.raw" -exec rm -f {} \;
+#			cd $WEB_ROOT_CS_RELEASE_LAB
+#			cat *.md5 > MD5SUMS.txt
+#			rm -f *.md5
+#			cat *.sha1 > SHA1SUMS.txt
+#			rm -f *.sha1
+#			cd -
+
+			cd $WEB_ROOT_CS_RELEASE
+			cat *.md5 > MD5SUMS.txt
+			rm -f *.md5
+			cat *.sha1 > SHA1SUMS.txt
+			rm -f *.sha1
+			cd - &>/dev/null
 
 
-#		find packer/build-lab* -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+			rm -rf packer/build*
 
-#		find packer/build-lab* -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#		find packer/build-lab* -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#		find packer/build-lab* -name "*cs-1*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#		find packer/build-lab* -name "*cs-1*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#		find packer/build-lab* -name "*cs-1*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-		find packer -name "cs*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-
-#		cd $WEB_ROOT_CS_RELEASE_LAB
-#		cat *.md5 > MD5SUMS.txt
-#		rm -f *.md5
-#		cat *.sha1 > SHA1SUMS.txt
-#		rm -f *.sha1
-#		cd -
-
-		cd $WEB_ROOT_CS_RELEASE
-		cat *.md5 > MD5SUMS.txt
-		rm -f *.md5
-		cat *.sha1 > SHA1SUMS.txt
-		rm -f *.sha1
-		cd - &>/dev/null
-
-
-		rm -rf packer/build*
+		fi
 
 	fi
 
@@ -352,67 +379,75 @@ then
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-		echo
-		echo "Moving all images created during this build, to the Web Root."
-		echo "Also, doing some clean ups, to free the way for subsequent builds..."
+                if [ "$DRYRUN" == "yes" ]
+                then
+                        echo
+                        echo "Not moving to web root! Skipping this step..."
+                else
+
+			echo
+			echo "Moving all images created during this build, to the Web Root."
+			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 
 
-		find packer -name "*.raw" -exec rm -f {} \;
+			find packer -name "*.raw" -exec rm -f {} \;
 
 
-		find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS_LAB \;
-#		find packer -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS_LAB \;
+#			find packer -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS \;
 
-		find packer/build-lab* -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS_LAB \;
-		find packer -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS \;
-
-
-		echo
-		echo "Merging MD5SUMS files together..."
-
-		cd $WEB_ROOT_CS_LAB
-		cat *.md5 > MD5SUMS.txt
-		rm -f *.md5
-		cat *.sha1 > SHA1SUMS.txt
-		rm -f *.sha1
-		cd - &>/dev/null
-
-		echo
-		echo "Merging SHA1SUMS files together..."
-
-		cd $WEB_ROOT_CS
-		cat *.md5 > MD5SUMS.txt
-		rm -f *.md5
-		cat *.sha1 > SHA1SUMS.txt
-		rm -f *.sha1
-		cd - &>/dev/null
+			find packer/build-lab* -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS \;
 
 
-                echo
-                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+			echo
+			echo "Merging MD5SUMS files together..."
 
-		cd $WEB_ROOT_CS_MAIN
-		rm -f current
-		ln -s $BUILD_DATE current
-		cd - &>/dev/null
+			cd $WEB_ROOT_CS_LAB
+			cat *.md5 > MD5SUMS.txt
+			rm -f *.md5
+			cat *.sha1 > SHA1SUMS.txt
+			rm -f *.sha1
+			cd - &>/dev/null
+
+			echo
+			echo "Merging SHA1SUMS files together..."
+
+			cd $WEB_ROOT_CS
+			cat *.md5 > MD5SUMS.txt
+			rm -f *.md5
+			cat *.sha1 > SHA1SUMS.txt
+			rm -f *.sha1
+			cd - &>/dev/null
 
 
-		rm -rf packer/build*
+        	        echo
+        	        echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+
+			cd $WEB_ROOT_CS_MAIN
+			rm -f current
+			ln -s $BUILD_DATE current
+			cd - &>/dev/null
+
+
+			rm -rf packer/build*
+
+		fi
 
 	fi
 
@@ -521,67 +556,75 @@ then
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-		echo
-		echo "Moving all images created during this build, to the Web Root."
-		echo "Also, doing some clean ups, to free the way for subsequent builds..."
+                if [ "$DRYRUN" == "yes" ]
+                then
+                        echo
+                        echo "Not moving to web root! Skipping this step..."
+                else
+
+			echo
+			echo "Moving all images created during this build, to the Web Root."
+			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 
 
-		find packer -name "*.raw" -exec rm -f {} \;
+			find packer -name "*.raw" -exec rm -f {} \;
 
 
-#		find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-#		find packer -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+#			find packer -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#		find packer/build-lab* -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-		find packer -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK \;
-
-
-#		echo
-#		echo "Merging MD5SUMS files together..."
-
-#		cd $WEB_ROOT_STOCK_LAB
-#		cat *.md5 > MD5SUMS.txt
-#		rm -f *.md5
-#		cat *.sha1 > SHA1SUMS.txt
-#		rm -f *.sha1
-#		cd - &>/dev/null
-
-		echo
-		echo "Merging SHA1SUMS files together..."
-
-		cd $WEB_ROOT_STOCK
-		cat *.md5 > MD5SUMS.txt
-		rm -f *.md5
-		cat *.sha1 > SHA1SUMS.txt
-		rm -f *.sha1
-		cd - &>/dev/null
+#			find packer/build-lab* -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK \;
 
 
-                echo
-                echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+#			echo
+#			echo "Merging MD5SUMS files together..."
 
-		cd $WEB_ROOT_STOCK_MAIN
-		rm -f current
-		ln -s $BUILD_DATE current
-		cd - &>/dev/null
+#			cd $WEB_ROOT_STOCK_LAB
+#			cat *.md5 > MD5SUMS.txt
+#			rm -f *.md5
+#			cat *.sha1 > SHA1SUMS.txt
+#			rm -f *.sha1
+#			cd - &>/dev/null
+
+			echo
+			echo "Merging SHA1SUMS files together..."
+
+			cd $WEB_ROOT_STOCK
+			cat *.md5 > MD5SUMS.txt
+			rm -f *.md5
+			cat *.sha1 > SHA1SUMS.txt
+			rm -f *.sha1
+			cd - &>/dev/null
 
 
-                rm -rf packer/build*
+                	echo
+                	echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+
+			cd $WEB_ROOT_STOCK_MAIN
+			rm -f current
+			ln -s $BUILD_DATE current
+			cd - &>/dev/null
+
+
+			rm -rf packer/build*
+
+		fi
 
 	fi
 
