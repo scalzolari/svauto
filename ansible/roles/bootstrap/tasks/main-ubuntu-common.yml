@@ -37,6 +37,7 @@
     - iptables
     - nftables
     - mtr-tiny
+    - mlocate
     - sysstat
     - tcpdump
     - iperf3
