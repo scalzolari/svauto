@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Ubuntu Trusty default sources.list
+- name: ubuntu14 - copy Ubuntu Trusty default sources.list
   copy: src=ubuntu/trusty_apt_sources.list
         dest=/etc/apt/sources.list
         owner=root

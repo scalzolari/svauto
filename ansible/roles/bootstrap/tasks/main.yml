@@ -12,24 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: main-centos-common.yml
+# CentOS Bootstrap tasks
+- name: centos - include common book
+  include: main-centos-common.yml
   when: base_os == 'centos72' or base_os == 'centos67'
 
-- include: main-centos7.yml
-  when: base_os == 'centos72'
 
-- include: main-centos6.yml
-  when: base_os == 'centos67'
-
-
-- include: main-ubuntu16.yml
+# Ubuntu Bootstrap tasks
+- name: ubuntu16 - include custom book
+  include: main-ubuntu16.yml
   when: base_os == 'ubuntu16'
 
-- include: main-ubuntu14.yml
+- name: ubuntu14 - include custom book
+  include: main-ubuntu14.yml
   when: base_os == 'ubuntu14'
 
-- include: main-ubuntu-common.yml
+- name: ubuntu - include common book
+  include: main-ubuntu-common.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
 
-- include: main-ubuntu-dummies.yml
+- name: ubuntu - include custom book
+  include: main-ubuntu-dummies.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14' and use_dummies == 'yes' 
+
+
+# Common across distributions
+- name: mlocate - updating root file system list
+  command: 'updatedb'

@@ -17,13 +17,14 @@
 #  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist nf_conntrack"
 
 
-- lineinfile: dest=/etc/modules line="dummy numdummies=6"
+- name: ubuntu - config dummy module
+  lineinfile: dest=/etc/modules line="dummy numdummies=6"
 
-- name: Loading dummy network module
+- name: ubuntu - loading dummy module
   command: 'modprobe dummy numdummies=6'
 
 
-- name: Copying dummy0 config file for LBR
+- name: ubuntu - copy dummy0 config file for LBR
   copy: src=ubuntu/interface_dummy0_lbr
         dest=/etc/network/interfaces.d/dummy0.cfg
         owner=root
@@ -31,7 +32,7 @@
         mode=0644
   when: br_mode == 'LBR'
 
-- name: Copying dummy1 config file for LBR
+- name: ubuntu - copy dummy1 config file for LBR
   copy: src=ubuntu/interface_dummy1_lbr
         dest=/etc/network/interfaces.d/dummy1.cfg
         owner=root
@@ -39,7 +40,7 @@
         mode=0644
   when: br_mode == 'LBR'
 
-- name: Copying dummy0 config file for OVS
+- name: ubuntu - copy dummy0 config file for OVS
   copy: src=ubuntu/interface_dummy0_ovs
         dest=/etc/network/interfaces.d/dummy0.cfg
         owner=root
@@ -47,7 +48,7 @@
         mode=0644
   when: br_mode == 'OVS'
 
-- name: Copying dummy1 config file for OVS
+- name: ubuntu - copy dummy1 config file for OVS
   copy: src=ubuntu/interface_dummy1_ovs
         dest=/etc/network/interfaces.d/dummy1.cfg
         owner=root

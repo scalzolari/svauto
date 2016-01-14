@@ -12,40 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Adjusting /etc/hosts
+- name: centos6 - config /etc/hosts
   shell: HOSTNAME=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 1) ; DOMAIN=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
 
 
-- name: Creating new "hostname-fix" init script
+- name: centos6 - copy "hostname-fix" init script
   copy: src=centos6/hostname-fix
         dest=/etc/init.d/hostname-fix
         owner=root
         group=root
         mode=0755
 
-- name: Ensure hostname-fix gets executed (and enable it at boot)
+- name: centos6 - service hostname-fix enabled
   service: name=hostname-fix state=started enabled=yes
 
 
-- name: Creating new "etc-hosts-fix" init script
+- name: centos6 - copy "etc-hosts-fix" init script
   copy: src=centos6/etc-hosts-fix
         dest=/etc/init.d/etc-hosts-fix
         owner=root
         group=root
         mode=0755
 
-- name: Ensure etc-hosts-fix gets executed (and enable it at boot)
+- name: centos6 - service etc-hosts-fix enabled
   service: name=etc-hosts-fix state=started enabled=yes
 
 
-- name: Configuring eth0
+- name: centos6 - copy eth0 config file
   copy: src=centos6/ifcfg-eth0
         dest=/etc/sysconfig/network-scripts/ifcfg-eth0
         owner=root
         group=root
         mode=0644
 
-- name: Configuring eth1
+- name: centos6 - copy eth1 config file
   copy: src=centos6/ifcfg-eth1
         dest=/etc/sysconfig/network-scripts/ifcfg-eth1
         owner=root
@@ -53,17 +53,17 @@
         mode=0644
   register: ifcfg_eth1_in_place
 
-- name: Enabling eth1
+- name: centos6 - starting up eth1
   shell: ifup eth1
   when: ifcfg_eth1_in_place|success and activate_eth1 == "yes"
   ignore_errors: yes
 
 
-- name: Activating EPEL Repository for CentOS 6
+- name: centos6 - yum EPEL repository
   yum: pkg=http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 
-- name: Installing CentOS Operation Tools
+- name: centos6 - yum installing basic tools
   yum: pkg={{item}} state=installed
   with_items:
     - at
@@ -92,7 +92,7 @@
     - bind-utils
 
 
-- name: Configuring SSH Daemon - RootLogin / PassAuth disabled.
+- name: centos6 - copy SSH Daemon config
   copy: src=centos6/sshd_config
         dest=/etc/ssh/sshd_config
         owner=root

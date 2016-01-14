@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Sandvine Main Repository - Production
+- name: centos - copy Sandvine Main Repository - Production
   template: src=common/Sandvine-Main.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
@@ -21,7 +21,7 @@
   register: sandvine_main_repo_in_place
   when: release == 'prod'
 
-- name: Creating Sandvine Main Repository - Development
+- name: centos - copy Sandvine Main Repository - Development
   template: src=common/Sandvine-Main_dev.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
@@ -30,7 +30,7 @@
   register: sandvine_main_repo_in_place
   when: release == 'dev'
 
-- name: Creating Sandvine Main Repository - Development
+- name: centos - copy Sandvine Main Repository - Development
   template: src=common/Sandvine-Main_dev_experimental.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
@@ -40,30 +40,33 @@
   when: release == 'dev' and is_experimental == 'yes'
 
 
-- selinux: policy=targeted state=permissive
+- name: centos - selinux to permissive state
+  selinux: policy=targeted state=permissive
   when: is_container != 'yes'
 
-- selinux: state=disabled
+- name: centos - selinux disabled
+  selinux: state=disabled
   when: is_container != 'yes'
 
 
-- name: Adjusting /etc/sudores
+- name: centos - sudo members of wheel group without password
   lineinfile: "dest=/etc/sudoers state=present regexp='^%wheel' line='%wheel ALL=(ALL) NOPASSWD: ALL'"
 
 
-- name: Disabling ZeroConf
+- name: centos - ZeroConf disabled
   lineinfile: dest=/etc/sysconfig/network line="NOZEROCONF=yes"
 
 
-- include: main-centos6.yml
+- name: centos7 - include custom book
+  include: main-centos7.yml
+  when: base_os == 'centos72'
+
+- name: centos6 - include custom book
+  include: main-centos6.yml
   when: base_os == 'centos67'
 
 
-- include: main-centos7.yml
-  when: base_os == 'centos72'
-
-
-- name: Customizing root's Bash RC 
+- name: centos - copy root's Bash RC 
   copy: src=common/_bashrc-root
         dest=/root/.bashrc
         owner=root
@@ -71,7 +74,7 @@
         mode=0640
         backup=yes
 
-- name: Customizing root's Bash Profile
+- name: centos - copy root's Bash Profile
   copy: src=common/_bash_profile-root
         dest=/root/.bash_profile
         owner=root
@@ -80,11 +83,11 @@
         backup=yes
 
 
-- name: Ensure ACPID is running (and enable it at boot)
+- name: centos - service acpid enabled
   service: name=acpid state=started enabled=yes
   when: is_container != 'yes'
 
 
-- name: Upgrading CentOS
+- name: centos - yum upgrading CentOS itself
   yum: name=* state=latest
   when: base_os_upgrade == 'yes'

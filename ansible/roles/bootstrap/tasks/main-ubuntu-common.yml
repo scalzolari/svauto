@@ -12,15 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Running 'apt update'
+- name: ubuntu - apt updating O.S. with 'apt update'
   apt: update_cache=yes
 
-- name: Running 'apt full-upgrade'
+- name: ubuntu - apt upgrading O.S. with 'apt full-upgrade'
   apt: upgrade=dist
   when: base_os_upgrade == 'yes'
 
 
-- name: Installing base Ubuntu packages
+- name: ubuntu - apt installing basic tools
   action: apt pkg={{item}} state=installed
   with_items:
     - tmux
@@ -31,6 +31,7 @@
     - iotop
     - patch
     - chrony
+    - man-db
     - openssl
     - ansible
     - iptables
@@ -49,29 +50,30 @@
     - ubuntu-cloud-keyring
 
 
-- lineinfile: dest=/etc/modules line="br_netfilter"
+- name: ubuntu - config br_netfilter module
+  lineinfile: dest=/etc/modules line="br_netfilter"
 
-- name: Loading br_netfilter network module
+- name: ubuntu - loading br_netfilter module
   command: 'modprobe br_netfilter'
 
 
-- name: Copying new Network config file
+- name: ubuntu - copy global network config file
   copy: src=ubuntu/etc_network_interfaces
         dest=/etc/network/interfaces
         owner=root
         group=root
         mode=0644
 
-- name: Creating network config directory
+- name: ubuntu - creating global network config directory
   file: path=/etc/network/interfaces.d
         state=directory
 
 
-- name: Check root's htop config directory
+- name: ubuntu - copy root's htop config directory
   file: path=/root/.config/htop
         state=directory
 
-- name: Write root's htoprc
+- name: ubuntu - copy root's htoprc config file
   copy: src=ubuntu/htoprc
         dest=/root/.config/htop/htoprc
         owner=root
