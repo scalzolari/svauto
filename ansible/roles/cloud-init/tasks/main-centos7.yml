@@ -26,3 +26,12 @@
         group=root
         mode=0644
         backup=yes
+
+
+- name: Configuring Cloud Init timeout
+  copy: src=10_timeouts.cfg
+        dest=/etc/cloud/cloud.cfg.d/10_timeouts.cfg
+        owner=root
+        group=root
+        mode=0644
+        backup=yes

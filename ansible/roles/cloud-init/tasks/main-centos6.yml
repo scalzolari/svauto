@@ -29,8 +29,8 @@
 
 
 - name: Configuring Cloud Init timeout
-  copy: src=centos6/10_ec2_timeouts.cfg
-        dest=/etc/cloud/cloud.cfg.d/10_ec2_timeouts.cfg
+  copy: src=10_timeouts.cfg
+        dest=/etc/cloud/cloud.cfg.d/10_timeouts.cfg
         owner=root
         group=root
         mode=0644

@@ -50,7 +50,7 @@
 
 
 - name: centos - sudo members of wheel group without password
-  lineinfile: "dest=/etc/sudoers state=present regexp='^%wheel' line='%wheel ALL=(ALL) NOPASSWD: ALL'"
+  lineinfile: "validate='visudo -cf %s' dest=/etc/sudoers state=present regexp='^%wheel' line='%wheel ALL=(ALL) NOPASSWD: ALL'"
 
 
 - name: centos - ZeroConf disabled

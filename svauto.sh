@@ -236,7 +236,7 @@ then
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo  $DRY_RUN_OPT \
+		--roles=bootstrap,cloud-init,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo $DRY_RUN_OPT \
 		--lock-el7-kernel-upgrade
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
@@ -469,24 +469,28 @@ then
 	#
 
 #	# Ubuntu Trusty 14.04.3 - Blank server
-#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=svserver --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+
+#	# Ubuntu Trusty 14.04.3 - SVAuto bootstraped
+#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum \
+#		--roles=bootstrap $DRY_RUN_OPT
 
 #	# Ubuntu Xenial 16.04 - Blank server
-#	./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=svserver --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
+#	./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
 
-#	# CentOS 6.7 - Blank server - Old Linux 2.6
+#	# CentOS 6.7 - SVAuto bootstraped - Old Linux 2.6
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
 
-#	# CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
+#	# CentOS 6.7 - SVAuto bootstraped - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,bootstrap,cloud-init,grub-conf $DRY_RUN_OPT
 
-#	# CentOS 7 - Blank server - Old Linux 3.10
+#	# CentOS 7 - SVAuto bootstraped - Old Linux 3.10
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=bootstrap,cloud-init $DRY_RUN_OPT
 
-#	# CentOS 7 - Blank server - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+#	# CentOS 7 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,bootstrap,cloud-init $DRY_RUN_OPT
 

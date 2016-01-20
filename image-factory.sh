@@ -207,7 +207,7 @@ case "$BASE_OS" in
 
         *)
 		echo
-		echo $"Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
 		exit 1
 		;;
 
@@ -257,7 +257,7 @@ case "$BASE_OS" in
 
         *)
 		echo
-		echo $"Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
 		exit 1
 		;;
 
@@ -292,7 +292,7 @@ then
 
 	        *)
 			echo
-			echo $"Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
 			exit 1
 			;;
 
@@ -329,7 +329,7 @@ then
 
 	        *)
 			echo
-			echo $"Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
 			exit 1
 			;;
 
@@ -400,7 +400,7 @@ case "$PRODUCT" in
 
         *)
 		echo
-		echo $"Usage: $0 --product={svpts|svsde|svspb|svcsd|centos|ubuntu}"
+		echo "Usage: $0 --product={svpts|svsde|svspb|svcsd|centos|ubuntu}"
 		exit 1
 		;;
 
@@ -417,7 +417,26 @@ sed -i -e 's/"--extra-vars \\"\\""/"--extra-vars  \\"'"$EXTRA_VARS"'\\""/g' $PAC
 
 # Creating Ansible Inventory file dinamically
 echo "- hosts: $PRODUCT-servers"	> $PLAYBOOK_FILE
-echo "  user: root"			>> $PLAYBOOK_FILE
+
+case "$BASE_OS" in
+
+        ubuntu*)
+		echo "  user: sandvine"			>> $PLAYBOOK_FILE
+		echo "  sudo: yes"			>> $PLAYBOOK_FILE
+		;;
+
+	centos*)
+		echo "  user: root"			>> $PLAYBOOK_FILE
+		;;
+
+        *)
+		echo
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		exit 1
+		;;
+
+esac
+
 echo "  roles:"				>> $PLAYBOOK_FILE
 
 for X in $ROLES; do

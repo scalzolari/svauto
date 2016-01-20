@@ -35,7 +35,6 @@
     - openssl
     - ansible
     - iptables
-    - nftables
     - mtr-tiny
     - mlocate
     - sysstat

@@ -14,6 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Ansible will need sudo without password
+echo 'sandvine' | sudo -S -E sed -i -e 's/^%sudo.*/%sudo ALL=NOPASSWD:ALL/' /etc/sudoers
+
 # Updating
 echo 'sandvine' | sudo -S -E apt-get update
 
