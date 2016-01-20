@@ -70,9 +70,11 @@
     - git 
     - vim 
     - man
+    - zip
     - wget 
     - lsof 
     - tmux
+    - unzip
     - acpid 
     - iotop 
     - iftop

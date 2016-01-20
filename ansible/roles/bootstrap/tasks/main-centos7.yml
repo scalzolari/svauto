@@ -55,9 +55,11 @@
     - git
     - vim
     - man
+    - zip
     - wget
     - tmux
     - lsof
+    - unzip
     - iotop
     - iftop
     - parted

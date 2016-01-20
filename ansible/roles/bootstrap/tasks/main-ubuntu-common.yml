@@ -23,9 +23,11 @@
 - name: ubuntu - apt installing basic tools
   action: apt pkg={{item}} state=installed
   with_items:
+    - zip
     - tmux
     - curl
     - htop
+    - unzip
     - ngrep
     - iftop
     - iotop
