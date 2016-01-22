@@ -98,7 +98,7 @@
 
 
 - name: Copying Sandvine SPB login logo
-  copy: src=spb/files/etc-issue-spb-logo
+  copy: src=etc-issue-spb-logo
         dest=/etc/issue
         owner=root
         group=root

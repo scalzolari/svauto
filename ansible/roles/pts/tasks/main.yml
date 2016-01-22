@@ -67,7 +67,7 @@
 
 
 - name: Copying Sandvine PTS login logo
-  copy: src=pts/files/etc-issue-pts-logo
+  copy: src=etc-issue-pts-logo
         dest=/etc/issue
         owner=root
         group=root

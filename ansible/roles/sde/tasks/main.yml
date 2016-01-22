@@ -25,7 +25,7 @@
 
 
 - name: Copying Sandvine SDE login logo
-  copy: src=sde/files/etc-issue-sde-logo
+  copy: src=etc-issue-sde-logo
         dest=/etc/issue
         owner=root
         group=root
