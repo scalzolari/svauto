@@ -24,6 +24,7 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - zip
+    - git
     - tmux
     - curl
     - htop
