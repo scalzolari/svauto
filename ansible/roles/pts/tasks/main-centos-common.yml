@@ -1,0 +1,59 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: centos | copy Sandvine PTS Repository - Production
+  template: src=common/Sandvine-PTS.repo
+            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+            owner=root
+            group=root
+            mode=0644
+  when: release == 'prod'
+
+
+- name: centos | copy Sandvine PTS Repository - Development
+  template: src=common/Sandvine-PTS_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+            owner=root
+            group=root
+            mode=0644
+  when: release == 'dev'
+
+
+- name: centos | copy Sandvine PTS Repository - Development - Versioned
+  template: src=common/Sandvine-PTS_versioned.repo
+            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+            owner=root
+            group=root
+            mode=0644
+  register: sandvine_pts_repo_in_place
+  when: pts_versioned == 'true' and release == 'dev'
+
+
+- name: centos | yum installing the Linux PTS
+  yum: pkg={{item}} state=installed
+  with_items:
+    - svpts
+  register: pts_installed
+
+
+- name: centos | copy Sandvine PTS login logo
+  copy: src=etc-issue-pts-logo
+        dest=/etc/issue
+        owner=root
+        group=root
+        mode=0644
+
+
+- name: centos | yum excluding the kernel out from upgrades (DPDK issue)
+  lineinfile: dest=/etc/yum.conf line="exclude=kernel"

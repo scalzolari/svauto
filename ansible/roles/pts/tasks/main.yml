@@ -12,63 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Sandvine PTS Repository - Production
-  template: src=common/Sandvine-PTS.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
-            owner=root
-            group=root
-            mode=0644
-  when: release == 'prod'
+
+- name: centos | include common book
+  include: main-centos-common.yml
+  when: base_os == 'centos72' or base_os == 'centos67'
 
 
-- name: Creating Sandvine PTS Repository - Development
-  template: src=common/Sandvine-PTS_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
-            owner=root
-            group=root
-            mode=0644
-  when: release == 'dev'
-
-
-- name: Creating Sandvine PTS Repository - Development - Versioned
-  template: src=common/Sandvine-PTS_versioned.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
-            owner=root
-            group=root
-            mode=0644
-  register: sandvine_pts_repo_in_place
-  when: pts_versioned == 'true' and release == 'dev'
-
-
-- name: Installing required packages and the PTS
-  yum: pkg={{item}} state=installed
-  with_items:
-    - svpts
-  register: pts_installed
-
-
-- name: Excluding the kernel from being upgraded (DPDK RPM workarond)
-  lineinfile: dest=/etc/yum.conf line="exclude=kernel"
-
-
-- include: main-centos6.yml
-  when: base_os == 'centos67'
-
-
-- include: main-centos7.yml
+- name: centos7 | include custom book
+  include: main-centos7.yml
   when: base_os == 'centos72'
 
 
-- name: Cleanup YUM local cache
+- name: centos6 | include custom book
+  include: main-centos6.yml
+  when: base_os == 'centos67'
+
+
+- name: centos | yum clean local cache
   command: yum clean all
+  when: base_os == 'centos72' or base_os == 'centos67'
 
 
-- include: sv-auto-config.yml
+- name: freebsd8 | include custom book
+  include: main-freebsd8.yml
+  when: base_os == 'freebsd8'
 
 
-- name: Copying Sandvine PTS login logo
-  copy: src=etc-issue-pts-logo
-        dest=/etc/issue
-        owner=root
-        group=root
-        mode=0644
+- name: Sandvine Auto Configuration book for PTS
+  include: sv-auto-config.yml

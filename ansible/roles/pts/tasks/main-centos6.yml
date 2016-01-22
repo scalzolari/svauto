@@ -12,17 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating "depmod" "init script"
+- name: centos6 | copy depmod "init script"
   copy: src=centos6/depmod.init
         dest=/etc/init.d/depmod
         owner=root
         group=root
         mode=0755
 
-- file: src=/etc/init.d/depmod dest=/etc/rc3.d/S01depmod state=link force=yes
+
+- name: centos6 | enable depmod "init service"
+  file: src=/etc/init.d/depmod
+        dest=/etc/rc3.d/S01depmod
+        state=link
+        force=yes
 
 
-- name: Managing Local Firewall Rules
+- name: centos6 | firewall
   command: "{{item}}"
   with_items:
   - lokkit --port=22:tcp --update

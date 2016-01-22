@@ -12,33 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- hosts: spb-servers
-  user: sandvine
-  sudo: yes
-  roles:
-  - role: bootstrap
-  - role: spb
-  - role: cs-spb
+- name: centos6 | config UTC timezone
+  file: src=/usr/share/zoneinfo/UTC
+        dest=/etc/localtime
+        state=link
+        force=yes
+  when: base_os == 'centos67'
 
-- hosts: sde-servers
-  user: sandvine
-  sudo: yes
-  roles:
-  - role: bootstrap
-  - role: sde
-  - role: cs-sde
-  - role: csd
 
-- hosts: pts-servers
-  user: sandvine
-  sudo: yes
-  roles:
-  - role: pts
-  - role: cs-pts
-
-- hosts: csd-servers
-  user: sandvine
-  sudo: yes
-  roles:
-  - role: bootstrap
-  - role: csd
+- name: centos | yum installing Cloud Services packages
+  yum: pkg={{item}} state=installed
+  with_items:
+     - cloud-services-pts

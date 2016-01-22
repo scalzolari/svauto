@@ -1,5 +1,0 @@
-internal 10 internal
-{{ int_subnet }}
-
-external 100 external
-{{ ext_subnet }}

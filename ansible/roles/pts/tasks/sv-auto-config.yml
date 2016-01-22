@@ -12,15 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating new "rc.conf" file
+- name: centos | copy new "rc.conf" file
   template: src=common/rc.conf
             dest=/usr/local/sandvine/etc/rc.conf
             owner=sv_admin
             group=sv_admin
             mode=0644
+  when: base_os == 'centos72' or base_os == 'centos67'
 
 
-- name: Creating new "policy.conf" file
+- name: freebsd8 | copy new "rc.conf" file
+  template: src=freebsd8/rc.conf
+            dest=/usr/local/sandvine/etc/rc.conf
+            owner=sv_admin
+            group=sv_admin
+            mode=0644
+  when: base_os == 'freebsd8'
+
+
+- name: copy new "policy.conf" file
   template: src=common/policy.conf
             dest=/usr/local/sandvine/etc/policy.conf
             owner=sv_admin
@@ -29,7 +39,7 @@
             backup=yes
 
 
-- name: Creating new "subnets.txt" file
+- name: copy new "subnets.txt" file
   template: src=common/subnets.txt
             dest=/usr/local/sandvine/etc/subnets.txt
             owner=sv_admin

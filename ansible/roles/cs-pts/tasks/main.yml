@@ -12,30 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Force UTC timezone
-  file: src=/usr/share/zoneinfo/UTC dest=/etc/localtime state=link force=yes
-  when: base_os == 'centos67'
+- name: centos | include common book
+  include: main-centos.yml
+  when: base_os == 'centos67' or base_os == 'centos72'
 
 
-- name: Installing Cloud Services package(s)
-  yum: pkg={{item}} state=installed
-  with_items:
-     - cloud-services-pts
+- name: freebsd8 | include custom book
+  include: main-freebsd8.yml
+  when: base_os == 'freebsd8'
 
 
-- name: Creating new "diam_peer_config.xml" file
-  template: src=diam_peer_config.xml
-            dest=/usr/local/sandvine/etc/diam_peer_config.xml
-            owner=root
-            group=sv_service
-            mode=0644
-            backup=yes
-
-
-- name: Creating new "policy.conf" file
-  copy: src=policy.conf
-        dest=/usr/local/sandvine/etc/policy.conf
-        owner=root
-        group=sv_service
-        mode=0644
-        backup=yes
+- name: Sandvine Auto Configuration book for Cloud Services PTS
+  include: cs-auto-config.yml

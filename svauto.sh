@@ -758,7 +758,8 @@ then
 			echo
 			echo "FreeBSD PTS detected, preparing it, by installing Python 2.7 sane version..."
 			ssh -oStrictHostKeyChecking=no cloud@$PTS_FLOAT 'sudo pkg_add http://ftp-archive.freebsd.org/pub/FreeBSD-Archive/old-releases/amd64/8.2-RELEASE/packages/python/python27-2.7.1_1.tbz'
-			sed -i -e 's/- role: pts.*/- role: pts-freebsd/g' ansible/site.yml
+			sed -i -e 's/base_os:.*/base_os: freebsd8/g' ansible/group_vars/all
+			sed -i -e 's/deploy_pts_freebsd_pkgs:.*/deploy_pts_freebsd_pkgs: yes/g' ansible/group_vars/all
 			echo "done."
 		fi
 
@@ -828,6 +829,11 @@ then
 	echo "Configuring hosts..."
 	if [ "$FREEBSD_PTS" == "yes" ]
 	then
+		echo
+		echo "FreeBSD PTS detected, preparing Ansible's group_vars/all & hosts files..."
+
+		sed -i -e 's/base_os:.*/base_os: freebsd8/g' ansible/group_vars/all
+		sed -i -e 's/deploy_pts_freebsd_pkgs:.*/deploy_pts_freebsd_pkgs: yes/g' ansible/group_vars/all
 		sed -i -e 's/^#FREEBSD_PTS_IP/'$PTS_CTRL_IP'/g' ansible/hosts
 	else
 		sed -i -e 's/^#PTS_IP/'$PTS_CTRL_IP'/g' ansible/hosts
@@ -836,10 +842,6 @@ then
 	sed -i -e 's/^#SPB_IP/'$SPB_CTRL_IP'/g' ansible/hosts
 #	sed -i -e 's/^#CSD_IP/'$CSD_CTRL_IP'/g' ansible/hosts
 
-
-	echo
-	echo "FreeBSD PTS detected, preparing site-svqcow.yml file..."
-	sed -i -e 's/- role: pts.*/- role: pts-freebsd/g' ansible/site-svqcow.yml
 
 fi
 

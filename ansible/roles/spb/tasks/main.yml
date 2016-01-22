@@ -94,7 +94,8 @@
   command: yum clean all
 
 
-- include: sv-auto-config.yml
+- name: Sandvine Auto Configuration book for SPB
+  include: sv-auto-config.yml
 
 
 - name: Copying Sandvine SPB login logo

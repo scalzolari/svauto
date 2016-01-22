@@ -68,4 +68,5 @@
   when: is_container != 'yes'
 
 
-- include: sv-auto-config.yml
+- name: Sandvine Auto Configuration book for SDE
+  include: sv-auto-config.yml

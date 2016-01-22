@@ -65,6 +65,7 @@ lock_el7_kernel_upgrade: "no"
 # Ubuntu: ubuntu14, ubuntu16
 # Debian: jessie, stretch
 # CentOS: centos67, centos72
+# FreeBSD: freebsd8
 base_os: centos67
 
 # Upgrade Base OS:
@@ -76,6 +77,8 @@ release: dev
 # Products and versions
 pts_version: "7.20"
 pts_versioned: false
+
+deploy_pts_freebsd_pkgs: "no"
 
 sde_version: "7.20"
 sde_versioned: false

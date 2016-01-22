@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating new FreeBSD rc.conf.local file
+- name: freebsd8 | copy FreeBSD rc.conf.local file
   copy: src=rc.conf.local
         dest=/etc/rc.conf.local
         owner=root
@@ -21,31 +21,7 @@
         backup=yes
 
 
-- name: Creating new "rc.conf" file
-  template: src=rc.conf
-            dest=/usr/local/sandvine/etc/rc.conf
-            owner=sv_admin
-            group=sv_admin
-            mode=0644
-
-- name: Creating new "policy.conf" file
-  template: src=policy.conf
-            dest=/usr/local/sandvine/etc/policy.conf
-            owner=root
-            group=sv_service
-            mode=0644
-            backup=yes
-
-- name: Creating new "subnets.txt" file
-  template: src=subnets.txt
-            dest=/usr/local/sandvine/etc/subnets.txt
-            owner=root
-            group=sv_service
-            mode=0644
-            backup=yes
-
-
-- name: Creating "fetchlabify" file
+- name: freebsd8 | copy "fetchlabify" file
   copy: src=fetchlabify
         dest=/etc/rc.d/fetchlabify
         owner=root
@@ -53,7 +29,7 @@
         mode=0755
 
 
-- name: Customizing root's Bash RC
+- name: freebsd8 | copy root's Bash RC
   copy: src=_bashrc-root
         dest=/root/.bashrc
         owner=root

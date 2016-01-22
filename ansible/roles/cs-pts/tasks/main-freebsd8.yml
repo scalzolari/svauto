@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing extra Sandvine's packages, plus Cloud Services
+- name: freebsd8 | pkg_adding Sandvine and Cloud Services packages
   shell: pkg_add {{ item }}
   with_items:
      - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/DIAMETER/svdiameter-BSD-5.60.0501.tbz
@@ -25,46 +25,5 @@
      - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0402.tbz
      - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-15.12.0021.tbz
   register: cloud_services_installed
+  when: deploy_pts_freebsd_pkgs == 'yes'
   ignore_errors: yes
-
-
-- name: Customizing "rc.conf.default.ptsd" file
-  copy: src=rc.conf.default.ptsd
-        dest=/usr/local/sandvine/etc/rc.conf.default.ptsd
-        owner=root
-        group=sv_service
-        mode=0644
-
-
-- name: Customizing "rc.conf.default.diameter" file
-  copy: src=rc.conf.default.diameter
-        dest=/usr/local/sandvine/etc/rc.conf.default.diameter
-        owner=root
-        group=sv_service
-        mode=0644
-
-
-- name: Customizing "rc.conf.default.cs" file
-  copy: src=rc.conf.default.cs
-        dest=/usr/local/sandvine/etc/rc.conf.default.cs
-        owner=root
-        group=sv_service
-        mode=0644
-
-
-- name: Creating new "policy.conf" file
-  copy: src=policy.conf
-        dest=/usr/local/sandvine/etc/policy.conf
-        owner=root
-        group=sv_service
-        mode=0644
-        backup=yes
-
-
-- name: Creating new "diam_peer_config.xml" file
-  template: src=diam_peer_config.xml
-            dest=/usr/local/sandvine/etc/diam_peer_config.xml
-            owner=root
-            group=sv_service
-            mode=0644
-            backup=yes

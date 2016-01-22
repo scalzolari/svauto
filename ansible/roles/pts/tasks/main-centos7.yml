@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Sandvine PTS Repository - Protocols - Production
+- name: centos7 | copy Sandvine PTS Protocols - Production
   template: src=common/Sandvine-SVPROTO.repo
             dest=/etc/yum.repos.d/Sandvine-SVPROTO.repo
             owner=root
@@ -20,7 +20,7 @@
             mode=0644
   when: release == 'prod'
 
-- name: Creating Sandvine PTS Repository - Protocols - Development
+- name: centos7 | copy Sandvine PTS Protocols - Development
   template: src=common/Sandvine-SVPROTO_dev.repo
             dest=/etc/yum.repos.d/Sandvine-SVPROTO.repo
             owner=root
@@ -29,7 +29,7 @@
   when: release == 'dev'
 
 
-- name: Enable igb_uio module on boot
+- name: centos7 | copy igb_uio rc.modules file to boot sequence
   copy: src=centos7/rc.modules
         dest=/etc/rc.modules
         owner=root
@@ -38,4 +38,5 @@
 
 
 # Adding support for running Linux PTS on CentOS 7 without systemd:
-#- include: c6_7-no-systemd.yaml
+#- name: centos7 | including hack to remove systemd
+#  include: c6_7-no-systemd.yaml
