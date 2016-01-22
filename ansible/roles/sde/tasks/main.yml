@@ -22,3 +22,11 @@
 
 - name: Cleanup YUM local cache
   command: yum clean all
+
+
+- name: Copying Sandvine SDE login logo
+  copy: src=sde/files/etc-issue-sde-logo
+        dest=/etc/issue
+        owner=root
+        group=root
+        mode=0644
