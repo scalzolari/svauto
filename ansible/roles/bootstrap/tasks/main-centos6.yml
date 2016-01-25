@@ -71,6 +71,7 @@
     - vim 
     - man
     - zip
+    - ntp
     - wget 
     - lsof 
     - tmux
