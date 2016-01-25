@@ -88,6 +88,10 @@
   when: is_container != 'yes'
 
 
+- name: centos6 - service ntpd enabled
+  service: name=ntpd state=started enabled=yes
+
+
 - name: centos - yum upgrading CentOS itself
   yum: name=* state=latest
   when: base_os_upgrade == 'yes'
