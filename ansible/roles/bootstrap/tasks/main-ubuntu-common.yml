@@ -50,6 +50,7 @@
     - vim-nox
     - iptraf-ng
     - python-mysqldb
+    - silversearcher-ag
     - ubuntu-cloud-keyring
 
 
