@@ -68,6 +68,7 @@
     - ansible
     - man-pages
     - bind-utils
+    - dracut-config-generic
     - pciutils
     - rsyslog
     - sysstat
@@ -77,6 +78,10 @@
     - cronie
     - acpid
     - which
+
+
+- name: centos7 - dracut updating initrd of running kernel
+  command: /sbin/dracut -f
 
 
 # Lock Kernel upgrade only when building Linux PTS on CentOS 7.
