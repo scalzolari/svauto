@@ -85,8 +85,8 @@
 - name: centos7 - yum installing Kernel, DPDK RPM workaround
   yum: pkg={{item}}
   with_items:
-    - kernel-3.10.0-327.4.5.el7.x86_64
-    - kernel-tools-3.10.0-327.4.5.el7.x86_64
+    - kernel-{{el7_kernel_version}}
+    - kernel-tools-{{el7_kernel_version}}
   when: lock_el7_kernel_upgrade == 'yes'
 
 - name: centos7 - yum excluding the Kernel from upgrade process, DPDK RPM workarond
