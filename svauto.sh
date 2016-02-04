@@ -236,12 +236,12 @@ then
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo $DRY_RUN_OPT \
+		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo $DRY_RUN_OPT \
 		--lock-el7-kernel-upgrade
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
 #	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
+#		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
 
 
 	if [ "$MOVE2WEBROOT" == "yes" ]
@@ -344,11 +344,11 @@ then
 
 	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
+		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
 
 	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
+		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
 
 
 	#
@@ -357,11 +357,11 @@ then
 
 	# SDE 7.40 on CentOS 7
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
 
 	# SDE 7.45 on CentOS 7
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.45 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -488,11 +488,11 @@ then
 
 #	# CentOS 7 - SVAuto bootstraped - Old Linux 3.10
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap $DRY_RUN_OPT
+#		--roles=cloud-init,bootstrap,grub-conf $DRY_RUN_OPT
 
 #	# CentOS 7 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap $DRY_RUN_OPT
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf $DRY_RUN_OPT
 
 
 	#
@@ -505,7 +505,7 @@ then
 
 	# PTS 7.20 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,pts,vmware-tools $DRY_RUN_OPT
+		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT
 
 	# SDE 7.30 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -513,7 +513,7 @@ then
 
 	# SDE 7.40 on CentOS 7
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools $DRY_RUN_OPT
 
        	# SDE 7.40 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -534,7 +534,7 @@ then
 
 	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
+		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
 
 	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.2 with Xen Support, no igb_uio
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -542,11 +542,11 @@ then
 
 	# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.2 with Xen Support, no igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk22-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
 
 	# SDE 7.45 on CentOS 7
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,vmware-tools --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.45 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
