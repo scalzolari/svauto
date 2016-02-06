@@ -117,7 +117,7 @@ then
 	echo "Installing SVAuto dependencies via APT:"
 	echo
 
-	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip ec2-ami-tools ec2-api-tools
+	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip ec2-ami-tools ec2-api-tools python-keystoneclient python-glanceclient python-novaclient python-neutronclient python-cinderclient python-heatclient
 
 
 	echo
