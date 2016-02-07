@@ -45,6 +45,7 @@
     - chrony
     - man-db
     - netcat
+    - telnet
     - openssl
     - sysstat
     - ansible
@@ -60,6 +61,7 @@
     - tzdata
     - vim-nox
     - iptraf-ng
+    - subnetcalc
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag
