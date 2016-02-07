@@ -63,6 +63,7 @@
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag
+    - command-not-found
     - ubuntu-cloud-keyring
 
 
