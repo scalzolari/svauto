@@ -50,6 +50,7 @@ WEBROOT = '/'
 #    "data-processing": 1.1,
 #    "identity": 3,
 #    "volume": 2,
+#    "compute": 2
 #}
 
 # Set this to True if running on multi-domain model. When this is enabled, it
@@ -399,6 +400,9 @@ TIME_ZONE = "UTC"
 #    'telemetry': 'ceilometer_policy.json',
 #}
 
+# TODO: (david-lyle) remove when plugins support adding settings.
+# Note: Only used when trove-dashboard plugin is configured to be used by
+# Horizon.
 # Trove user and database extension support. By default support for
 # creating users and databases on database instances is turned on.
 # To disable these extensions set the permission here to something
@@ -480,11 +484,6 @@ LOGGING = {
             'propagate': False,
         },
         'ceilometerclient': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'troveclient': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
@@ -641,6 +640,9 @@ SECURITY_GROUP_RULES = {
 #
 # See Metadata Definitions on: http://docs.openstack.org/developer/glance/
 
+# TODO: (david-lyle) remove when plugins support settings natively
+# Note: This is only used when the Sahara plugin is configured and enabled
+# for use in Horizon.
 # Indicate to the Sahara data processing service whether or not
 # automatic floating IP allocation is in effect.  If it is not
 # in effect, the user will be prompted to choose a floating IP
@@ -711,4 +713,5 @@ COMPRESS_OFFLINE = True
 # http://tinyurl.com/anticlickjack
 #DISALLOW_IFRAME_EMBED = True
 
+# Allow Horizon to be hosted behind a reverse proxy
 USE_X_FORWARDED_HOST = True
