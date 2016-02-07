@@ -18,3 +18,9 @@
         owner=root
         group=root
         mode=0644
+
+
+- name: ubuntu16 - apt installing basic tools
+  action: apt pkg={{item}} state=installed
+  with_items:
+    - nftables

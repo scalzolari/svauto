@@ -23,19 +23,30 @@
 - name: ubuntu - apt installing basic tools
   action: apt pkg={{item}} state=installed
   with_items:
+    - pv
     - zip
     - git
+    - zsh
     - tmux
     - curl
     - htop
+    - bmon
     - unzip
     - ngrep
     - iftop
     - iotop
     - patch
+    - byobu
+    - socat
+    - monit
+    - ifstat
+    - strace
+    - ltrace
     - chrony
     - man-db
+    - netcat
     - openssl
+    - sysstat
     - ansible
     - iptables
     - mtr-tiny
@@ -50,6 +61,7 @@
     - vim-nox
     - iptraf-ng
     - python-mysqldb
+    - python-httplib2
     - silversearcher-ag
     - ubuntu-cloud-keyring
 
