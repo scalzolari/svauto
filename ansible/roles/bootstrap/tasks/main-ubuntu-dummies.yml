@@ -17,11 +17,14 @@
 #  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist nf_conntrack"
 
 
+- name: ubuntu - config dummy module options
+  lineinfile: dest=/etc/modprobe.d/dummy.conf line="options dummy numdummies=6" create=yes
+
 - name: ubuntu - config dummy module
-  lineinfile: dest=/etc/modules line="dummy numdummies=6"
+  lineinfile: dest=/etc/modules line="dummy"
 
 - name: ubuntu - loading dummy module
-  command: 'modprobe dummy numdummies=6'
+  command: 'modprobe dummy'
 
 
 - name: ubuntu - copy dummy0 config file for LBR
