@@ -64,7 +64,7 @@ WEBROOT = '/'
 # Set Console type:
 # valid options are "AUTO"(default), "VNC", "SPICE", "RDP", "SERIAL" or None
 # Set to None explicitly if you want to deactivate the console.
-#CONSOLE_TYPE = "AUTO"
+CONSOLE_TYPE = "SPICE"
 
 # If provided, a "Report Bug" link will be displayed in the site header
 # which links to the value of this setting (ideally a URL containing
