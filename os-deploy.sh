@@ -215,17 +215,19 @@ sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/keystone/tasks/openrc-fil
 
 
 # Configuring the default interface
-DEFAULT_GW_INT=$(ip r | grep default | awk '{print $5}')
+PRIMARY_INTERFACE=$(ip r | grep default | awk '{print $5}')
 
 echo 
 echo "Your primary network interface is:"
-echo "dafault route via:" $DEFAULT_GW_INT
+echo "dafault route via:" $PRIMARY_INTERFACE
 
 echo
-echo "Preparing Ansible templates based on current default gateway interface..."
+echo "Preparing Ansible templates based on current default primary interface..."
 
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/nova_aio/templates/nova.conf
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/cinder/templates/cinder.conf
+sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
+
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/nova_aio/templates/nova.conf
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/cinder/templates/cinder.conf
 
 
 echo
@@ -292,12 +294,12 @@ else
 	echo "You'll need an iptables MASQUERADE rule to allow your Instances to reach the"
 	echo "Internet, so, lets add the following line to your /etc/rc.local file:"
 	echo
-	echo "iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE"
+	echo "iptables -t nat -I POSTROUTING 1 -o $PRIMARY_INTERFACE -j MASQUERADE"
 	
 	sudo sed -i -e '/exit/d' /etc/rc.local
 	
 	sudo tee --append /etc/rc.local > /dev/null <<EOF
-iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -o $PRIMARY_INTERFACE -j MASQUERADE
 EOF
 	
 	echo

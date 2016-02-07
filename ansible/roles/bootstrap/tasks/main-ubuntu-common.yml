@@ -87,6 +87,13 @@
   file: path=/etc/network/interfaces.d
         state=directory
 
+- name: ubuntu - copy primary network interface config (DHCP)
+  template: src=ubuntu/primary_interface_dhcp_cfg
+            dest=/etc/network/interfaces.d/{{primary_interface_name}}.cfg
+            owner=root
+            group=root
+            mode=0644
+ 
 
 - name: ubuntu - copy root's htop config directory
   file: path=/root/.config/htop

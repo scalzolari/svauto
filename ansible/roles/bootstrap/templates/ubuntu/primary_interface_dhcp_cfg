@@ -1,0 +1,2 @@
+auto {{primary_interface_name}}
+iface {{primary_interface_name}} inet dhcp

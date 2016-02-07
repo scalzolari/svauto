@@ -95,12 +95,14 @@ csd_versioned: false
 # OpenStack Definitions
 #
 
+primary_interface_name: "eth0"
+
 use_dummies: "no"
 
 br_mode: "LBR"
 
 linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"
-neutron_interface_driver: "neutron.agent.linux.interface.BridgeInterfaceDriver"
+neutron_interface_driver: "linuxbridge"
 mechanism_drivers: "linuxbridge"
 firewall_driver: "neutron.agent.linux.iptables_firewall.IptablesFirewallDriver"
 
