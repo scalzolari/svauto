@@ -257,9 +257,7 @@ else
 	then
 
 		echo
-		echo "Creating and uploding your SSH Keypair into OpenStack..."
-		echo
-		echo "Safe SSH Key found, uploading it to OpenStack."
+		echo "Uploding your existing SSH Keypair into OpenStack..."
 
 		source ~/demo-openrc.sh
 		nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
@@ -268,8 +266,6 @@ else
 
 		echo
 		echo "Creating and uploding your SSH Keypair into OpenStack..."
-		echo
-	        echo "Creating a safe SSH Keypair for you and uploading it to OpenStack."
 		echo
 
 	        ssh-keygen -b 2048 -t rsa -N "" -f ~/.ssh/id_rsa
