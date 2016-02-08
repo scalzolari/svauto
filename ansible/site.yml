@@ -18,7 +18,7 @@
 
 - hosts: spb-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: spb
@@ -26,7 +26,7 @@
 
 - hosts: sde-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: sde
@@ -34,7 +34,7 @@
 
 - hosts: pts-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: pts
@@ -42,7 +42,7 @@
 
 - hosts: csd-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: csd
@@ -54,7 +54,7 @@
 
 - hosts: all-in-one
   user: administrative
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: mysql
@@ -71,7 +71,7 @@
 
 - hosts: controller_nodes
   user: administrative
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: mysql
@@ -93,14 +93,14 @@
 
 - hosts: network_nodes
   user: administrative
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
 #  - role: neutron_lbr_net_agents
 
 - hosts: compute_nodes
   user: administrative
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
 #  - role: nova_compute
@@ -108,7 +108,7 @@
 
 - hosts: vagrant-node
   user: administrative
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: mysql

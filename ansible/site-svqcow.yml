@@ -14,7 +14,7 @@
 
 - hosts: spb-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: spb
@@ -22,7 +22,7 @@
 
 - hosts: sde-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: sde
@@ -31,14 +31,14 @@
 
 - hosts: pts-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: pts
   - role: cs-pts
 
 - hosts: csd-servers
   user: sandvine
-  sudo: yes
+  become: yes
   roles:
   - role: bootstrap
   - role: csd
