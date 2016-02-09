@@ -39,24 +39,21 @@
 
 
 - name: Stopping Neutron Server and Agents
-  command: "{{item}}"
+  service: name={{item}} state=stopped
   with_items:
-    - service neutron-dhcp-agent stop
-    - service neutron-l3-agent stop
-    - service neutron-metadata-agent stop
-    - service neutron-server stop
-  ignore_errors: yes
+    - neutron-dhcp-agent
+    - neutron-l3-agent
+    - neutron-metadata-agent
+    - neutron-server
   when: neutron_installed|changed
   register: neutron_stopped
 
 - name: Stopping Neutron Linux Bridge Agent
-  command: service neutron-plugin-linuxbridge-agent stop
-  ignore_errors: yes
+  service: name=neutron-plugin-linuxbridge-agent state=stopped
   when: br_mode == 'LBR' and neutron_installed|changed
 
 - name: Stopping Neutron Open vSwitch Agent
-  command: service neutron-plugin-openvswitch-agent stop
-  ignore_errors: yes
+  service: name=neutron-plugin-openvswitch-agent state=stopped
   when: br_mode == 'OVS' and neutron_installed|changed
 
 
@@ -181,21 +178,21 @@
 
 
 - name: Starting Neutron Server and Agents
-  command: "{{item}}"
+  service: name={{item}} state=started enabled=yes
   with_items:
-    - service neutron-server restart
-    - service neutron-dhcp-agent restart
-    - service neutron-l3-agent restart
-    - service neutron-metadata-agent restart
+    - neutron-server
+    - neutron-dhcp-agent
+    - neutron-l3-agent
+    - neutron-metadata-agent
   when: neutron_populated|changed and neutron_cleaned|changed
   register: neutron_started
 
 - name: Starting Neutron Linux Bridge Agent
-  command: service neutron-plugin-linuxbridge-agent start
+  service: name=neutron-plugin-linuxbridge-agent state=started enabled=yes
   when: br_mode == 'LBR' and neutron_cleaned|changed
 
 - name: Starting Neutron Open vSwitch Agent
-  command: service neutron-plugin-openvswitch-agent start
+  service: name=neutron-plugin-openvswitch-agent state=started enabled=yes
   when: br_mode == 'OVS' and neutron_cleaned|changed
 
 
