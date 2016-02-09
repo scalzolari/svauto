@@ -175,6 +175,10 @@
   openvswitch_port: bridge=br-ex port=dummy0 state=present
   when: br_mode == 'OVS' and ovs_agent_installed|changed
 
+- name: Enabling br-ex Interface (only required for demo boxes)
+  command: 'ifup br-ex'
+  when: br_mode == 'OVS'
+
 
 - name: Starting Neutron Server and Agents
   command: "{{item}}"
@@ -201,9 +205,15 @@
   register: neutron_ready
 
 
-- name: Creating Neutron External Network and its subnet
+- name: Creating Neutron External Network
   environment: "{{admin_openrc_env}}"
-  shell: neutron net-create ext-net --router:external --provider:physical_network external --provider:network_type flat ; neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
+  shell: neutron net-create ext-net --router:external --provider:physical_network external --provider:network_type flat
+  when: neutron_started|changed
+  register: neutron_net_created
+
+- name: Creating Neutron External Subnet
+  environment: "{{admin_openrc_env}}"
+  shell: neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
   when: neutron_started|changed
   register: neutron_net_created
 

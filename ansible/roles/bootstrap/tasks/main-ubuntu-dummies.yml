@@ -35,6 +35,10 @@
         mode=0644
   when: br_mode == 'LBR'
 
+- name: ubuntu - starting up dummy0
+  command: 'ifup dummy0'
+  when: br_mode == 'LBR'
+
 - name: ubuntu - copy dummy1 config file for LBR
   copy: src=ubuntu/interface_dummy1_lbr
         dest=/etc/network/interfaces.d/dummy1.cfg
@@ -42,6 +46,11 @@
         group=root
         mode=0644
   when: br_mode == 'LBR'
+
+- name: ubuntu - starting up dummy1
+  command: 'ifup dummy1'
+  when: br_mode == 'LBR'
+
 
 - name: ubuntu - copy dummy0 config file for OVS
   copy: src=ubuntu/interface_br-ex_ovs
@@ -58,3 +67,11 @@
         group=root
         mode=0644
   when: br_mode == 'OVS'
+
+- name: ubuntu - starting up dummy1
+  command: 'ifup dummy1'
+  when: br_mode == 'OVS'
+
+
+- name: ubuntu - re-read facts after configuring network interfaces
+  setup: filter=ansible_*
