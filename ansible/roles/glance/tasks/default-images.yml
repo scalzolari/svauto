@@ -16,7 +16,7 @@
 # 1- Update Glance images with: shorter names plus description
 
 - name: Adding a few Operating System images into Glance
-  environment: admin_openrc_env
+  environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
   - glance image-create --location http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud-1503.qcow2c --name "CentOS 7 - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
@@ -35,7 +35,7 @@
 
 
 #- name: Updating O.S. images properties
-#  environment: admin_openrc_env
+#  environment: "{{admin_openrc_env}}"
 #  command: "{{item}}"
 #  with_items:
 #  - glance image-update --property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi "CentOS 7 - 64-bit - Cloud Based Image"

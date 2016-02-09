@@ -15,7 +15,7 @@
 # OpenStack Instance Types
 
 - name: Creating new Nova Flavors
-  environment: admin_openrc_env
+  environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
   # Delete default OpenStack favors

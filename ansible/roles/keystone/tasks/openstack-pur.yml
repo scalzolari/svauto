@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Creating OpenStack Projects, Users and Roles
-  environment: openstack_env
+  environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
   - openstack project create --domain default --description "Admin Project" admin

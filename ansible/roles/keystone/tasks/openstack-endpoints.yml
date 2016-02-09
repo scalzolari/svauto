@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Creating OpenStack Endpoint
-  environment: openstack_env
+  environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
   # Identify v2.0

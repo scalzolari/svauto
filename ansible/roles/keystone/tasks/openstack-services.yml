@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Creating OpenStack Services
-  environment: openstack_env
+  environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
   - openstack service create --name keystone --description "OpenStack Identity" identity
