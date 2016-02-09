@@ -44,8 +44,8 @@
   when: br_mode == 'LBR'
 
 - name: ubuntu - copy dummy0 config file for OVS
-  copy: src=ubuntu/interface_dummy0_ovs
-        dest=/etc/network/interfaces.d/dummy0.cfg
+  copy: src=ubuntu/interface_br-ex_ovs
+        dest=/etc/network/interfaces.d/br-ex.cfg
         owner=root
         group=root
         mode=0644
