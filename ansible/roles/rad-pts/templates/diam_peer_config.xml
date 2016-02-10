@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE diameter-peer SYSTEM "diam_peer_config.dtd">
+<diameter-peer>
+	<peers>
+		<peer>
+			<identity>protowizard</identity>
+			<hostname>{{ sde_srvc_ip }}</hostname>
+			<realm>sandvine.com</realm>
+			<port>3871</port>
+			<bias>2</bias>
+			<dictionaries>
+				<dictionary>ProtoWizard</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<reachable-realms>
+				<realm>sandvine.com</realm>
+			</reachable-realms>
+		</peer>
+	</peers>
+	<identities>
+		<local-identity>
+			<identity>pts-offline</identity>
+			<display-name>pts-offline</display-name>
+			<realm>sandvine.com</realm>
+			<dictionaries>
+				<dictionary>ProtoWizard</dictionary>
+			</dictionaries>
+			<security>
+				<ca-file>CApath</ca-file>
+				<cert-file>CERTpath</cert-file>
+				<key-file>KEYpath</key-file>
+			</security>
+			<client-config>
+				<watchdog-timeout>10</watchdog-timeout>
+				<cea-timeout>5</cea-timeout>
+				<connection-timeout>1</connection-timeout>
+				<connect>
+					<remote-peer>protowizard</remote-peer>
+				</connect>
+			</client-config>
+		</local-identity>
+	</identities>
+</diameter-peer>
+
