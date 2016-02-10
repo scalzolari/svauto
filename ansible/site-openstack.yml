@@ -13,42 +13,6 @@
 # limitations under the License.
 
 #
-# The following hosts definitions, deploys Sandvine Platform:
-#
-
-- hosts: spb-servers
-  user: sandvine
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: spb
-  - role: power-cycle
-
-- hosts: sde-servers
-  user: sandvine
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: sde
-  - role: power-cycle
-
-- hosts: pts-servers
-  user: sandvine
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: pts
-  - role: power-cycle
-
-- hosts: csd-servers
-  user: sandvine
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: csd
-  - role: power-cycle
-
-#
 # The following hosts definitions, deploys OpenStack:
 #
 

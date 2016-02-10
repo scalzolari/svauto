@@ -858,14 +858,14 @@ else
 
 		echo
 		cd ansible
-		ansible-playbook site-cs.yml
+		ansible-playbook site-cloudservices.yml
 	else
 		echo
 		echo "Configuring Sandvine Platform with Ansible..."
 
 		echo
 		cd ansible
-		ansible-playbook site-svqcow.yml
+		ansible-playbook site-preinstalled.yml
 	fi
 fi
 

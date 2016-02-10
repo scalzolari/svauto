@@ -241,7 +241,7 @@ else
         echo
 
 	cd ~/svauto/ansible
-        ansible-playbook site.yml
+        ansible-playbook site-openstack.yml
 fi
 
 
