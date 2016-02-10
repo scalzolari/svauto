@@ -24,3 +24,12 @@
   yum: pkg={{item}} state=installed
   with_items:
      - cloud-services-pts
+
+
+# This is a requirement for Linux PTS 7.20, newer releases will have a dynamic
+# RAM management.
+- name: Fine tunning Linux PTS rc.conf file - hal_maxFlows
+  lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="hal_maxFlows=100000"
+
+- name: Fine tunning Linux PTS rc.conf file - ptsm_numHugePages
+  lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="ptsm_numHugePages=256"
