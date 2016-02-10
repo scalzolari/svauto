@@ -55,6 +55,33 @@
   when: is_container != 'yes'
 
 
+- name: Configuring Cloud Services Daemon
+  template: src=csd.conf
+            dest=/etc/csd.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+
+- name: Configuring Redis
+  copy: src=redis.conf
+        dest=/etc/redis.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+
+
+- name: Configuring InfluxDB
+  copy: src=config.toml
+        dest=/opt/influxdb/shared/config.toml
+        owner=influxdb
+        group=influxdb
+        mode=0644
+        backup=yes
+
+
 - name: Ensure CSD is running (and enable it at boot)
   service: name=csd state=started enabled=yes
   when: csd_installed|success
@@ -98,32 +125,6 @@
 - mysql_db: name=cs state=import target=/tmp/mysql-schema.sql
   when: cs_db_created|changed and csd_installed|changed
 
-
-- name: Configuring Cloud Services Daemon
-  template: src=csd.conf
-            dest=/etc/csd.conf
-            owner=root
-            group=root
-            mode=0644
-            backup=yes
-
-
-- name: Configuring Redis
-  copy: src=redis.conf
-        dest=/etc/redis.conf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-
-
-- name: Configuring InfluxDB for Cloud Services
-  copy: src=config.toml
-        dest=/opt/influxdb/shared/config.toml
-        owner=influxdb
-        group=influxdb
-        mode=0644
-        backup=yes
 
 - name: Workaround for InfluxDB Issue 3944
   file: src=/lib64/libbz2.so.1.0.4 dest=/lib64/libbz2.so.1.0 state=link
