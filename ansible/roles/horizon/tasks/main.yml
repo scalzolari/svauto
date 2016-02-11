@@ -14,10 +14,10 @@
 
 - name: Installing Horizon Dashboard
   action: apt pkg=openstack-dashboard state=installed
-  register: horizon_installed
+
 
 - name: Removing Horizon Ubuntu theme
-  action: apt pkg=openstack-dashboard-ubuntu-theme state=absent
+  action: apt pkg=openstack-dashboard-ubuntu-theme state=remove
 
 
 - name: Updating local_settings.py
@@ -27,8 +27,7 @@
             group=root
             mode=0644
             backup=yes
-  when: horizon_installed|changed
-  register: horizon_cnf_updated
+
 
 - name: Updating openstack-dashboard.conf
   template: src=openstack-dashboard.conf
@@ -37,10 +36,7 @@
             group=root
             mode=0644
             backup=yes
-  when: horizon_installed|changed
-  register: apache2_cnf_updated
 
 
 - name: Restarting Apache
   service: name=apache2 state=restarted
-  when: horizon_cnf_updated|changed or apache2_cnf_updated|changed

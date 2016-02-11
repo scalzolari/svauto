@@ -17,22 +17,15 @@
   with_items:
     - cinder-api
     - cinder-scheduler
-  register: cinder_installed
 
 - name: Stopping Cinder API
   service: name=cinder-api state=stopped
-  when: cinder_installed|changed
-  register: api_stopped
 
 - name: Stopping Cinder Registry
   service: name=cinder-scheduler state=stopped
-  when: cinder_installed|changed
-  register: registry_stopped
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/cinder/cinder.sqlite state=absent
-  when: cinder_installed
-  register: cinder_cleaned
 
 
 - name: Updating cinder.conf
@@ -42,22 +35,16 @@
         group=cinder
         mode=0640
         backup=yes
-  when: api_stopped|changed and registry_stopped|changed and item.os_project == "cinder"
+  when: item.os_project == "cinder"
   with_items: mysql_databases
-  register: cinder_cfg_updated
 
 
 - name: Populating Cinder Database
   shell: su -s /bin/sh -c "cinder-manage db sync" cinder
-  when: cinder_cfg_updated|changed
-  register: cinder_populated
+
 
 - name: Starting Cinder API
   service: name=cinder-api state=restarted
-  when: cinder_populated|changed
-  register: apt_started
 
 - name: Starting Cinder Registry
   service: name=cinder-scheduler state=restarted
-  when: cinder_populated|changed
-  register: registry_started

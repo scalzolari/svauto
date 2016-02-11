@@ -36,7 +36,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_pts_repo_in_place
   when: pts_versioned == 'true' and release == 'dev'
 
 
@@ -44,7 +43,6 @@
   yum: pkg={{item}} state=installed
   with_items:
     - svpts
-  register: pts_installed
 
 
 - name: centos | copy Sandvine PTS login logo

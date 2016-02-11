@@ -17,13 +17,10 @@
   with_items:
     - keystone
     - python-openstackclient
-  register: keystone_installed
 
 
 - name: Stopping Keystone
   service: name=keystone state=stopped
-  when: keystone_installed|changed
-  register: keystone_stopped
 
 
 - name: Disabling Keystone Upstart Service, it now runs under Apache WSGI
@@ -35,8 +32,6 @@
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/keystone/keystone.db state=absent
-  when: keystone_installed|changed
-  register: keystone_cleaned
 
 
 - name: Updating keystone.conf
@@ -46,15 +41,12 @@
             group=root
             mode=0644
             backup=yes
-  when: keystone_stopped|success and item.os_project == "keystone"
+  when: item.os_project == "keystone"
   with_items: mysql_databases
-  register: keystone_cfg_updated
 
 
 - name: Populating Keystone Database
   shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
-  when: keystone_cfg_updated|changed
-  register: keystone_populated
 
 
 - name: Creating Apache Keystone Virtual Host - Public
@@ -78,26 +70,26 @@
         owner=root
         group=root
         state=link
-  register: keystone_pub_vhost_cfg_updated
 
 - file: src=/etc/apache2/sites-available/wsgi-keystone-internal.conf
         dest=/etc/apache2/sites-enabled/wsgi-keystone-internal.conf
         owner=root
         group=root
         state=link
-  register: keystone_intra_vhost_cfg_updated
 
 
 - name: Restarting Apache
   service: name=apache2 state=restarted
-  when: keystone_pub_vhost_cfg_updated|changed and keystone_intra_vhost_cfg_updated|changed
-  register: keystone_started
 
 
 - include: openstack-services.yml
+  when: openstack_installation == 'yes'
 
 - include: openstack-endpoints.yml
+  when: openstack_installation == 'yes'
 
 - include: openstack-pur.yml
+  when: openstack_installation == 'yes'
 
 - include: openrc-files.yml
+  when: openstack_installation == 'yes'

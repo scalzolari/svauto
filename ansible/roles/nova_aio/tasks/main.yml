@@ -28,7 +28,6 @@
     - ipset
     - pm-utils
     - ubuntu-virt-server
-  register: nova_installed
 
 
 - name: Stopping all Nova services
@@ -41,14 +40,10 @@
     - nova-consoleauth
     - nova-scheduler
     - nova-spiceproxy
-  when: nova_installed|changed
-  register: nova_stopped
 
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/nova/nova.sqlite state=absent
-  when: nova_stopped|changed
-  register: nova_cleaned
 
 
 - name: "Workarounding BUG LP #759725"
@@ -66,9 +61,7 @@
         group=nova
         mode=0640
         backup=yes
-  when: nova_stopped|changed and item.os_project == "nova"
-  with_items: mysql_databases
-  register: nova_cfg_updated
+  when: item.os_project == "nova"
 
 
 - name: Updating nova-compute.conf
@@ -78,14 +71,10 @@
         group=nova
         mode=0640
         backup=yes
-  when: nova_stopped|changed
-  register: novac_cfg_updated
 
 
 - name: Populating Nova Database
   shell: su -s /bin/sh -c "nova-manage db sync" nova
-  when: nova_stopped|changed and novac_cfg_updated|changed
-  register: nova_populated
 
 
 - name: Starting all Nova services
@@ -98,17 +87,14 @@
     - nova-consoleauth
     - nova-scheduler
     - nova-spiceproxy
-  when: nova_populated|changed and nova_stopped|changed
-  register: nova_started
 
 
 - name: Wait a bit until Nova starts up properly...
   pause: seconds=5
-  when: nova_started|changed
-  register: nova_ready
 
 
 - include: nova-flavors-standards.yml
+  when: openstack_installation == 'yes'
 
 
 #- name: "Reconfiguring Libvirt and enabling VHOST_NET + KSM at the Compute Node (QEmu-KVM)"
@@ -122,4 +108,3 @@
 #    - sed -i 's/^env libvirtd_opts="-d"/env libvirtd_opts="-d -l"/' /etc/init/libvirt-bin.conf
 #    - sed -i 's/^libvirtd_opts="-d"/libvirtd_opts="-d -l"/' /etc/default/libvirt-bin
 #  notify: Restart libvirt-bin
-#  when: nova_installed|changed

@@ -18,7 +18,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_sde_repo_in_place
   when: release == 'dev'
 
 
@@ -30,7 +29,6 @@
     - perl-XML-Parser
     - perl-XML-Simple
     - perl-libwww-perl
-  register: sde_installed
 
 
 # Adding support for running Linux SDE on CentOS 7 without systemd:

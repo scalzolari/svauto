@@ -44,5 +44,3 @@
   - openstack role add --project service --user ceilometer admin
   - openstack user create --domain default --password "{{service_password}}" --email trove@{{your_domain}} trove
   - openstack role add --project service --user trove admin
-  when: keystone_started|changed
-  register: openstack_pur_ready

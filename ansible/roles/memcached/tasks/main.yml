@@ -16,7 +16,7 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - memcached
-  register: memcached_installed
+
 
 - name: Updating memcached.conf
   copy: src=memcached.conf
@@ -25,10 +25,7 @@
         group=root
         mode=0644
         backup=yes
-  when: memcached_installed|changed
-  register: memcached_conf_updated
+
 
 - name: Restarting Memcached
   service: name=memcached state=restarted
-  when: memcached_conf_updated|changed
-  register: memcached_restarted

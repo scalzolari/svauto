@@ -16,7 +16,6 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - mysql-server
-  register: mysql_installed
 
 
 - name: Updating mysqld.cnf
@@ -26,20 +25,14 @@
         group=root
         mode=0644
         backup=yes
-  when: mysql_installed|changed
-  register: my_cnf_updated
 
 
 - name: Restarting MySQL
   service: name=mysql state=restarted
-  when: my_cnf_updated|changed
-  register: mysql_ready
 
 
 - name: Creating OpenStack MySQL databases
   mysql_db: name={{item.db_name}} state=present
-  when: mysql_ready|changed
-  with_items: mysql_databases
 
   
 - name: Creating OpenStack MySQL users 
@@ -49,5 +42,3 @@
     password="{{item.db_pass}}"
     priv="{{item.db_name}}.*:ALL,GRANT"
     state=present
-  when: mysql_ready|changed
-  with_items: mysql_databases

@@ -95,6 +95,10 @@ csd_versioned: false
 # OpenStack Definitions
 #
 
+openstack_installation: "no"
+
+openstack_release: "mitaka"
+
 primary_interface_name: "eth0"
 
 use_dummies: "no"

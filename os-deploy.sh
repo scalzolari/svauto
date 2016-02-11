@@ -56,6 +56,14 @@ case $i in
 		shift
         	;;
 
+
+        --openstack-installation)
+
+	        OPENSTACK_INSTALLATION="yes"
+		shift
+        	;;
+
+
 esac
 done
 
@@ -240,8 +248,15 @@ then
 else
         echo
 
-	cd ~/svauto/ansible
-        ansible-playbook site-openstack.yml
+	if [ "$OPENSTACK_INSTALLATION" == "yes" ];
+	then
+		cd ~/svauto/ansible
+        	ansible-playbook site-openstack.yml --extra-vars "openstack_installation=yes"
+	else
+
+		cd ~/svauto/ansible
+        	ansible-playbook site-openstack.yml
+	fi
 fi
 
 

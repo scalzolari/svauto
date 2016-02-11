@@ -28,5 +28,3 @@
   - openstack service create --name heat-cfn --description "Orchestration"  cloudformation
   - openstack service create --name ec2 --description "EC2 Compatibility Layer" ec2
   - openstack service create --name ceilometer --description "OpenStack Metering Service" metering
-  when: keystone_started|changed
-  register: openstack_srvc_ready

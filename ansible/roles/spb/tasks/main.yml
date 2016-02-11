@@ -18,7 +18,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_spb_repo_in_place
   when: release == 'prod'
 
 
@@ -28,7 +27,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_spb_repo_in_place
   when: spb_version == '6.60' and release == 'dev'
 
 
@@ -38,7 +36,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_spb_repo_in_place
   when: spb_versioned == 'true' and release == 'dev'
 
 
@@ -48,20 +45,17 @@
 - name: Installing PostgreSQL 9.3 RPM Repository package for CentOS 7
   yum: pkg=http://yum.postgresql.org/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-1.noarch.rpm state=present
   when: base_os == 'centos72'
-  register: pgsql_repo_in_place
 
 # For CentOS 6:
 - name: Installing PostgreSQL 9.3 RPM Repository package for CentOS 6
   yum: pkg=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm state=present
   when: base_os == 'centos67'
-  register: pgsql_repo_in_place
 
 
 - name: Installing required packages and the SPB
   yum: pkg={{item}} state=installed
   with_items:
     - svspb
-  register: spb_installed
 
 
 - name: Managing Local Firewall Rules
@@ -74,9 +68,8 @@
 
 
 - name: Enabling PostgreSQL on system boot
-  command: chkconfig postgresql-9.3 on
-  when: spb_installed|changed
-  register: pgsql_running
+  service: name=postgresql-9.3 state=started enabled=yes
+
 
 
 - name: Creating new "java.security" file
@@ -86,8 +79,6 @@
         group=root
         mode=0644
         backup=yes
-  when: spb_installed|success
-  register: spb_java_sec_in_place
 
 
 - name: Cleanup YUM local cache

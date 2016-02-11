@@ -63,5 +63,3 @@
   - openstack endpoint create --region "{{region}}" metering public http://{{public_addr}}:8777
   - openstack endpoint create --region "{{region}}" metering internal http://{{controller_addr}}:8777
   - openstack endpoint create --region "{{region}}" metering admin http://{{controller_addr}}:8777
-  when: keystone_started|changed
-  register: openstack_endpoint_ready

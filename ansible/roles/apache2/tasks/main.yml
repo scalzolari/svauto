@@ -17,4 +17,3 @@
   with_items:
     - apache2
     - libapache2-mod-wsgi
-  register: apache2_installed

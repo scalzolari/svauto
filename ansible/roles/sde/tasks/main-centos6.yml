@@ -24,7 +24,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_sde_repo_in_place
   when: release == 'prod'
 
 
@@ -34,7 +33,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_sde_repo_in_place
   when: release == 'dev'
 
 
@@ -44,7 +42,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_sde_repo_in_place
   when: sde_versioned == 'true' and release == 'dev'
 
  
@@ -56,7 +53,6 @@
     - perl-XML-Parser
     - perl-XML-Simple
     - perl-libwww-perl
-  register: sde_installed
 
 
 - name: Managing Local Firewall Rules

@@ -32,4 +32,3 @@
 
 - name: Enabling Labify on system boot
   command: chkconfig fetchlabify on
-  register: labified

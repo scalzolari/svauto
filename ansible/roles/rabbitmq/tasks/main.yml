@@ -16,7 +16,7 @@
   action: apt pkg={{item}} state=installed
   with_items:
     - rabbitmq-server
-  register: rabbitmq_installed
+
 
 - rabbitmq_user: user=openstack
                  password=RABBIT_PASS
@@ -25,4 +25,3 @@
                  read_priv=.*
                  write_priv=.*
                  state=present
-  when: rabbitmq_installed|changed

@@ -21,7 +21,6 @@
   yum: pkg={{item}} state=installed
   with_items:
     - cloud-services-sde
-  register: csd_sde_installed
 
 
 - name: Creating new "diam_peer_config.xml" file
@@ -31,7 +30,6 @@
             group=sv_service
             mode=0644
             backup=yes
-  when: csd_sde_installed|success
 
 
 - name: Linking "csv_config.xml.proto" with "csv_config.xml"
@@ -39,7 +37,6 @@
         dest=/usr/local/sandvine/etc/csv_config.xml
         state=link
         force=yes
-  when: csd_sde_installed|success
 
 
 - name: Creating new "policy.conf" file
@@ -58,7 +55,6 @@
 
 - name: Activating Cloud Services "policy.sde.cs.main.conf" into "policy.conf"
   lineinfile: dest=/usr/local/sandvine/etc/policy.conf line="include \"/usr/local/sandvine/etc/policy.sde.cs.main.conf\""
-  when: csd_sde_installed|success
 
 
 - name: Updating the "logging_file_management.conf" to have smaller UDR size
@@ -68,4 +64,3 @@
         group=sv_admin
         mode=0664
         backup=yes
-  when: csd_sde_installed|success

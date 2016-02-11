@@ -18,7 +18,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_main_repo_in_place
   when: release == 'prod'
 
 - name: Creating Cloud Services Main Repository - Development
@@ -27,7 +26,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_main_repo_in_place
   when: release == 'dev'
 
 
@@ -41,7 +39,6 @@
     - influxdb
     - cloud-services-daemon
     - global-attributes-broker
-  register: csd_installed
 
 
 - name: Managing Local Firewall Rules
@@ -84,31 +81,23 @@
 
 - name: Ensure CSD is running (and enable it at boot)
   service: name=csd state=started enabled=yes
-  when: csd_installed|success
-  register: csd_running
 
 
 - name: Ensure InfluxDB is running (and enable it at boot)
   service: name=influxdb state=started enabled=yes
-  when: csd_installed|success
-  register: influxdb_running
 
 
 - name: Ensure Redis is running (and enable it at boot)
   service: name=redis state=started enabled=yes
-  when: csd_installed|success
-  register: redis_running
 
 
 - name: Ensure MySQL is running (and enable it at boot)
   service: name=mysqld state=started enabled=yes
-  register: mysql_running
 
 
 - name: Creating Cloud Services MySQL database
   mysql_db: name=cs state=present
   register: cs_db_created
-  when: mysql_running|changed
 
 - name: Creating Cloud Services MySQL user and permissions
   mysql_user:
@@ -123,7 +112,7 @@
   when: cs_db_created|changed
 
 - mysql_db: name=cs state=import target=/tmp/mysql-schema.sql
-  when: cs_db_created|changed and csd_installed|changed
+  when: cs_db_created|changed
 
 
 - name: Workaround for InfluxDB Issue 3944
