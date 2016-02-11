@@ -18,7 +18,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_main_repo_in_place
   when: release == 'prod'
 
 - name: centos - copy Sandvine Main Repository - Development
@@ -27,7 +26,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_main_repo_in_place
   when: release == 'dev'
 
 - name: centos - copy Sandvine Main Repository - Development
@@ -36,7 +34,6 @@
             owner=root
             group=root
             mode=0644
-  register: sandvine_main_repo_in_place
   when: release == 'dev' and is_experimental == 'yes'
 
 
@@ -58,11 +55,11 @@
 
 
 - name: centos7 - include custom book
-  include: main-centos7.yml
+  include: centos7.yml
   when: base_os == 'centos72'
 
 - name: centos6 - include custom book
-  include: main-centos6.yml
+  include: centos6.yml
   when: base_os == 'centos67'
 
 
@@ -88,7 +85,7 @@
   when: is_container != 'yes'
 
 
-- name: centos6 - service ntpd enabled
+- name: centos - service ntpd enabled
   service: name=ntpd state=started enabled=yes
 
 

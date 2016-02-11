@@ -14,25 +14,25 @@
 
 # CentOS Bootstrap tasks
 - name: centos - include common book
-  include: main-centos-common.yml
+  include: centos-common.yml
   when: base_os == 'centos72' or base_os == 'centos67'
 
 
 # Ubuntu Bootstrap tasks
 - name: ubuntu16 - include custom book
-  include: main-ubuntu16.yml
+  include: ubuntu16.yml
   when: base_os == 'ubuntu16'
 
 - name: ubuntu14 - include custom book
-  include: main-ubuntu14.yml
+  include: ubuntu14.yml
   when: base_os == 'ubuntu14'
 
 - name: ubuntu - include common book
-  include: main-ubuntu-common.yml
+  include: ubuntu-common.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
 
 - name: ubuntu - include custom book
-  include: main-ubuntu-dummies.yml
+  include: ubuntu-dummies.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14' and use_dummies == 'yes' 
 
 
