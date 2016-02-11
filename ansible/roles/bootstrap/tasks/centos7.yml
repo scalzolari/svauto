@@ -68,6 +68,7 @@
     - man-pages
     - bind-utils
     - dracut-config-generic
+    - traceroute
     - pciutils
     - rsyslog
     - sysstat

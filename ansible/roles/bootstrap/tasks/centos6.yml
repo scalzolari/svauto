@@ -92,6 +92,7 @@
     - dmidecode
     - man-pages
     - bind-utils
+    - traceroute
 
 
 - name: centos6 - copy SSH Daemon config

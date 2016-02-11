@@ -62,6 +62,7 @@
     - vim-nox
     - iptraf-ng
     - subnetcalc
+    - traceroute
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag
