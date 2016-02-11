@@ -137,7 +137,7 @@ Add your remote computer `FQDN` or `IP Address` to the `hosts` file, within grou
 
 Then, run `Ansible`:
 
-    ansible-playbook site.yml
+    ansible-playbook site-openstack.yml
 
 **NOTE:** You can take a look at the script `os-deploy.sh` to see what needs to be changed before running `Ansible`.
 

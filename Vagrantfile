@@ -90,7 +90,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ansible provisioner.
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "ansible/site.yml"
+    ansible.playbook = "ansible/site-openstack.yml"
     ansible.inventory_path = "ansible/hosts"
     ansible.sudo = true
   end

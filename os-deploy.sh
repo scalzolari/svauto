@@ -206,11 +206,11 @@ sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
 sed -i -e 's/^#localhost/localhost/g' ansible/hosts
 
 
-# Configuring site.yml and some roles
+# Configuring site-openstack.yml and some roles
 echo
-echo "Configuring ansible/site.yml and OpenStack OpenRC files with your current $WHOAMI user..."
+echo "Configuring ansible/site-openstack.yml and OpenStack OpenRC files with your current $WHOAMI user..."
 
-sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site.yml
+sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site-openstack.yml
 sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/keystone/tasks/openrc-files.yml
 
 

@@ -89,7 +89,7 @@ case $i in
 
 		[ -f build-date.txt ] && rm -f build-date.txt
 
-		git checkout ansible/hosts ansible/site.yml ansible/group_vars/all
+		git checkout ansible/hosts ansible/group_vars/all
 
 		rm -rf packer/build*
 		[ -d packer_cache ] && rmdir packer_cache
@@ -849,7 +849,7 @@ fi
 if [ "$DRYRUN" == "yes" ]
 then
 	echo
-	echo "Not running Ansible! Just preparing the environment variables and site.yml..."
+	echo "Not running Ansible! Just preparing the environment variables and site-*.yml..."
 else
 	if [ ! "$LABIFY" == "yes" ]
 	then

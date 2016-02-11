@@ -52,8 +52,8 @@ sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
 
 
 echo
-echo "Configuring ansible/site.yml and OpenStack OpenRC files with your current $WHOAMI user..."
-sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site.yml
+echo "Configuring ansible/site-openstack.yml and OpenStack OpenRC files with your current $WHOAMI user..."
+sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site-openstack.yml
 sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/keystone/tasks/main.yml
 sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/heat/tasks/main.yml
 

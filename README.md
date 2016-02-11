@@ -7,7 +7,7 @@ With SVAuto, you can create QCoWs, VMDKs, OVAs, and much more, with Packer and A
 
 Also, you can deploy Sandvine's RPM Packages on top of any supported CentOS 6 or 7, be it bare-metal, Cloud-based images, regular KVM, VMWare, Xen, Hyper-V and etc.
 
-Looking forward to add support for Linux Containers (LXD and Docker).
+Looking forward to add support for Vagrant, Linux Containers (LXD and Docker).
 
 It uses the following Open Source projects:
 
@@ -37,7 +37,7 @@ It contains Ansible Playbooks for Automated deployments of:
 Download SVAuto into your home directory (Designed for Ubuntu LTS):
 
     cd ~
-    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/raw/dev/misc/svauto-install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/misc/svauto-install.sh)
 
 ## Installing SVAuto dependencies
 
@@ -111,4 +111,4 @@ bash using `ssh-agent` and add your keys to it:
 
 Then use the playbook normally:
 
-    ansible-playbook -u root site.yml
+    ansible-playbook -u root site-sandvine.yml
