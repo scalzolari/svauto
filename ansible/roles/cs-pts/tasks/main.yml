@@ -13,12 +13,12 @@
 # limitations under the License.
 
 - name: centos | include common book
-  include: main-centos.yml
+  include: centos.yml
   when: base_os == 'centos67' or base_os == 'centos72'
 
 
 - name: freebsd8 | include custom book
-  include: main-freebsd8.yml
+  include: freebsd8.yml
   when: base_os == 'freebsd8'
 
 
