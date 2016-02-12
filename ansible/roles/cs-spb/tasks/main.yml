@@ -17,20 +17,5 @@
   when: base_os == 'centos67'
 
 
-- name: Customizing "rc.conf.default.spbservices" file
-  copy: src=rc.conf.default.spbservices
-        dest=/usr/local/sandvine/etc/rc.conf.default.spbservices
-        owner=root
-        group=sv_service
-        mode=0644
-  notify: reload sandvine
-
-
-- name: Creating new "dataRetention.conf" configuration
-  copy: src=dataRetention.conf
-        dest=/usr/local/sandvine/etc/dataRetention.conf
-        owner=root
-        group=sv_service
-        mode=0600
-        backup=yes
-  notify: reload sandvine
+- name: Sandvine Auto Configuration book for Cloud Services PTS
+  include: cs-auto-config.yml
