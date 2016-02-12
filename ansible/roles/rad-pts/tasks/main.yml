@@ -23,6 +23,7 @@
   yum: pkg={{item}} state=installed
   with_items:
     - protowizard-pts
+  notify: reload sandvine
 
 
 - name: Configuring Protowizard PTS Diamater
