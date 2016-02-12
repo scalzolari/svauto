@@ -22,7 +22,7 @@ clear
 
 
 echo
-echo "Welcome to OpenStack Liberty Deployment!"
+echo "Welcome to OpenStack Mitaka Deployment!"
 echo
 
 
@@ -33,7 +33,7 @@ sudo apt -y install git ansible python-pycurl
 
 
 echo
-echo "Cloning OpenStack Ansible Deployment Lite into your home directory..."
+echo "Downloading SVAuto into your home directory..."
 echo
 cd ~
 git clone -b dev https://github.com/sandvine/svauto.git

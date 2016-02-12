@@ -30,11 +30,11 @@ sudo apt -y install git
 
 
 echo
-echo "Cloning Sandvine's Ansible Deployment into your home directory..."
+echo "Downloading SVAuto into your home directory..."
 echo
 
 cd ~
-git clone -b dev http://github.com/tmartinx/svauto.git
+git clone -b dev https://github.com/tmartinx/svauto.git
 
 echo
 echo "You'll need to install all the dependencies for running SVAuto."
