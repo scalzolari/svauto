@@ -12,6 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: centos7 - copy eth2 config file
+  copy: src=centos7/ifcfg-eth2
+        dest=/etc/sysconfig/network-scripts/ifcfg-eth2
+        owner=root
+        group=root
+        mode=0644
+  
+- name: centos7 - copy eth3 config file
+  copy: src=centos7/ifcfg-eth3
+        dest=/etc/sysconfig/network-scripts/ifcfg-eth3
+        owner=root
+        group=root
+        mode=0644
+
+
 - name: centos7 | copy Sandvine PTS Protocols - Production
   template: src=common/Sandvine-SVPROTO.repo
             dest=/etc/yum.repos.d/Sandvine-SVPROTO.repo
