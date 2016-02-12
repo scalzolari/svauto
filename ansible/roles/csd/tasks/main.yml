@@ -22,7 +22,7 @@
 
 - name: Creating Cloud Services Main Repository - Development
   template: src=common/Sandvine-CS-Main_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-Main.repo
+            dest=/etc/yum.repos.d/Sandvine-CS-Main.repo
             owner=root
             group=root
             mode=0644
