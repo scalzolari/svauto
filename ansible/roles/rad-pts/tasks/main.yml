@@ -26,19 +26,5 @@
   notify: reload sandvine
 
 
-- name: Configuring Protowizard PTS Diamater
-  template: src=diam_peer_config.xml
-            dest=/usr/local/sandvine/etc/diam_peer_config.xml
-            owner=root
-            group=root
-            mode=0644
-            backup=yes
-
-
-- name: Configuring PTS Policy
-  copy: src=policy.conf
-        dest=/usr/local/sandvine/etc/policy.conf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
+- name: RAD Auto Configuration book for PTS
+  include: rad-auto-config.yml

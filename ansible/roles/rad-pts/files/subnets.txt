@@ -1,0 +1,9 @@
+#Default Subnets File
+#Please refer subnets.txt.sample to edit this file
+internal 10 internal
+10.0.0.0/8
+172.168.0.0/16
+ 
+default 100 external
+0.0.0.0/0
+::/0
