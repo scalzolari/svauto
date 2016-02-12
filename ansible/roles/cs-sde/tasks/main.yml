@@ -21,6 +21,7 @@
   yum: pkg={{item}} state=installed
   with_items:
     - cloud-services-sde
+  notify: reload sandvine
 
 
 - name: Creating new "diam_peer_config.xml" file

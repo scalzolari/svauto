@@ -18,6 +18,8 @@
             owner=sv_admin
             group=sv_admin
             mode=0644
+  notify: reload sandvine
+
 
 - name: Creating new "policy.conf" file
   copy: src=common/policy.conf
@@ -26,3 +28,4 @@
         group=sv_service
         mode=0644
         backup=yes
+  notify: reload sandvine

@@ -24,6 +24,10 @@
   command: yum clean all
 
 
+- name: Sandvine Auto Configuration book for SDE
+  include: sv-auto-config.yml
+
+
 - name: Copying Sandvine SDE login logo
   copy: src=etc-issue-sde-logo
         dest=/etc/issue

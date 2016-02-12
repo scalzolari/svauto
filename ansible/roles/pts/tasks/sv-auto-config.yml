@@ -19,6 +19,7 @@
             group=sv_admin
             mode=0644
   when: base_os == 'centos72' or base_os == 'centos67'
+  notify: reload sandvine
 
 
 - name: freebsd8 | copy new "rc.conf" file
@@ -28,6 +29,7 @@
             group=sv_admin
             mode=0644
   when: base_os == 'freebsd8'
+  notify: reload sandvine
 
 
 - name: copy new "policy.conf" file
@@ -37,6 +39,7 @@
             group=sv_admin
             mode=0644
             backup=yes
+  notify: reload sandvine
 
 
 - name: copy new "subnets.txt" file
@@ -46,3 +49,4 @@
             group=sv_admin
             mode=0644
             backup=yes
+  notify: reload sandvine

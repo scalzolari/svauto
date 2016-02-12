@@ -20,6 +20,7 @@
             group=sv_service
             mode=0644
             backup=yes
+  notify: reload sandvine
 
 
 - name: Creating new "policy.conf" file
@@ -29,6 +30,7 @@
         group=sv_service
         mode=0644
         backup=yes
+  notify: reload sandvine
 
 
 - name: Customizing "rc.conf.default.ptsd" file
@@ -37,6 +39,7 @@
         owner=root
         group=sv_service
         mode=0644
+  notify: reload sandvine
 
 
 - name: Customizing "rc.conf.default.diameter" file
@@ -45,6 +48,7 @@
         owner=root
         group=sv_service
         mode=0644
+  notify: reload sandvine
 
 
 - name: Customizing "rc.conf.default.cs" file
@@ -53,3 +57,4 @@
         owner=root
         group=sv_service
         mode=0644
+  notify: reload sandvine

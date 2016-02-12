@@ -16,6 +16,7 @@
   lineinfile: dest=/etc/sudoers
               insertafter='^Defaults.*requiretty'
               line='Defaults:root !requiretty'
+              validate='visudo -cf %s'
 
 
 - name: Creating Sandvine SDE Repository - Production
@@ -62,7 +63,3 @@
   - lokkit -t eth1
   - service iptables save
   when: is_container != 'yes'
-
-
-- name: Sandvine Auto Configuration book for SDE
-  include: sv-auto-config.yml

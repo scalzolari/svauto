@@ -23,6 +23,7 @@
         owner=root
         group=sv_service
         mode=0644
+  notify: reload sandvine
 
 
 - name: Creating new "dataRetention.conf" configuration
@@ -32,3 +33,4 @@
         group=sv_service
         mode=0600
         backup=yes
+  notify: reload sandvine

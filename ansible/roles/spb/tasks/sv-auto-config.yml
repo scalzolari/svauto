@@ -18,3 +18,4 @@
             owner=sv_admin
             group=sv_admin
             mode=0644
+  notify: reload sandvine

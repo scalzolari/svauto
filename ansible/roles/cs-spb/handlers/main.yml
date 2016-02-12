@@ -12,5 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Reloading Sandvine configuration
+- name: reload sandvine
   command: svreload
+  when: is_packer_building != 'yes'

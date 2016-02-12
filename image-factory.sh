@@ -339,7 +339,7 @@ fi
 
 
 # Build extra_vars "nicely"!
-EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE" activate_eth1="no""
+EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE" activate_eth1="no" is_packer_building="yes""
 
 if [ "$EXPERIMENTAL_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS is_experimental="yes""
