@@ -35,4 +35,4 @@ echo
 echo "Installing RAD Protowizard Daemon:"
 echo
 cd ~/svauto/ansible
-ansible-playbook -i "sde-servers," -c local playbooks/rad.yml
+ansible-playbook -c local playbooks/rad.yml

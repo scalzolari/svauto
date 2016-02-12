@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys SPB:
 #
 
-- hosts: spb-servers
+- hosts: localhost
   user: sandvine
   become: yes
   roles:

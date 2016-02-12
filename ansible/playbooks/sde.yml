@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys SDE:
 #
 
-- hosts: sde-servers
+- hosts: localhost
   user: sandvine
   become: yes
   roles:

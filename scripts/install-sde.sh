@@ -35,4 +35,4 @@ echo
 echo "Installing SDE on CentOS 6.7:"
 echo
 cd ~/svauto/ansible
-ansible-playbook -i "sde-servers," -c local playbooks/sde.yml
+ansible-playbook -c local playbooks/sde.yml

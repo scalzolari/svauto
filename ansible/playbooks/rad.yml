@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys RAD Protowizard on SDE:
 #
 
-- hosts: sde-servers
+- hosts: localhost
   user: sandvine
   become: yes
   roles:

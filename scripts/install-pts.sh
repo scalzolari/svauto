@@ -35,4 +35,4 @@ echo
 echo "Installing PTS on CentOS 7.2:"
 echo
 cd ~/svauto/ansible
-ansible-playbook -i "pts-servers," -c local playbooks/pts.yml --extra-vars "base_os=centos72"
+ansible-playbook -c local playbooks/pts.yml --extra-vars "base_os=centos72"

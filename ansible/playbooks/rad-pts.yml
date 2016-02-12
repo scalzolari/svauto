@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys RAD Protowizard Policy on PTS:
 #
 
-- hosts: pts-servers
+- hosts: localhost
   user: sandvine
   become: yes
   roles:

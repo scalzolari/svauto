@@ -35,4 +35,4 @@ echo
 echo "Installing SPB on CentOS 6.7:"
 echo
 cd ~/svauto/ansible
-ansible-playbook -i "spb-servers," -c local playbooks/spb.yml
+ansible-playbook -c local playbooks/spb.yml

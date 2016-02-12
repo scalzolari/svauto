@@ -35,4 +35,4 @@ echo
 echo "Installing CSD on CentOS 6.7:"
 echo
 cd ~/svauto/ansible
-ansible-playbook -i "sde-servers," -c local playbooks/csd.yml
+ansible-playbook -c local playbooks/csd.yml

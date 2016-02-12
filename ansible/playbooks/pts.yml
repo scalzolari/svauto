@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys PTS:
 #
 
-- hosts: pts-servers
+- hosts: localhost
   user: sandvine
   become: yes
   roles:
