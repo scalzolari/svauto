@@ -20,13 +20,6 @@ clear
 
 echo
 echo "Welcome to SVAuto, the Sandvine Automation!"
-echo
-
-
-echo
-echo "Installing Git..."
-echo
-sudo apt -y install git
 
 
 echo
@@ -36,12 +29,13 @@ echo
 cd ~
 git clone -b dev https://github.com/tmartinx/svauto.git
 
+
 echo
 echo "You'll need to install all the dependencies for running SVAuto."
-echo "Git is already install by this script, it is a dependency as well."
 echo
-echo "To install everything, run:"
+echo "To install the dependences, run:"
 echo
 echo "cd ~/svauto"
 echo "./svauto.sh --install-dependencies"
 echo
+echo "NOTE: To use all features that SVAuto provides, you need an Ubuntu 16.04."

@@ -37,7 +37,7 @@ It contains Ansible Playbooks for Automated deployments of:
 Download SVAuto into your home directory (Designed for Ubuntu LTS):
 
     cd ~
-    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/misc/svauto-install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/install-svauto.sh)
 
 ## Installing SVAuto dependencies
 
