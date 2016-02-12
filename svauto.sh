@@ -334,14 +334,6 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,spb,svreports,cs-spb,vmware-tools $DRY_RUN_OPT --labify
 
-	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=only-sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,vmware-tools $DRY_RUN_OPT
-
-	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=only-csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,csd,vmware-tools $DRY_RUN_OPT
-
 	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT
@@ -349,6 +341,14 @@ then
 	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
+
+	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=only-sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,vmware-tools $DRY_RUN_OPT
+
+	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=only-csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,csd,vmware-tools $DRY_RUN_OPT
 
 
 	#
