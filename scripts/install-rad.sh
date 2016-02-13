@@ -23,16 +23,22 @@ echo "Welcome to SVAuto, the Sandvine Automation!"
 echo
 
 
-echo
-echo "Downloading SVAuto into your home directory..."
-echo
+if  [ ! -d ~/svauto ]; then
+        echo
+        echo "Downloading SVAuto into your home directory..."
+        echo
 
-cd ~
-git clone -b dev https://github.com/tmartinx/svauto.git
+        cd ~
+        git clone -b dev https://github.com/tmartinx/svauto.git
+else
+        echo
+        echo "Apparently, you already have SVAuto, enjoy it!"
+        echo
+fi
 
 
 echo
-echo "Installing RAD Protowizard Daemon:"
+echo "Installing RAD Protowizard daemon"
 echo
 cd ~/svauto/ansible
 ansible-playbook -c local playbooks/rad.yml

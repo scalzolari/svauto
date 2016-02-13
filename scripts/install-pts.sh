@@ -23,16 +23,22 @@ echo "Welcome to SVAuto, the Sandvine Automation!"
 echo
 
 
-echo
-echo "Downloading SVAuto into your home directory..."
-echo
+if  [ ! -d ~/svauto ]; then
+        echo
+        echo "Downloading SVAuto into your home directory..."
+        echo
 
-cd ~
-git clone -b dev https://github.com/tmartinx/svauto.git
+        cd ~
+        git clone -b dev https://github.com/tmartinx/svauto.git
+else
+        echo
+        echo "Apparently, you already have SVAuto, enjoy it!"
+        echo
+fi
 
 
 echo
-echo "Installing PTS on CentOS 7.2:"
+echo "Installing PTS..."
 echo
 cd ~/svauto/ansible
 ansible-playbook -c local playbooks/pts.yml --extra-vars "base_os=centos72"
