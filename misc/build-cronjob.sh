@@ -25,15 +25,15 @@ cd ~/svauto
 
 
 # Sandvine Cloud Services Images for being released to the public
-time ./svauto.sh --packer-build-cs --move2webroot --release
+time ./svauto.sh --packer-build-cs --heat-templates-cs --move2webroot --release
 #exit
 
 
 # Sandvine Cloud Services Images
-time ./svauto.sh --packer-build-cs --move2webroot
+time ./svauto.sh --packer-build-cs --heat-templates-cs --move2webroot
 #exit
 
 
 # Sandvine Stock Images
-time ./svauto.sh --packer-build-official --move2webroot
+time ./svauto.sh --packer-build-official --heat-templates --move2webroot
 #exit

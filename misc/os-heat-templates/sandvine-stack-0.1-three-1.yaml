@@ -2,16 +2,13 @@ heat_template_version: 2013-05-23
 
 description: >
 
-
-  HOT template to create standard PTS setup, acting as a L2 Bridge between two VXLAN (or VLAN) networks.
-
-  NOTE: The "PTS Image" is just a plain Linux (or FreeBSD) distribution without any kind of PTS configured. To make it work, you'll need to create a Linux L2 Bridge (or a DPDK App), using the Virtual NICs "eth2 + eth3".
+  HOT template to create Sandvine Stack, it have an Instance acting as a L2 Bridge between two VXLAN networks.
 
   We have 3 Instances:
 
-  * PTS - Linux CentOS 7
-  * SDE - Linux CentOS 6.7
-  * SPB - Linux CentOS 6.7
+  * PTS - CentOS 7.2
+  * SDE - CentOS 6.7
+  * SPB - CentOS 6.7
 
 
   We want to wire them as:
@@ -55,21 +52,21 @@ parameters:
 
   pts_image:
     type: string
-    label: "PTS L2 Bridge Image (default 'pts')"
+    label: "PTS L2 Bridge Image (default '{{pts_image}}')"
     description: "PTS Image"
-    default: "CentOS 6.6 - 64-bit - Cloud Based Image"
+    default: "{{pts_image}}"
 
   sde_image:
     type: string
-    label: "SDE Image (default 'sde')"
+    label: "SDE Image (default '{{sde_image}}')"
     description: "SDE Image"
-    default: "CentOS 6.6 - 64-bit - Cloud Based Image"
+    default: "{{sde_image}}"
 
   spb_image:
     type: string
-    label: "SPB Image (default 'spb')"
+    label: "SPB Image (default '{{spb_image}}')"
     description: "SPB Image"
-    default: "CentOS 6.6 - 64-bit - Cloud Based Image"
+    default: "{{spb_image}}"
 
 resources:
   rtr:
@@ -213,7 +210,7 @@ resources:
     type: OS::Neutron::Subnet
     properties:
       name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-control' } }
-      dns_nameservers: [8.8.8.8, 8.8.4.4]
+      dns_nameservers: [8.8.4.4, 8.8.8.8]
       network: { get_resource: ctrl_net }
       enable_dhcp: True
       cidr: 192.168.192/25
@@ -230,7 +227,7 @@ resources:
     type: OS::Neutron::Subnet
     properties:
       name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-service' } }
-      dns_nameservers: [8.8.8.8, 8.8.4.4]
+      dns_nameservers: [8.8.4.4, 8.8.8.8]
       network: { get_resource: service_net }
       enable_dhcp: True
       cidr: 192.168.192.128/25
@@ -245,7 +242,7 @@ resources:
     type: OS::Neutron::Subnet
     properties:
       name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-subscribers-ss1' } }
-      dns_nameservers: [192.168.196.20, 192.168.194.20]
+      dns_nameservers: [8.8.4.4, 8.8.8.8]
       network: { get_resource: data_sub_net1 }
       enable_dhcp: True
       cidr: 10.192/16
@@ -362,7 +359,7 @@ resources:
       name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-pts' } }
       key_name: { get_param: 'ssh_key' }
       image: { get_param: 'pts_image' }
-      flavor: "m1.medium"
+      flavor: "m1.small"
       metadata:
         {
           common:

@@ -76,6 +76,18 @@ case $i in
 		shift
 		;;
 
+	--heat-templates)
+
+		HEAT_TEMPLATES="yes"
+		shift
+		;;
+
+	--heat-templates-cs)
+
+		HEAT_TEMPLATES_CS="yes"
+		shift
+		;;
+
 	--release)
 
 		PACKER_BUILD_CS_RELEASE="yes"
@@ -84,30 +96,41 @@ case $i in
 
 	--clean-all)
 
-		echo
-		echo "Cleaning it up..."
-
-		[ -f build-date.txt ] && rm -f build-date.txt
-
-		git checkout ansible/hosts ansible/group_vars/all
-
-		rm -rf packer/build*
-		[ -d packer_cache ] && rmdir packer_cache
-
-		echo
-		exit 0
-
+		CLEAN_ALL="yes"
 		shift
 		;;
 
 	--dry-run)
 
-		DRYRUN="yes"
+		DRY_RUN="yes"
 		shift
 		;;
 
 esac
 done
+
+
+if [ "$CLEAN_ALL" == "yes" ]
+then
+
+	echo
+	echo "Cleaning it up..."
+
+	[ -f build-date.txt ] && rm -f build-date.txt
+
+	git checkout ansible/hosts ansible/group_vars/all
+
+	rm -rf packer/build*
+
+	[ -d packer_cache ] && rm -rf packer_cache
+
+	rm -f tmp/cs-rel/* tmp/cs/* tmp/sv/*
+
+	echo
+
+	exit 0
+
+fi
 
 
 if [ "$INSTALL_DEPENDENCIES" == "yes" ]
@@ -117,7 +140,23 @@ then
 	echo "Installing SVAuto dependencies via APT:"
 	echo
 
-	sudo apt -y install git ansible lxd ubuntu-virt-server virtualbox vagrant zip unzip ec2-ami-tools ec2-api-tools python-keystoneclient python-glanceclient python-novaclient python-neutronclient python-cinderclient python-heatclient
+	sudo apt -y install \
+		git \
+		ansible \
+		lxd \
+		ubuntu-virt-server \
+		virtualbox \
+		vagrant \
+		zip \
+		unzip \
+		ec2-ami-tools \
+		ec2-api-tools \
+		python-keystoneclient \
+		python-glanceclient \
+		python-novaclient \
+		python-neutronclient \
+		python-cinderclient \
+		python-heatclient
 
 
 	echo
@@ -137,7 +176,7 @@ fi
 if [ "$MOVE2WEBROOT" == "yes" ]
 then
 
-        if [ "$DRYRUN" == "yes" ]
+        if [ "$DRY_RUN" == "yes" ]
         then
                 echo
                 echo "Not creating to web root directory structure! Skipping this step..."
@@ -191,7 +230,7 @@ fi
 if [ "$PACKER_BUILD_CS_RELEASE" == "yes" ]
 then
 
-        if [ "$DRYRUN" == "yes" ]
+        if [ "$DRY_RUN" == "yes" ]
         then
                 echo
                 echo "Not requesting FTP account details on dry run! Skipping this step..."
@@ -209,7 +248,7 @@ then
 	fi
 
 
-        if [ "$DRYRUN" == "yes" ]; then
+        if [ "$DRY_RUN" == "yes" ]; then
                 export DRY_RUN_OPT="--dry-run"
         fi
 
@@ -244,10 +283,36 @@ then
 #		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools,cleanrepo --labify $DRY_RUN_OPT
 
 
+	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not creating Heat Templates! Skipping this step..."
+
+                else
+
+			echo
+			echo "Creating Cloud Services Heat Templates for release into tmp/cs-rel subdirectory..."
+
+			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs-rel
+
+			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs-rel/*.yaml
+			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
+			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
+
+		fi
+
+	fi
+
+
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-                if [ "$DRYRUN" == "yes" ]
+                if [ "$DRY_RUN" == "yes" ]
                 then
                         echo
                         echo "Not moving to web root! Skipping this step..."
@@ -295,6 +360,21 @@ then
 			cd - &>/dev/null
 
 
+			if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+			then
+
+				echo
+				echo "Moving Cloud Services Heat Templates for release into public web subdirectory..."
+
+				cp tmp/cs-rel/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-flat-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-vlan-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-rad-1.yaml
+				#cp tmp/cs-rel/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-micro-1.yaml
+
+			fi
+
+
 			rm -rf packer/build*
 
 		fi
@@ -309,7 +389,7 @@ fi
 if [ "$PACKER_BUILD_CS" == "yes" ]
 then
 
-	if [ "$DRYRUN" == "yes" ]; then
+	if [ "$DRY_RUN" == "yes" ]; then
 		export DRY_RUN_OPT="--dry-run"
 	fi
 
@@ -376,10 +456,36 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,spb,vmware-tools --versioned-repo $DRY_RUN_OPT
 
 
+	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not creating Heat Templates! Skipping this step..."
+
+                else
+
+			echo
+			echo "Creating Cloud Services Heat Templates into tmp/cs subdirectory..."
+
+			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs
+
+			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs/*.yaml
+			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
+			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-cs-1-centos6-amd64/g' tmp/cs/*.yaml
+
+		fi
+
+	fi
+
+
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-                if [ "$DRYRUN" == "yes" ]
+                if [ "$DRY_RUN" == "yes" ]
                 then
                         echo
                         echo "Not moving to web root! Skipping this step..."
@@ -445,6 +551,20 @@ then
 			cd - &>/dev/null
 
 
+			if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+			then
+
+				echo
+				echo "Moving Cloud Services Heat Templates into web public subdirectory..."
+
+				cp tmp/cs/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1.yaml
+				cp tmp/cs/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-flat-1.yaml
+				cp tmp/cs/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-vlan-1.yaml
+				cp tmp/cs/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-rad-1.yaml
+				#cp tmp/cs/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-four-1.yaml
+
+			fi
+
 			rm -rf packer/build*
 
 		fi
@@ -459,7 +579,7 @@ fi
 if [ "$PACKER_BUILD_OFFICIAL" == "yes" ]
 then
 
-	if [ "$DRYRUN" == "yes" ]; then
+	if [ "$DRY_RUN" == "yes" ]; then
 		export DRY_RUN_OPT="--dry-run"
 	fi
 
@@ -557,10 +677,36 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,spb,vmware-tools $DRY_RUN_OPT --versioned-repo
 
 
+	if [ "$HEAT_TEMPLATES" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not creating Heat Templates! Skipping this step..."
+
+                else
+
+			echo
+			echo "Creating Sandvine's Heat Templates into tmp/sv subdirectory..."
+
+			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/sv
+
+			sed -i -e 's/{{pts_image}}/svpts-7.20-1-centos7-amd64/g' tmp/sv/*.yaml
+			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
+			sed -i -e 's/{{spb_image}}/svspb-6.60-1-centos6-amd64/g' tmp/sv/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-1-centos6-amd64/g' tmp/sv/*.yaml
+
+		fi
+
+	fi
+
+
 	if [ "$MOVE2WEBROOT" == "yes" ]
 	then
 
-                if [ "$DRYRUN" == "yes" ]
+                if [ "$DRY_RUN" == "yes" ]
                 then
                         echo
                         echo "Not moving to web root! Skipping this step..."
@@ -624,6 +770,21 @@ then
 			rm -f current
 			ln -s $BUILD_DATE current
 			cd - &>/dev/null
+
+
+			if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+			then
+
+				echo
+				echo "Moving Sandvine's Heat Templates into web public subdirectory..."
+
+				cp tmp/sv/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-1.yaml
+				cp tmp/sv/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-flat-1.yaml
+				cp tmp/sv/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-vlan-1.yaml
+				cp tmp/sv/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-rad-1.yaml
+				#cp tmp/sv/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-four-1.yaml
+
+			fi
 
 
 			rm -rf packer/build*
@@ -750,7 +911,7 @@ then
 	if [ "$FREEBSD_PTS" == "yes" ]
 	then
 
-		if [ "$DRYRUN" == "yes" ]
+		if [ "$DRY_RUN" == "yes" ]
 		then
 			echo
 			echo "Not preparing FreeBSD! Skipping this step..."
@@ -846,7 +1007,7 @@ then
 fi
 
 
-if [ "$DRYRUN" == "yes" ]
+if [ "$DRY_RUN" == "yes" ]
 then
 	echo
 	echo "Not running Ansible! Just preparing the environment variables and site-*.yml..."
