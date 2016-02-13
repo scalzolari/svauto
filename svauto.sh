@@ -302,7 +302,7 @@ then
 			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs-rel/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
-			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
 
 		fi
 
@@ -423,11 +423,11 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools $DRY_RUN_OPT --labify
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=only-sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,vmware-tools $DRY_RUN_OPT
 
 	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=only-csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=centos-xen,cloud-init,bootstrap,grub-conf,csd,vmware-tools $DRY_RUN_OPT
 
 
@@ -475,7 +475,7 @@ then
 			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs/*.yaml
-			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-cs-1-centos6-amd64/g' tmp/cs/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 
 		fi
 
@@ -606,11 +606,11 @@ then
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf $DRY_RUN_OPT
 
-#	# CentOS 7 - SVAuto bootstraped - Old Linux 3.10
+#	# CentOS 7.2 - SVAuto bootstraped - Old Linux 3.10
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf $DRY_RUN_OPT
 
-#	# CentOS 7 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+#	# CentOS 7.2 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf $DRY_RUN_OPT
 
@@ -656,12 +656,12 @@ then
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo
 
-#	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.2 with Xen Support, no igb_uio
-#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk21-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
+	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
 
-	# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.2 with Xen Support, no igb_uio
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=dpdk21-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=centos-xen,cloud-init,bootstrap,grub-conf,pts,vmware-tools $DRY_RUN_OPT --versioned-repo --experimental-repo
 
 	# SDE 7.45 on CentOS 7
@@ -696,7 +696,7 @@ then
 			sed -i -e 's/{{pts_image}}/svpts-7.20-1-centos7-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-1-centos6-amd64/g' tmp/sv/*.yaml
-			#sed -i -e 's/{{csd_image}}/svcsd-7.40-only-csd-1-centos6-amd64/g' tmp/sv/*.yaml
+			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-1-centos6-amd64/g' tmp/sv/*.yaml
 
 		fi
 
