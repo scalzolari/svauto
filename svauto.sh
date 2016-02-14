@@ -648,13 +648,13 @@ then
 	# EXPERIMENTAL
 	#
 
-	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
+#	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
-	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
+#	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
 	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
