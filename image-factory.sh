@@ -14,12 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# TODO:
-#
-# 1- Include support for generating Xen XL files for QCoWs (libvirt ?);
-# 2- Create small functions where needed;
-
 
 for i in "$@"
 do

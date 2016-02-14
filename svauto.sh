@@ -772,7 +772,7 @@ then
 			cd - &>/dev/null
 
 
-			if [ "$HEAT_TEMPLATES_CS" == "yes" ]
+			if [ "$HEAT_TEMPLATES" == "yes" ]
 			then
 
 				echo
