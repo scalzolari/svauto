@@ -346,16 +346,16 @@ then
 
 
 #			cd $WEB_ROOT_CS_RELEASE_LAB
-#			cat *.md5 > MD5SUMS.txt
+#			cat *.md5 > MD5SUMS
 #			rm -f *.md5
-#			cat *.sha1 > SHA1SUMS.txt
+#			cat *.sha1 > SHA1SUMS
 #			rm -f *.sha1
 #			cd -
 
 			cd $WEB_ROOT_CS_RELEASE
-			cat *.md5 > MD5SUMS.txt
+			cat *.md5 > MD5SUMS
 			rm -f *.md5
-			cat *.sha1 > SHA1SUMS.txt
+			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
 			cd - &>/dev/null
 
@@ -525,9 +525,9 @@ then
 			echo "Merging MD5SUMS files together..."
 
 			cd $WEB_ROOT_CS_LAB
-			cat *.md5 > MD5SUMS.txt
+			cat *.md5 > MD5SUMS
 			rm -f *.md5
-			cat *.sha1 > SHA1SUMS.txt
+			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
 			cd - &>/dev/null
 
@@ -535,9 +535,9 @@ then
 			echo "Merging SHA1SUMS files together..."
 
 			cd $WEB_ROOT_CS
-			cat *.md5 > MD5SUMS.txt
+			cat *.md5 > MD5SUMS
 			rm -f *.md5
-			cat *.sha1 > SHA1SUMS.txt
+			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
 			cd - &>/dev/null
 
@@ -746,9 +746,9 @@ then
 #			echo "Merging MD5SUMS files together..."
 
 #			cd $WEB_ROOT_STOCK_LAB
-#			cat *.md5 > MD5SUMS.txt
+#			cat *.md5 > MD5SUMS
 #			rm -f *.md5
-#			cat *.sha1 > SHA1SUMS.txt
+#			cat *.sha1 > SHA1SUMS
 #			rm -f *.sha1
 #			cd - &>/dev/null
 
@@ -756,9 +756,9 @@ then
 			echo "Merging SHA1SUMS files together..."
 
 			cd $WEB_ROOT_STOCK
-			cat *.md5 > MD5SUMS.txt
+			cat *.md5 > MD5SUMS
 			rm -f *.md5
-			cat *.sha1 > SHA1SUMS.txt
+			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
 			cd - &>/dev/null
 
