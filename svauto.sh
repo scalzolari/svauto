@@ -298,6 +298,7 @@ then
 			echo "Creating Cloud Services Heat Templates for release into tmp/cs-rel subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs-rel
+			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
 
 			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs-rel/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
@@ -370,6 +371,7 @@ then
 				cp tmp/cs-rel/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-flat-1.yaml
 				cp tmp/cs-rel/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-vlan-1.yaml
 				cp tmp/cs-rel/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-rad-1.yaml
+				cp tmp/cs-rel/sandvine-stack-nubo-0.1-stock-gui-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-nubo-15.12-stock-gui-1.yaml
 				#cp tmp/cs-rel/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-micro-1.yaml
 
 			fi
@@ -471,6 +473,7 @@ then
 			echo "Creating Cloud Services Heat Templates into tmp/cs subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs
+			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
 
 			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
@@ -561,6 +564,7 @@ then
 				cp tmp/cs/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-flat-1.yaml
 				cp tmp/cs/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-vlan-1.yaml
 				cp tmp/cs/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-rad-1.yaml
+				cp tmp/cs/sandvine-stack-nubo-0.1-stock-gui-1.yaml $WEB_ROOT_CS/cloudservices-stack-nubo-0.1-stock-gui-1.yaml
 				#cp tmp/cs/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-four-1.yaml
 
 			fi
@@ -692,6 +696,7 @@ then
 			echo "Creating Sandvine's Heat Templates into tmp/sv subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/sv
+			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
 
 			sed -i -e 's/{{pts_image}}/svpts-7.20-1-centos7-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
@@ -782,6 +787,7 @@ then
 				cp tmp/sv/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-flat-1.yaml
 				cp tmp/sv/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-vlan-1.yaml
 				cp tmp/sv/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-rad-1.yaml
+				cp tmp/sv/sandvine-stack-nubo-0.1-stock-gui-1.yaml $WEB_ROOT_STOCK/sandvine-stack-nubo-0.1-stock-gui-1.yaml
 				#cp tmp/sv/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-four-1.yaml
 
 			fi

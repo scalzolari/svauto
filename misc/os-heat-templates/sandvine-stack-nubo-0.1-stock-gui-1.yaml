@@ -1,0 +1,365 @@
+heat_template_version: 2013-05-23
+
+description: >
+
+  HOT template to create Sandvine Stack, it have an Instance acting as a L2 Bridge between two VXLAN networks.
+
+  We have 4 Instances:
+
+  * PTS - CentOS 7.2
+  * SDE - CentOS 6.7
+  * SPB - CentOS 6.7
+  * GUI - Windows or Android
+
+  We want to wire them as:
+
+  -------|ctrl_subnet|------------- Control Network (with Internet access via router_i0)
+      |        |        |
+     ---      ---      ---
+     | |      | |      | |      --|Android|     --|Windows|
+     | |      | |      | |      |               |
+     | |      | |      | |    -------------------------
+     | |      | |      | |----|     data_sub_net1     |---|CentOS|
+     |S|      |S|      |P|    -------------------------
+     |B|      |D|      |T|     |            |      |
+     |P|      |E|      |S|     |            |      --|Mac|
+     | |      | |      | |     --|Ubuntu|   |
+     | |      | |      | |                  --|Debian|
+     | |      | |      | |
+     | |      | |      | |
+     | |      | |      | |-------|data_int_subnet1 + dhcp|----|Internet via router_i1|
+     | |      | |      | |
+     ---      ---      - -
+      |        |        |
+      --|service_subnet|------  <-- Service Network (not routed - no gateway)
+
+parameters:
+  ssh_key:
+    type: string
+    label: "Your SSH keypair name (pre-create please!)"
+    description: |
+        If you have not created your key, please go to
+        Project/Compute/Access & Security, and either import
+        one or create one. If you create it, make sure you keep
+        the downloaded file (as you don't get a second chance)
+    default: default
+
+  public_network:
+    type: string
+    label: Public External Network
+    description: Public Network with Floating IP addresses
+    default: "ext-net"
+
+  sde_image:
+    type: string
+    label: "SDE Image (default '{{sde_image}}')"
+    description: "SDE Image"
+    default: "{{sde_image}}"
+
+  pts_image:
+    type: string
+    label: "PTS L2 Bridge Image (default '{{pts_image}}')"
+    description: "PTS Image"
+    default: "{{pts_image}}"
+
+  spb_image:
+    type: string
+    label: "SPB Image (default '{{spb_image}}')"
+    description: "SPB Image"
+    default: "{{spb_image}}"
+
+  gui_image:
+    type: string
+    label: "GUI image (win7 or android)"
+    description: "GUI (win7 or android)"
+    default: "win7"
+
+resources:
+  crtr:
+    type: OS::Neutron::Router
+    properties:
+      admin_state_up: True
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-crtr' } }
+      external_gateway_info: 
+        network: { get_param: public_network }
+
+  ctrl_net:
+    type: OS::Neutron::Net
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-control' } }
+
+  ctrl_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-control' } }
+      dns_nameservers: [8.8.4.4, 8.8.8.8]
+      enable_dhcp: True
+      network_id: { get_resource: ctrl_net }
+      cidr: 192.168.192/25
+      allocation_pools:
+        - start: 192.168.192.50
+          end: 192.168.192.126
+
+  service_net:
+    type: OS::Neutron::Net
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-service' } }
+
+  service_subnet:
+    type: OS::Neutron::Subnet
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-service' } }
+      dns_nameservers: [8.8.4.4, 8.8.8.8]
+      network: { get_resource: service_net }
+      enable_dhcp: True
+      cidr: 192.168.192.128/25
+      gateway_ip: ""
+
+  router_i0:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: crtr }
+      subnet_id: { get_resource: ctrl_subnet }
+
+  drtr:
+    type: OS::Neutron::Router
+    properties:
+      admin_state_up: True
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-drtr' } }
+      external_gateway_info:
+        network: { get_param: public_network }
+
+  router_i1:
+    type: OS::Neutron::RouterInterface
+    properties:
+      router_id: { get_resource: drtr }
+      subnet_id: { get_resource: data_int_subnet1 }
+
+  data_sub_net1:
+    type: OS::Neutron::Net
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-sub-net1' } }
+
+  data_int_net1:
+    type: OS::Neutron::Net
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-int-net1' } }
+
+  data_int_subnet1:
+    type: OS::Neutron::Subnet
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-data-int-subnet1' } }
+      enable_dhcp: true
+      network_id: { get_resource: data_int_net1 }
+      cidr: 10.192/16
+
+  spb_ctrl_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "spb-port"]]}
+      network_id: { get_resource: ctrl_net }
+      fixed_ips:
+        - ip_address: 192.168.192.10
+
+  pts_ctrl_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "pts-port"]]}
+      network_id: { get_resource: ctrl_net }
+      fixed_ips:
+        - ip_address: 192.168.192.30
+
+  sde_ctrl_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "sde-port"]]}
+      network_id: { get_resource: ctrl_net }
+      fixed_ips:
+        - ip_address: 192.168.192.20
+
+  spb_srvc_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "spb-port"]]}
+      network: { get_resource: service_net }
+      fixed_ips:
+        - ip_address: 192.168.192.130
+
+  sde_srvc_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "sde-port"]]}
+      network: { get_resource: service_net }
+      fixed_ips:
+       - ip_address: 192.168.192.140
+ 
+  pts_srvc_port:
+    type: OS::Neutron::Port
+    properties:
+      name: {"Fn::Join": ["-", [{ get_param: "OS::stack_name" } , "pts-port"]]}
+      network: { get_resource: service_net }
+      fixed_ips:
+        - ip_address: 192.168.192.150
+
+  pts:
+    type: OS::Nova::Server
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-pts' } }
+      key_name: { get_param: 'ssh_key' }
+      image: { get_param: 'pts_image' }
+      flavor: "m1.medium"
+      metadata:
+        {
+          common:
+          {
+            int_subnet:  { get_attr: [data_int_subnet1, cidr] }
+          },
+          sde:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ sde_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ sde_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          pts:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ pts_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ pts_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          spb:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ spb_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ spb_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+        }
+      networks:
+        - port: { get_resource: pts_ctrl_port }
+        - port: { get_resource: pts_srvc_port }
+        - network: { get_resource: data_sub_net1 }
+        - network: { get_resource: data_int_net1 }
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        system_info:
+          default_user:
+            name: "sandvine"
+
+  spb:
+    type: OS::Nova::Server
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-spb' } }
+      key_name: { get_param: 'ssh_key' }
+      image: { get_param: 'spb_image' }
+      flavor: "m1.medium"
+      metadata:
+        {
+          common:
+          {
+            int_subnet:  { get_attr: [data_int_subnet1, cidr] }
+          },
+          sde:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ sde_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ sde_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          pts:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ pts_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ pts_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          spb:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ spb_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ spb_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+        }
+      networks:
+        - port: { get_resource: spb_ctrl_port }
+        - port: { get_resource: spb_srvc_port }
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        system_info:
+          default_user:
+            name: "sandvine"
+
+  sde:
+    type: OS::Nova::Server
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-sde' } }
+      key_name: { get_param: 'ssh_key' }
+      image: { get_param: 'sde_image' }
+      flavor: "m1.medium"
+      metadata:
+        {
+          common:
+          {
+            int_subnet:  { get_attr: [data_int_subnet1, cidr] }
+          },
+          sde:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ sde_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ sde_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          pts:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ pts_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ pts_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+          spb:
+          {
+            1:
+            {
+              ip_c:     { get_attr: [ spb_ctrl_port, fixed_ips, 0, ip_address ] },
+              ip_s:     { get_attr: [ spb_srvc_port, fixed_ips, 0, ip_address ] }
+            }
+          },
+        }
+      networks:
+        - port: { get_resource: sde_ctrl_port }
+        - port: { get_resource: sde_srvc_port }
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        system_info:
+          default_user:
+            name: "sandvine"
+
+  gui:
+    type: OS::Nova::Server
+    properties:
+      name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-gui' } }
+      image: { get_param: 'gui_image' }
+      flavor: "m1.medium"
+      networks:
+        - network: { get_resource: data_sub_net1 }
+      user_data_format: RAW
+      user_data: |
+        #cloud-config
+        system_info:
+          default_user:
+            name: "sandvine"
+
+outputs:
