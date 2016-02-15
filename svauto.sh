@@ -457,6 +457,15 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,spb,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
+	#
+	# BUILD ENVIRONMENT
+	#
+
+	# Cloud Services Build Server (back / front) on CentOS 6.7
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
+
+
 
 	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
 	then
