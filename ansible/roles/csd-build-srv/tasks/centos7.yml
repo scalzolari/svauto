@@ -12,13 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: centos6.yml
-  when: base_os == 'centos67'
+- name: centos7 - yum installing epel repository
+  yum: pkg=epel-release state=installed
 
 
-- include: centos7.yml
-  when: base_os == 'centos72'
-
-
-- include: centos-common.yml
-  when: base_os == 'centos72' or base_os == 'centos67'
+- name: centos7 - copy custom BashRC (For Golang devs)
+  copy: src=centos7/_bashrc.j2
+        dest=/etc/skel/.bashrc
+        owner=root
+        group=root
+        mode=0644
