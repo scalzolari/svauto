@@ -465,9 +465,9 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-#	# Cloud Services Build Server (back / front) on CentOS 7.2 (old Golang 1.4)
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
+	# Cloud Services Build Server (back / front) on CentOS 7.2 (old Golang 1.4)
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	# Cloud Services Build Server (back) on CentOS 6.7 (new Golang 1.5)
@@ -475,17 +475,17 @@ then
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,go-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (front) on CentOS 6.7 (NodeJS)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=node-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,node-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
-#	# Cloud Services Build Server (back) on CentOS 7.2 (old Golang 1.4)
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,go-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
+	# Cloud Services Build Server (back) on CentOS 7.2 (old Golang 1.4)
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,go-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-#	# Cloud Services Build Server (front) on CentOS 7.2 (NodeJS)
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=node-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,node-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
+	# Cloud Services Build Server (front) on CentOS 7.2 (NodeJS)
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
