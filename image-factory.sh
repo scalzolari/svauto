@@ -304,7 +304,7 @@ then
 	case "$BASE_OS" in
 
 	        ubuntu*)
-			if [ "$PRODUCT" == "svpts" ]; then
+			if [ "$PRODUCT" == "svpts" ] || [ "$PRODUCT" == "cs-svpts" ] ; then
 				cp packer/libvirt-ubuntu-4nic.xml packer/$PACKER_FILES/"$PACKER_VM_NAME".xml
 			else
 				cp packer/libvirt-ubuntu-2nic.xml packer/$PACKER_FILES/"$PACKER_VM_NAME".xml
@@ -313,7 +313,7 @@ then
 			;;
 
 		centos*)
-			if [ "$PRODUCT" == "svpts" ]; then
+			if [ "$PRODUCT" == "svpts" ] || [ "$PRODUCT" == "cs-svpts" ] ; then
 				cp packer/libvirt-centos-4nic.xml packer/$PACKER_FILES/"$PACKER_VM_NAME".xml
 			else
 				cp packer/libvirt-centos-2nic.xml packer/$PACKER_FILES/"$PACKER_VM_NAME".xml
