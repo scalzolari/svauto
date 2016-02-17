@@ -35,10 +35,11 @@
   with_items:
    - "@development-tools"
    - libpcap-devel
+   - rpm-build
    - golang
    - nodejs
    - npm
-   - rpm-build
+   - git
 
 
 - name: centos - npm installing packages

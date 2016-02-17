@@ -35,5 +35,6 @@
   with_items:
    - "@development-tools"
    - libpcap-devel
-   - golang
    - rpm-build
+   - golang
+   - git

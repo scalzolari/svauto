@@ -16,9 +16,10 @@
   yum: pkg={{item}} state=installed
   with_items:
    - "@development-tools"
+   - rpm-build
    - nodejs
    - npm
-   - rpm-build
+   - git
 
 
 - name: centos - npm installing packages
