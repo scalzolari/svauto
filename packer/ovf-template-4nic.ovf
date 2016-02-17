@@ -144,6 +144,28 @@
         <rasd:ResourceType>10</rasd:ResourceType>
         <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true" />
       </Item>
+      <Item>
+        <rasd:AddressOnParent>9</rasd:AddressOnParent>
+        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+        <rasd:Connection>subscriber</rasd:Connection>
+        <rasd:Description>VmxNet3 ethernet adapter on "subscriber"</rasd:Description>
+        <rasd:ElementName>Ethernet 3</rasd:ElementName>
+        <rasd:InstanceID>13</rasd:InstanceID>
+        <rasd:ResourceSubType>VmxNet3</rasd:ResourceSubType>
+        <rasd:ResourceType>10</rasd:ResourceType>
+        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true" />
+      </Item>
+      <Item>
+        <rasd:AddressOnParent>10</rasd:AddressOnParent>
+        <rasd:AutomaticAllocation>true</rasd:AutomaticAllocation>
+        <rasd:Connection>internet</rasd:Connection>
+        <rasd:Description>VmxNet3 ethernet adapter on "internet"</rasd:Description>
+        <rasd:ElementName>Ethernet 4</rasd:ElementName>
+        <rasd:InstanceID>14</rasd:InstanceID>
+        <rasd:ResourceSubType>VmxNet3</rasd:ResourceSubType>
+        <rasd:ResourceType>10</rasd:ResourceType>
+        <vmw:Config ovf:required="false" vmw:key="wakeOnLanEnabled" vmw:value="true" />
+      </Item>
       <vmw:Config ovf:required="false" vmw:key="cpuHotAddEnabled" vmw:value="false" />
       <vmw:Config ovf:required="false" vmw:key="cpuHotRemoveEnabled" vmw:value="false" />
       <vmw:Config ovf:required="false" vmw:key="firmware" vmw:value="bios" />
