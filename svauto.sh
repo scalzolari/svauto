@@ -726,7 +726,7 @@ then
 			echo "Creating Sandvine's Heat Templates into tmp/sv subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/sv
-			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
+			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/sv
 
 			sed -i -e 's/{{pts_image}}/svpts-7.20-1-centos7-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
