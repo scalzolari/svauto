@@ -63,7 +63,7 @@ activate_eth1: "yes"
 
 # Lock CentOS 7 Kernel upgrade? This is a DPDK RPM package bug workaround.
 lock_el7_kernel_upgrade: "no"
-el7_kernel_version: "3.10.0-327.4.5.el7.x86_64"
+el7_kernel_version: "3.10.0-327.10.1.el7.x86_64"
 
 # Base O.S.:
 # Ubuntu: ubuntu14, ubuntu16
