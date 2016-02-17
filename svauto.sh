@@ -503,7 +503,7 @@ then
 			echo "Creating Cloud Services Heat Templates into tmp/cs subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs
-			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
+			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs
 
 			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
