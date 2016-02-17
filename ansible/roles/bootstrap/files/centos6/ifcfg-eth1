@@ -1,7 +1,7 @@
 DEVICE="eth1"
 BOOTPROTO="dhcp"
 IPV6INIT="yes"
-NM_CONTROLLED="yes"
+NM_CONTROLLED="no"
 ONBOOT="yes"
 TYPE="Ethernet"
 PEERDNS="no"
