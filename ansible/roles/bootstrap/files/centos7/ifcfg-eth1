@@ -1,4 +1,5 @@
 TYPE="Ethernet"
+NM_CONTROLLED="no"
 ONBOOT="yes"
 NAME="eth1"
 DEVICE="eth1"

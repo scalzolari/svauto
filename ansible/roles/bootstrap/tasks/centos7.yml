@@ -80,6 +80,14 @@
     - which
 
 
+- name: centos7 - yum uninstalling Network Manager
+  yum: pkg={{item}} state=absent
+  with_items:
+    - NetworkManager
+    - NetworkManager-libnm
+    - NetworkManager-tui
+
+ 
 - name: centos7 - dracut updating initrd of running kernel
   command: /sbin/dracut -f
 
