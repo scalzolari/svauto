@@ -324,26 +324,26 @@ then
 			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 	
 	
-			find packer -name "*.raw" -exec rm -f {} \;
+			find packer/build* -name "*.raw" -exec rm -f {} \;
 	
 	
-#			find packer/build-lab* -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
-#			find packer/build-lab* -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
-#			find packer/build-lab* -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
-#			find packer/build-lab* -name "*cs-1*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
-#			find packer/build-lab* -name "*cs-1*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.vhd" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
-#			find packer/build-lab* -name "*cs-1*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
-			find packer -name "cs*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+#			find packer/build-lab* -name "*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
+			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
 
 #			cd $WEB_ROOT_CS_RELEASE_LAB
@@ -462,29 +462,29 @@ then
 	#
 
 	# Cloud Services Build Server (back / front) on CentOS 6.7 (new Golang 1.5)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (back / front) on CentOS 7.2 (old Golang 1.4)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,csd-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	# Cloud Services Build Server (back) on CentOS 6.7 (new Golang 1.5)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=go-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,go-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (front) on CentOS 6.7 (NodeJS)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	# Cloud Services Build Server (back) on CentOS 7.2 (old Golang 1.4)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,go-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (front) on CentOS 7.2 (NodeJS)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-build-srv,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
@@ -529,29 +529,29 @@ then
 			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 
 
-			find packer -name "*.raw" -exec rm -f {} \;
+			find packer/build* -name "*.raw" -exec rm -f {} \;
 
 
-			find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.sha1" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "*cs*.qcow2*" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS_LAB \;
-#			find packer -name "*cs*.vmdk" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS_LAB \;
+#			find packer/build* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "*cs*.vhd" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS \;
 
-			find packer/build-lab* -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS_LAB \;
-			find packer -name "*cs*.ova" -exec mv {} $WEB_ROOT_CS \;
+			find packer/build-lab* -name "*.ova" -exec mv {} $WEB_ROOT_CS_LAB \;
+			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_CS \;
 
 
 			echo
@@ -752,29 +752,29 @@ then
 			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 
 
-			find packer -name "*.raw" -exec rm -f {} \;
+			find packer/build* -name "*.raw" -exec rm -f {} \;
 
 
-#			find packer/build-lab* -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "sv*.md5" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_STOCK \;
 
-#			find packer/build-lab* -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "sv*.sha1" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.sha1" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer/build* -name "*.sha1" -exec mv {} $WEB_ROOT_STOCK \;
 
-#			find packer/build-lab* -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "sv*.xml*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_STOCK \;
 
-#			find packer/build-lab* -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "*.qcow2*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.qcow2c" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer/build* -name "*.qcow2c" -exec mv {} $WEB_ROOT_STOCK \;
 
-#			find packer/build-lab* -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-#			find packer -name "*.vmdk*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.vmdk" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+#			find packer/build* -name "*.vmdk" -exec mv {} $WEB_ROOT_STOCK \;
 
 #			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
+			find packer/build* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
 
-#			find packer/build-lab* -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
-			find packer -name "*.ova*" -exec mv {} $WEB_ROOT_STOCK \;
+#			find packer/build-lab* -name "*.ova" -exec mv {} $WEB_ROOT_STOCK_LAB \;
+			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_STOCK \;
 
 
 #			echo
