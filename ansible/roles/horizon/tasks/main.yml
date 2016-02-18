@@ -17,7 +17,7 @@
 
 
 - name: Removing Horizon Ubuntu theme
-  action: apt pkg=openstack-dashboard-ubuntu-theme state=remove
+  action: apt pkg=openstack-dashboard-ubuntu-theme state=absent
 
 
 - name: Updating local_settings.py

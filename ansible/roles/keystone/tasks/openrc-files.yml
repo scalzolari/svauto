@@ -14,14 +14,14 @@
 
 - name: Creating admin-openrc.sh file
   template: src=admin-openrc.sh
-            dest=/home/administrative/admin-openrc.sh
-            owner=administrative
-            group=administrative
+            dest=/home/{{ubuntu_user}}/admin-openrc.sh
+            owner={{ubuntu_user}}
+            group={{ubuntu_user}}
             mode=0640
 
 - name: Creating demo-openrc.sh file
   template: src=demo-openrc.sh
-            dest=/home/administrative/demo-openrc.sh
-            owner=administrative
-            group=administrative
+            dest=/home/{{ubuntu_user}}/demo-openrc.sh
+            owner={{ubuntu_user}}
+            group={{ubuntu_user}}
             mode=0640

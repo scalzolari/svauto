@@ -17,13 +17,13 @@
   command: "{{item}}"
   with_items:
   # Identify v2.0
-  - openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v2.0
-  - openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v2.0
-  - openstack endpoint create --region "{{region}}" identity admin http://{{controller_addr}}:35357/v2.0
+  #- openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v2.0
+  #- openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v2.0
+  #- openstack endpoint create --region "{{region}}" identity admin http://{{controller_addr}}:35357/v2.0
   # Identify v3
-  #- openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v3
-  #- openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v3
-  #- openstack endpoint create --region "{{region}}" identity admin http://{{controller_addr}}:35357/v3
+  - openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v3
+  - openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v3
+  - openstack endpoint create --region "{{region}}" identity admin http://{{controller_addr}}:35357/v3
   # Image
   - openstack endpoint create --region "{{region}}" image public http://{{public_addr}}:9292
   - openstack endpoint create --region "{{region}}" image internal http://{{controller_addr}}:9292

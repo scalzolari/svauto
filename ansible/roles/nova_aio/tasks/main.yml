@@ -62,6 +62,7 @@
         mode=0640
         backup=yes
   when: item.os_project == "nova"
+  with_items: mysql_databases
 
 
 - name: Updating nova-compute.conf

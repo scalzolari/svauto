@@ -46,12 +46,6 @@
   with_items: mysql_databases
 
 
-- name: Setting up Heat Domain with heat-keystone-setup-domain
-  environment: "{{admin_openrc_env}}"
-  shell: domid=$(heat-keystone-setup-domain --stack-user-domain-name heat_user_domain --stack-domain-admin heat_domain_admin --stack-domain-admin-password calor_do_heat | grep stack_user_domain_id | cut -d = -f 2) ; sed -i -e 's/^#stack_user_domain_id=/stack_user_domain_id='$domid'/g' /etc/heat/heat.conf
-  when: openstack_installation == 'yes'
-
-
 - name: Populating Heat Database
   shell: su -s /bin/sh -c "heat-manage db_sync" heat
 

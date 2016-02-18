@@ -49,6 +49,10 @@
   shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
 
 
+- name: Initialize Fernet keys
+  shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+
+
 - name: Creating Apache Keystone Virtual Host - Public
   copy: src=wsgi-keystone-public.conf
         dest=/etc/apache2/sites-available/wsgi-keystone-public.conf

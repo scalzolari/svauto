@@ -17,7 +17,7 @@
 #
 
 - hosts: all-in-one
-  user: administrative
+  user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -34,7 +34,7 @@
   - role: heat
 
 - hosts: controller_nodes
-  user: administrative
+  user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -56,14 +56,14 @@
 #  - role: ceilometer
 
 - hosts: network_nodes
-  user: administrative
+  user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
 #  - role: neutron_lbr_net_agents
 
 - hosts: compute_nodes
-  user: administrative
+  user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -71,7 +71,7 @@
 #  - role: neutron_lbr_cmpt_agent
 
 - hosts: vagrant-node
-  user: administrative
+  user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap

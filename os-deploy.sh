@@ -216,10 +216,9 @@ sed -i -e 's/^#localhost/localhost/g' ansible/hosts
 
 # Configuring site-openstack.yml and some roles
 echo
-echo "Configuring ansible/site-openstack.yml and OpenStack OpenRC files with your current $WHOAMI user..."
+echo "Configuring ansible/group_vars/all with your current "$WHOAMI" user..."
 
-sed -i -e 's/administrative/'$WHOAMI'/g' ansible/site-openstack.yml
-sed -i -e 's/administrative/'$WHOAMI'/g' ansible/roles/keystone/tasks/openrc-files.yml
+sed -i -e 's/{{ubuntu_user}}/'$WHOAMI'/g' ansible/group_vars/all
 
 
 # Configuring the default interface
