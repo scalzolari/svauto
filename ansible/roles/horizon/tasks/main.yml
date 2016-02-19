@@ -38,5 +38,9 @@
             backup=yes
 
 
+- name: Running manage.py collectstatic and compress
+  shell: cd /usr/share/openstack-dashboard ; python manage.py collectstatic --noinput ; python manage.py compress
+
+
 - name: Restarting Apache
   service: name=apache2 state=restarted

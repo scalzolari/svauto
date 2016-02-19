@@ -695,7 +695,7 @@ except ImportError:
   pass
 
 # Default Ubuntu apache configuration uses /horizon as the application root.
-WEBROOT='/horizon/'
+#WEBROOT='/horizon/'
 
 # By default, validation of the HTTP Host header is disabled.  Production
 # installations should have this set accordingly.  For more information
