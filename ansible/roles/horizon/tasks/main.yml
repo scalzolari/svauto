@@ -13,11 +13,11 @@
 # limitations under the License.
 
 - name: Installing Horizon Dashboard
-  action: apt pkg=openstack-dashboard state=installed
+  apt: name=openstack-dashboard state=latest
 
 
 - name: Removing Horizon Ubuntu theme
-  action: apt pkg=openstack-dashboard-ubuntu-theme state=absent
+  apt: name=openstack-dashboard-ubuntu-theme state=absent
 
 
 - name: Updating local_settings.py

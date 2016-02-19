@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Installing Cinder Server
-  action: apt pkg={{item}} state=installed
+  apt: name={{item}} state=latest
   with_items:
     - cinder-api
     - cinder-scheduler

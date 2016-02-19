@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: Installing Neutron Server and Agents
-  action: apt pkg={{item}} state=installed
+  apt: name={{item}} state=latest
   with_items:
     - python-ryu
     - neutron-server
@@ -25,11 +25,11 @@
 
 
 - name: Installing Neutron Linux Bridge Agent
-  action: apt pkg=neutron-plugin-linuxbridge-agent state=installed
+  apt: name=neutron-plugin-linuxbridge-agent state=latest
   when: br_mode == 'LBR'
 
 - name: Installing Neutron Open vSwitch Agent
-  action: apt pkg={{item}} state=installed
+  apt: name={{item}} state=latest
   with_items:
     - openvswitch-switch
     - neutron-plugin-openvswitch-agent

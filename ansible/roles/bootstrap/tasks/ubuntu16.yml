@@ -21,6 +21,6 @@
 
 
 - name: ubuntu16 - apt installing basic tools
-  action: apt pkg={{item}} state=installed
+  apt: name={{item}} state=latest
   with_items:
     - nftables
