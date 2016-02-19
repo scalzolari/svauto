@@ -69,6 +69,15 @@
   with_items: mysql_databases
 
 
+- name: Updating neutron-plugin-linuxbridge-agent
+  copy: src=neutron-plugin-linuxbridge-agent
+        dest=/etc/default/neutron-plugin-linuxbridge-agent
+        owner=root
+        group=root
+        mode=0640
+        backup=yes
+
+
 - name: Updating ml2_conf.ini
   template: src=ml2_conf.ini
             dest=/etc/neutron/plugins/ml2/ml2_conf.ini
@@ -116,6 +125,7 @@
             mode=0644
             backup=yes
 
+
 - name: Updating dnsmasq-neutron.conf
   copy: src=dnsmasq-neutron.conf
         dest=/etc/neutron/dnsmasq-neutron.conf
@@ -123,6 +133,7 @@
         group=neutron
         mode=0644
         backup=yes
+
 
 - name: Updating l3_agent.ini
   template: src=l3_agent.ini
@@ -132,6 +143,7 @@
             mode=0644
             backup=yes
 
+
 - name: Updating metadata_agent.ini
   template: src=metadata_agent.ini
             dest=/etc/neutron/metadata_agent.ini
@@ -139,6 +151,7 @@
             group=neutron
             mode=0644
             backup=yes
+
 
 - name: Updating fwaas_driver.ini
   template: src=fwaas_driver.ini
@@ -184,18 +197,18 @@
 
 
 - name: Wait a bit until Neutron starts up properly...
-  pause: seconds=5
+  pause: seconds=3
 
 
-#- name: Creating Neutron External Network
-#  environment: "{{admin_openrc_env}}"
-#  shell: neutron net-create ext-net --router:external --provider:physical_network external --provider:network_type flat
-#  when: openstack_installation == 'yes'
-#
-#- name: Creating Neutron External Subnet
-#  environment: "{{admin_openrc_env}}"
-#  shell: neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
-#  when: openstack_installation == 'yes'
+- name: Creating Neutron External Network
+  environment: "{{admin_openrc_env}}"
+  shell: neutron net-create ext-net --router:external --provider:physical_network external --provider:network_type flat
+  when: openstack_installation == 'yes'
+
+- name: Creating Neutron External Subnet
+  environment: "{{admin_openrc_env}}"
+  shell: neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
+  when: openstack_installation == 'yes'
 
 
 - name: Write custom sysctl.conf
