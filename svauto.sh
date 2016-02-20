@@ -230,6 +230,10 @@ fi
 if [ "$PACKER_BUILD_CS_RELEASE" == "yes" ]
 then
 
+
+	RELEASE="16.02"
+
+
         if [ "$DRY_RUN" == "yes" ]
         then
                 echo
@@ -258,28 +262,28 @@ then
 	#
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,post-cleanup,cleanrepo $DRY_RUN_OPT
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,sde,svusagemanagement,svsubscribermapping,cs-sde,csd,vmware-tools,post-cleanup,cleanrepo --labify $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,spb,svreports,cs-spb,vmware-tools,post-cleanup,cleanrepo $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,spb,svreports,cs-spb,vmware-tools,post-cleanup,cleanrepo --labify $DRY_RUN_OPT
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools,post-cleanup,cleanrepo $DRY_RUN_OPT \
 		--lock-el7-kernel-upgrade
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=15.12 --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,pts,svusagemanagementpts,cs-pts,vmware-tools,post-cleanup,cleanrepo --labify $DRY_RUN_OPT
 
 
@@ -300,10 +304,10 @@ then
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs-rel
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
 
-			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs-rel/*.yaml
-			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
-			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
-			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-cs-1-centos6-amd64/g' tmp/cs-rel/*.yaml
+			sed -i -e 's/{{pts_image}}/cs-svpts-'$RELEASE'-centos7-amd64/g' tmp/cs-rel/*.yaml
+			sed -i -e 's/{{sde_image}}/cs-svsde-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
+			sed -i -e 's/{{spb_image}}/cs-svspb-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
+			#sed -i -e 's/{{csd_image}}/cs-svcsd-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
 
 		fi
 
@@ -329,6 +333,9 @@ then
 	
 #			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
+#			find packer/build-lab* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB\;
+			find packer/build* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
 #			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
@@ -365,14 +372,14 @@ then
 			then
 
 				echo
-				echo "Moving Cloud Services Heat Templates for release into public web subdirectory..."
+				echo "Copying Cloud Services Heat Templates for release into public web subdirectory..."
 
-				cp tmp/cs-rel/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-1.yaml
-				cp tmp/cs-rel/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-flat-1.yaml
-				cp tmp/cs-rel/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-vlan-1.yaml
-				cp tmp/cs-rel/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-rad-1.yaml
-				cp tmp/cs-rel/sandvine-stack-nubo-0.1-stock-gui-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-nubo-15.12-stock-gui-1.yaml
-				#cp tmp/cs-rel/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-15.12-micro-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-$RELEASE-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-$RELEASE-flat-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-vlan-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-$RELEASE-vlan-1.yaml
+				cp tmp/cs-rel/sandvine-stack-0.1-three-rad-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-$RELEASE-rad-1.yaml
+				cp tmp/cs-rel/sandvine-stack-nubo-0.1-stock-gui-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-nubo-$RELEASE-stock-gui-1.yaml
+				#cp tmp/cs-rel/sandvine-stack-0.1-four-1.yaml $WEB_ROOT_CS_RELEASE/cloudservices-stack-$RELEASE-micro-1.yaml
 
 			fi
 
@@ -588,7 +595,7 @@ then
 			then
 
 				echo
-				echo "Moving Cloud Services Heat Templates into web public subdirectory..."
+				echo "Copying Cloud Services Heat Templates into web public subdirectory..."
 
 				cp tmp/cs/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1.yaml
 				cp tmp/cs/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_CS/cloudservices-stack-0.1-flat-1.yaml
@@ -811,7 +818,7 @@ then
 			then
 
 				echo
-				echo "Moving Sandvine's Heat Templates into web public subdirectory..."
+				echo "Copying Sandvine's Heat Templates into web public subdirectory..."
 
 				cp tmp/sv/sandvine-stack-0.1-three-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-1.yaml
 				cp tmp/sv/sandvine-stack-0.1-three-flat-1.yaml $WEB_ROOT_STOCK/sandvine-stack-0.1-three-flat-1.yaml

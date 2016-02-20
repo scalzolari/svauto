@@ -84,7 +84,7 @@ Make sure it is working:
 
 Then, you'll be able to deploy `OpenStack` by running:
 
-    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/misc/os-install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/os-install.sh)
 
 Well done!
 
