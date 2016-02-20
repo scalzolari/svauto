@@ -334,6 +334,9 @@ then
 #			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
+#			find packer/build-lab* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB\;
+			find packer/build* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE \;
+
 #			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
