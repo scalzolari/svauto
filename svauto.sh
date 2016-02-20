@@ -88,6 +88,20 @@ case $i in
 		shift
 		;;
 
+	--libvirt-files)
+
+		LIBVIRT_FILES="yes"
+		shift
+		;;
+
+	--installation-helper)
+
+		INSTALLATION_HELPER="yes"
+		HEAT_TEMPLATES_CS="yes"
+		LIBVIRT_FILES="yes"
+		shift
+		;;
+
 	--release)
 
 		PACKER_BUILD_CS_RELEASE="yes"
@@ -215,6 +229,9 @@ then
 #		WEB_ROOT_CS_RELEASE_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/to-be-released/lab
 
 
+		echo
+		echo "Creating web root directory structure..."
+
 		# Creating the Web directory structure:
 		mkdir -p $WEB_ROOT_STOCK_LAB
 		mkdir -p $WEB_ROOT_STOCK_RELEASE
@@ -294,12 +311,12 @@ then
                 then
 
                         echo
-                        echo "Not creating Heat Templates! Skipping this step..."
+                        echo "Not copying Heat Templates! Skipping this step..."
 
                 else
 
 			echo
-			echo "Creating Cloud Services Heat Templates for release into tmp/cs-rel subdirectory..."
+			echo "Copying Cloud Services Heat Templates for release into tmp/cs-rel subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs-rel
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs-rel
@@ -308,6 +325,31 @@ then
 			sed -i -e 's/{{sde_image}}/cs-svsde-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
 			sed -i -e 's/{{spb_image}}/cs-svspb-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
 			#sed -i -e 's/{{csd_image}}/cs-svcsd-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/*.yaml
+
+		fi
+
+	fi
+
+
+	if [ "$LIBVIRT_FILES" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not copying Libvirt files! Skipping this step..."
+
+                else
+
+			echo
+			echo "Copying Libvirt files for release into tmp/cs-rel subdirectory..."
+
+			cp misc/libvirt/* tmp/cs-rel/
+
+			find packer/build* -name "*.xml" -exec cp {} tmp/cs-rel/ \;
+
+			sed -i -e 's/{{sde_image}}/cs-svsde-'$RELEASE'-centos6-amd64/g' tmp/cs-rel/libvirt-qemu.hook
 
 		fi
 
@@ -327,9 +369,7 @@ then
 			echo "Moving all images created during this build, to the Web Root."
 			echo "Also, doing some clean ups, to free the way for subsequent builds..."
 	
-	
 			find packer/build* -name "*.raw" -exec rm -f {} \;
-	
 	
 #			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
@@ -353,18 +393,37 @@ then
 			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
 
 
+#			echo
+#			echo "Merging MD5SUMS files together..."
+
 #			cd $WEB_ROOT_CS_RELEASE_LAB
+
 #			cat *.md5 > MD5SUMS
 #			rm -f *.md5
+
+#			echo
+#			echo "Merging SHA1SUMS files together..."
+
 #			cat *.sha1 > SHA1SUMS
 #			rm -f *.sha1
-#			cd -
+
+#			cd - &>/dev/null
+
+
+			echo
+			echo "Merging MD5SUMS files together..."
 
 			cd $WEB_ROOT_CS_RELEASE
+
 			cat *.md5 > MD5SUMS
 			rm -f *.md5
+
+			echo
+			echo "Merging SHA1SUMS files together..."
+
 			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
+
 			cd - &>/dev/null
 
 
@@ -384,6 +443,43 @@ then
 			fi
 
 
+			if [ "$INSTALLATION_HELPER" == "yes" ]
+			then
+
+				echo
+				echo "Creating Cloud Services installation helper script..."
+
+				cp misc/self-extract/* tmp/cs-rel/
+
+				cd tmp/cs-rel/
+
+				mv sandvine-stack-0.1-three-1.yaml cloudservices-stack-$RELEASE-1.yaml
+				mv sandvine-stack-0.1-three-flat-1.yaml cloudservices-stack-$RELEASE-flat-1.yaml
+				mv sandvine-stack-0.1-three-vlan-1.yaml cloudservices-stack-$RELEASE-vlan-1.yaml
+				mv sandvine-stack-0.1-three-rad-1.yaml cloudservices-stack-$RELEASE-rad-1.yaml
+				mv sandvine-stack-nubo-0.1-stock-gui-1.yaml cloudservices-stack-nubo-$RELEASE-stock-gui-1.yaml
+				#mv sandvine-stack-0.1-four-1.yaml cloudservices-stack-$RELEASE-four-1.yaml
+
+ 				rm sandvine-stack-0.1-four-1.yaml sandvine-stack-nubo-0.1-stock-1.yaml
+
+				mv libvirt-qemu.hook cs-svsde-$RELEASE-centos6-amd64.hook
+
+				tar -cf sandvine-files.tar *.yaml *.hook *.xml
+
+				cat extract.sh sandvine-files.tar > sandvine-helper.sh_tail
+
+				sed -i -e 's/{{sandvine_release}}/'$RELEASE'/g' sandvine-helper.sh_template
+
+				cat sandvine-helper.sh_template sandvine-helper.sh_tail > cloudservices-helper.sh
+
+				chmod +x cloudservices-helper.sh
+
+				cp cloudservices-helper.sh $WEB_ROOT_CS_RELEASE
+
+			fi
+
+
+			# Free the way for subsequent builds:
 			rm -rf packer/build*
 
 		fi
@@ -502,12 +598,12 @@ then
                 then
 
                         echo
-                        echo "Not creating Heat Templates! Skipping this step..."
+                        echo "Not copying Heat Templates! Skipping this step..."
 
                 else
 
 			echo
-			echo "Creating Cloud Services Heat Templates into tmp/cs subdirectory..."
+			echo "Copying Cloud Services Heat Templates into tmp/cs subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs
@@ -516,6 +612,31 @@ then
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-cs-1-centos6-amd64/g' tmp/cs/*.yaml
+
+		fi
+
+	fi
+
+
+	if [ "$LIBVIRT_FILES" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not copying Libvirt files! Skipping this step..."
+
+                else
+
+			echo
+			echo "Copying Libvirt files for release into tmp/cs subdirectory..."
+
+			cp misc/libvirt/* tmp/cs/
+
+			find packer/build* -name "*.xml" -exec cp {} tmp/cs/ \;
+
+			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/libvirt-qemu.hook
 
 		fi
 
@@ -562,32 +683,47 @@ then
 
 
 			echo
-			echo "Merging MD5SUMS files together..."
+			echo "Merging MD5SUMS files together (lab)..."
 
 			cd $WEB_ROOT_CS_LAB
+
 			cat *.md5 > MD5SUMS
 			rm -f *.md5
+
+			echo
+			echo "Merging SHA1SUMS files together (lab)..."
+
 			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
+
 			cd - &>/dev/null
+
+
+			echo
+			echo "Merging MD5SUMS files together..."
+
+			cd $WEB_ROOT_CS
+
+			cat *.md5 > MD5SUMS
+			rm -f *.md5
 
 			echo
 			echo "Merging SHA1SUMS files together..."
 
-			cd $WEB_ROOT_CS
-			cat *.md5 > MD5SUMS
-			rm -f *.md5
 			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
+
 			cd - &>/dev/null
 
 
         	        echo
-        	        echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+        	        echo "Updating symbolic link \"current\" to point to \"$BUILD_DATE\"..."
 
 			cd $WEB_ROOT_CS_MAIN
+
 			rm -f current
 			ln -s $BUILD_DATE current
+
 			cd - &>/dev/null
 
 
@@ -606,6 +742,33 @@ then
 
 			fi
 
+
+			if [ "$INSTALLATION_HELPER" == "yes" ]
+			then
+
+				echo
+				echo "Creating Cloud Services installation helper script (dev)..."
+
+				cp misc/self-extract/* tmp/cs/
+
+				cd tmp/cs/
+
+				tar -cf sandvine-files.tar *.yaml *.hook *.xml
+
+				cat extract.sh sandvine-files.tar > sandvine-helper.sh_tail
+
+				sed -i -e 's/{{sandvine_release}}/'$RELEASE'/g' sandvine-helper.sh_template
+
+				cat sandvine-helper.sh_template sandvine-helper.sh_tail > sandvine-cs-helper.sh
+
+				chmod +x sandvine-cs-helper.sh
+
+				cp sandvine-cs-helper.sh $WEB_ROOT_CS
+
+			fi
+
+
+			# Free the way for subsequent builds:
 			rm -rf packer/build*
 
 		fi
@@ -629,29 +792,29 @@ then
 	# Examples
 	#
 
-#	# Ubuntu Trusty 14.04.3 - Blank server
+	# Ubuntu Trusty 14.04.3 - Blank server
 #	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
 
-#	# Ubuntu Trusty 14.04.3 - SVAuto bootstraped
+	# Ubuntu Trusty 14.04.3 - SVAuto bootstraped
 #	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum \
 #		--roles=bootstrap,post-cleanup $DRY_RUN_OPT
 
-#	# Ubuntu Xenial 16.04 - Blank server
+	# Ubuntu Xenial 16.04 - Blank server
 #	./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
 
-#	# CentOS 6.7 - SVAuto bootstraped - Old Linux 2.6
+	# CentOS 6.7 - SVAuto bootstraped - Old Linux 2.6
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
 
-#	# CentOS 6.7 - SVAuto bootstraped - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
+	# CentOS 6.7 - SVAuto bootstraped - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
 
-#	# CentOS 7.2 - SVAuto bootstraped - Old Linux 3.10
+	# CentOS 7.2 - SVAuto bootstraped - Old Linux 3.10
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
 
-#	# CentOS 7.2 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
+	# CentOS 7.2 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
 
@@ -689,11 +852,11 @@ then
 	# EXPERIMENTAL
 	#
 
-#	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
-#	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
 #	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,pts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
@@ -725,12 +888,12 @@ then
                 then
 
                         echo
-                        echo "Not creating Heat Templates! Skipping this step..."
+                        echo "Not copying Heat Templates! Skipping this step..."
 
                 else
 
 			echo
-			echo "Creating Sandvine's Heat Templates into tmp/sv subdirectory..."
+			echo "Copying Sandvine's Heat Templates into tmp/sv subdirectory..."
 
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/sv
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/sv
@@ -739,6 +902,31 @@ then
 			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-1-centos6-amd64/g' tmp/sv/*.yaml
 			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-1-centos6-amd64/g' tmp/sv/*.yaml
+
+		fi
+
+	fi
+
+
+	if [ "$LIBVIRT_FILES" == "yes" ]
+	then
+
+                if [ "$DRY_RUN" == "yes" ]
+                then
+
+                        echo
+                        echo "Not copying Libvirt files! Skipping this step..."
+
+                else
+
+			echo
+			echo "Copying Libvirt files for release into tmp/cs subdirectory..."
+
+			cp misc/libvirt/* tmp/sv/
+
+			find packer/build* -name "*.xml" -exec cp {} tmp/sv/ \;
+
+			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/libvirt-qemu.hook
 
 		fi
 
@@ -785,32 +973,47 @@ then
 
 
 #			echo
-#			echo "Merging MD5SUMS files together..."
+#			echo "Merging MD5SUMS files together (lab)..."
 
 #			cd $WEB_ROOT_STOCK_LAB
+
 #			cat *.md5 > MD5SUMS
 #			rm -f *.md5
+
+#			echo
+#			echo "Merging SHA1SUMS files together (lab)..."
+
 #			cat *.sha1 > SHA1SUMS
 #			rm -f *.sha1
+
 #			cd - &>/dev/null
+
+
+			echo
+			echo "Merging MD5SUMS files together..."
+
+			cd $WEB_ROOT_STOCK
+
+			cat *.md5 > MD5SUMS
+			rm -f *.md5
 
 			echo
 			echo "Merging SHA1SUMS files together..."
 
-			cd $WEB_ROOT_STOCK
-			cat *.md5 > MD5SUMS
-			rm -f *.md5
 			cat *.sha1 > SHA1SUMS
 			rm -f *.sha1
+
 			cd - &>/dev/null
 
 
                 	echo
-                	echo "Updating symbolic link \"current\" to point to "$BUILD_DATE"..."
+                	echo "Updating symbolic link \"current\" to point to \"$BUILD_DATE\"..."
 
 			cd $WEB_ROOT_STOCK_MAIN
+
 			rm -f current
 			ln -s $BUILD_DATE current
+
 			cd - &>/dev/null
 
 
@@ -830,6 +1033,32 @@ then
 			fi
 
 
+			if [ "$INSTALLATION_HELPER" == "yes" ]
+			then
+
+				echo
+				echo "Creating Sandvine installation helper script (dev)..."
+
+				cp misc/self-extract/* tmp/sv/
+
+				cd tmp/sv/
+
+				tar -cf sandvine-files.tar *.yaml *.hook *.xml
+
+				cat extract.sh sandvine-files.tar > sandvine-helper.sh_tail
+
+				sed -i -e 's/{{sandvine_release}}/'$RELEASE'/g' sandvine-helper.sh_template
+
+				cat sandvine-helper.sh_template sandvine-helper.sh_tail > sandvine-helper.sh
+
+				chmod +x sandvine-helper.sh
+
+				cp sandvine-helper.sh $WEB_ROOT_STOCK
+
+			fi
+
+
+			# Free the way for subsequent builds:
 			rm -rf packer/build*
 
 		fi
