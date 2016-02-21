@@ -106,3 +106,7 @@
         owner=root
         group=root
         mode=0644
+
+
+- name: ubuntu - vim as default for editor
+  alternatives: name=editor path=/usr/bin/vim.nox
