@@ -39,3 +39,4 @@
 #  - nova flavor-key m1.large set sas=true
   - nova flavor-create --ephemeral 32 --swap 8192 --rxtx-factor 1.0 --is-public yes m1.xlarge auto 16384 160 8
 #  - nova flavor-key m1.xlarge set sas=true
+  when: openstack_installation == 'yes'
