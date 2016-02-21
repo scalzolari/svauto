@@ -416,7 +416,7 @@ case "$BASE_OS" in
 
         ubuntu*)
 		echo "  user: sandvine"			>> $PLAYBOOK_FILE
-		echo "  sudo: yes"			>> $PLAYBOOK_FILE
+		echo "  become: yes"			>> $PLAYBOOK_FILE
 		;;
 
 	centos*)

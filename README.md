@@ -12,13 +12,13 @@ Looking forward to add support for Vagrant, Linux Containers (LXD and Docker).
 It uses the following Open Source projects:
 
 * Ubuntu Xenial 16.04
-* Ansible
-* Packer
-* QEmu
-* VirtualBox
-* Vagrant
-* Docker
-* LXD
+* Ansible 2.0
+* Packer 0.8.6
+* QEmu 2.5
+* VirtualBox 5.0
+* Vagrant 1.8
+* Docker 1.10
+* LXD 2.0
 * Amazon EC2 AMI & API Tools
 
 It contains Ansible Playbooks for Automated deployments of:

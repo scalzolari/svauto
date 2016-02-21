@@ -41,4 +41,4 @@ echo
 echo "Installing PTS..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/pts.yml --extra-vars "base_os=centos72"
+ansible-playbook -c local playbooks/svpts.yml --extra-vars "base_os=centos72"

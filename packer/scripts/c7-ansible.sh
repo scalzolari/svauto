@@ -18,4 +18,4 @@
 yum -y install epel-release
 
 # Install Ansible.
-yum -y install ansible libselinux-python
+yum -y install ansible libselinux-python --enablerepo=epel-testing

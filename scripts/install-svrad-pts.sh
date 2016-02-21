@@ -38,7 +38,7 @@ fi
 
 
 echo
-echo "Installing RAD Protowizard daemon"
+echo "Installing RAD Protowizard Policy on PTS..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/rad.yml
+ansible-playbook -c local playbooks/svrad-pts.yml --extra-vars "base_os=centos72"

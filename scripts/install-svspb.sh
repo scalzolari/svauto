@@ -24,21 +24,21 @@ echo
 
 
 if  [ ! -d ~/svauto ]; then
-	echo
-	echo "Downloading SVAuto into your home directory..."
-	echo
-	
-	cd ~
-	git clone -b dev https://github.com/tmartinx/svauto.git
+        echo
+        echo "Downloading SVAuto into your home directory..."
+        echo
+
+        cd ~
+        git clone -b dev https://github.com/tmartinx/svauto.git
 else
-	echo
-	echo "Apparently, you already have SVAuto, enjoy it!"
-	echo
+        echo
+        echo "Apparently, you already have SVAuto, enjoy it!"
+        echo
 fi
 
 
 echo
-echo "Installing Cloud Services..."
+echo "Installing SPB..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/csd.yml
+ansible-playbook -c local playbooks/svspb.yml
