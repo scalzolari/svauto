@@ -12,15 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu14 - copy Ubuntu Trusty default sources.list
-  copy: src=ubuntu/trusty_apt_sources.list
-        dest=/etc/apt/sources.list
-        owner=root
-        group=root
-        mode=0644
+- name: ubuntu14 - apt install software-properties-common
+  apt: name=software-properties-common state=present
 
 
-- name: ubuntu14 - apt installing Linux 4.2 for Trusty
-  apt: name={{item}} state=installed
-  with_items:
-    - linux-generic-lts-wily
+- name: ubuntu14 - apt Installing Cloud Archive Keyring
+  apt: name=ubuntu-cloud-keyring state=present
+
+
+- name: ubuntu14 - apt enabling Mitaka Ubuntu Cloud Archive
+  shell: add-apt-repository -y ppa:ubuntu-cloud-archive/mitaka-staging

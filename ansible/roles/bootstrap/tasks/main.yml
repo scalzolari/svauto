@@ -27,6 +27,10 @@
   include: ubuntu14.yml
   when: base_os == 'ubuntu14'
 
+- name: ubuntu14 - include uca book
+  include: ubuntu14-uca-{{openstack_release}}.yml
+  when: base_os == 'ubuntu14'
+
 - name: ubuntu - include common book
   include: ubuntu-common.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
