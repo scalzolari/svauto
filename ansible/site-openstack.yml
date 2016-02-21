@@ -21,81 +21,83 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: mysql
-  - role: mysql_db
-#  - role: mongodb
-  - role: rabbitmq
-  - role: memcached
-  - role: apache2
-  - role: keystone
-  - role: openstack_data
-  - role: glance
-  - role: glance_images
-  - role: nova_aio
-  - role: nova_flavors
-  - role: neutron_aio
-  - role: neutron_net
-  - role: horizon
-  - role: cinder
-  - role: heat
-#  - role: ceilometer
+  - role: os_mysql
+  - role: os_mysql_db
+#  - role: os_mongodb
+  - role: os_rabbitmq
+  - role: os_memcached
+  - role: os_apache2
+  - role: os_keystone
+  - role: os_openstack_data
+  - role: os_glance
+  - role: os_glance_images
+  - role: os_nova_aio
+  - role: os_nova_flavors
+  - role: os_neutron_aio
+  - role: os_neutron_net
+  - role: os_horizon
+  - role: os_cinder
+  - role: os_heat
+#  - role: os_ceilometer
 
 - hosts: controller_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
-  - role: mysql
-  - role: mysql_db
-#  - role: mongodb
-  - role: rabbitmq
-  - role: memcached
-  - role: apache2
-  - role: keystone
-  - role: openstack_data
-  - role: glance
-  - role: glance_images
-#  - role: nova_ctrl
-  - role: nova_flavors
-#  - role: neutron_ctrl
-  - role: horizon
-  - role: cinder
-  - role: heat
-#  - role: ceilometer
+  - role: os_mysql
+  - role: os_mysql_db
+#  - role: os_mongodb
+  - role: os_rabbitmq
+  - role: os_memcached
+  - role: os_apache2
+  - role: os_keystone
+  - role: os_openstack_data
+  - role: os_glance
+  - role: os_glance_images
+#  - role: os_nova_ctrl
+  - role: os_nova_flavors
+#  - role: os_neutron_ctrl
+  - role: os_horizon
+  - role: os_cinder
+  - role: os_heat
+#  - role: os_ceilometer
 
 - hosts: network_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
-#  - role: neutron_lbr_net_agents
+#  - role: os_neutron_net_node
 
 - hosts: compute_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
-#  - role: nova_compute
-#  - role: neutron_lbr_cmpt_agent
+#  - role: os_nova_cmpt_node
+#  - role: os_neutron_cmpt_node
 
 - hosts: vagrant-node
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
-  - role: mysql
-  - role: mysql_db
-  - role: rabbitmq
-  - role: memcached
-  - role: apache2
-  - role: keystone
-  - role: openstack_data
-  - role: glance
-  - role: glance_images
-  - role: nova_aio
-  - role: nova_flavors
-  - role: neutron_aio
-  - role: neutron_net
-  - role: horizon
-  - role: cinder
-  - role: heat
+  - role: os_mysql
+  - role: os_mysql_db
+#  - role: os_mongodb
+  - role: os_rabbitmq
+  - role: os_memcached
+  - role: os_apache2
+  - role: os_keystone
+  - role: os_openstack_data
+  - role: os_glance
+  - role: os_glance_images
+  - role: os_nova_aio
+  - role: os_nova_flavors
+  - role: os_neutron_aio
+  - role: os_neutron_net
+  - role: os_horizon
+  - role: os_cinder
+  - role: os_heat
+#  - role: os_ceilometer

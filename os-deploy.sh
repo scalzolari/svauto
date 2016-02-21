@@ -67,11 +67,6 @@ case $i in
 esac
 done
 
-# Open vSwitch is the default.
-if [ -z $BR_MODE ]
-then
-	BR_MODE=OVS
-fi
 
 # Validade the BR_MODE variable.
 if ! [[ "$BR_MODE" = "OVS" || "$BR_MODE" = "LBR" ]]
@@ -80,9 +75,12 @@ then
 	echo "Aborting!!!"
 	echo "You need to correctly specify the Bridge Mode for your OpenStack."
 	echo
-	echo "Try:"
-	echo "./os-deploy.sh --br-mode=OVS --base-os=ubuntu16 --base-os-upgrade=yey  # For Open vSwitch."
-	echo "./os-deploy.sh --br-mode=LBR --base-os=ubuntu16 --base-os-upgrade=yes  # For Linux Bridges."
+	echo "For Open vSwitch based deployments:"
+	echo "./os-deploy.sh --br-mode=OVS --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation"
+	echo
+	echo "For Linux Bridges based deployments:"
+	echo "./os-deploy.sh --br-mode=LBR --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation"
+
 	exit 1
 fi
 
@@ -91,8 +89,9 @@ fi
 if [ "$DRYRUN" == "yes" ]
 then
 
-        echo
+	echo
 	echo "WARNING!!!"
+	echo
         echo "Not running CPU checks..."
 
 else
@@ -107,8 +106,8 @@ else
 	then
 		echo
 	        echo "WARNING!!!"
+		echo
 		echo "You do not have enough CPU Cores to run this system!"
-		echo "ABORTING!!!"
 	
 		exit 1
 	else
@@ -129,8 +128,8 @@ else
 	        echo "OK, Virtualization supported, proceeding..."
 	else
 	        echo "WARNING!!!"
+		echo
 		echo "Virtualization NOT supported on this CPU or it is not enabled on your BIOS"
-		echo "ABORTING!!!"
 	
 		exit 1
 	fi
@@ -236,8 +235,8 @@ echo "Preparing Ansible templates based on current default primary interface..."
 
 sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
 
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/nova_aio/templates/$OPENSTACK_RELEASE/nova.conf
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/cinder/templates/$OPENSTACK_RELEASE/cinder.conf
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/os_nova_aio/templates/$OPENSTACK_RELEASE/nova.conf
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/os_cinder/templates/$OPENSTACK_RELEASE/cinder.conf
 
 
 echo

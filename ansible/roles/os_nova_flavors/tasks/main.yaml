@@ -31,7 +31,7 @@
 #  - nova flavor-key m1.tiny set sas=true
   - nova flavor-create --ephemeral 2 --swap 512 --rxtx-factor 1.0 --is-public yes m1.little auto 1024 8 1
 #  - nova flavor-key m1.little set sas=true
-  - nova flavor-create --ephemeral 4 --swap 1024 --rxtx-factor 1.0 --is-public yes m1.small auto 2048 20 1
+  - nova flavor-create --ephemeral 4 --swap 1024 --rxtx-factor 1.0 --is-public yes m1.small auto 2048 20 2
 #  - nova flavor-key m1.small set sas=true
   - nova flavor-create --ephemeral 8 --swap 2048 --rxtx-factor 1.0 --is-public yes m1.medium auto 4096 40 2
 #  - nova flavor-key m1.medium set sas=true
