@@ -17,15 +17,12 @@
   with_items:
     - cinder-api
     - cinder-scheduler
+  notify: restart-cinder
 
-- name: Stopping Cinder API
-  service: name=cinder-api state=stopped
-
-- name: Stopping Cinder Registry
-  service: name=cinder-scheduler state=stopped
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/cinder/cinder.sqlite state=absent
+  notify: restart-cinder
 
 
 - name: Updating cinder.conf
@@ -37,14 +34,11 @@
         backup=yes
   when: item.os_project == "cinder"
   with_items: mysql_databases
+  notify: restart-cinder
 
 
 - name: Populating Cinder Database
   shell: su -s /bin/sh -c "cinder-manage db sync" cinder
 
 
-- name: Starting Cinder API
-  service: name=cinder-api state=restarted
-
-- name: Starting Cinder Registry
-  service: name=cinder-scheduler state=restarted
+- meta: flush_handlers

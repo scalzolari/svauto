@@ -22,12 +22,12 @@
     - neutron-l3-agent
     - neutron-dhcp-agent
     - neutron-metadata-agent
-  register: neutron_installed
-
+  notify: restart-neutron
 
 - name: Installing Neutron Linux Bridge Agent
   apt: name=neutron-plugin-linuxbridge-agent state=latest
   when: br_mode == 'LBR'
+  notify: restart-neutron-lbr
 
 - name: Installing Neutron Open vSwitch Agent
   apt: name={{item}} state=latest
@@ -35,29 +35,12 @@
     - openvswitch-switch
     - neutron-plugin-openvswitch-agent
   when: br_mode == 'OVS'
-
-
-- name: Stopping Neutron Server and Agents
-  service: name={{item}} state=stopped
-  with_items:
-    - neutron-dhcp-agent
-    - neutron-l3-agent
-    - neutron-metadata-agent
-    - neutron-server
-  when: neutron_installed|changed
- 
-
-- name: Stopping Neutron Linux Bridge Agent
-  service: name=neutron-plugin-linuxbridge-agent state=stopped
-  when: br_mode == 'LBR' and neutron_installed|changed
-
-- name: Stopping Neutron Open vSwitch Agent
-  service: name=neutron-plugin-openvswitch-agent state=stopped
-  when: br_mode == 'OVS' and neutron_installed|changed
+  notify: restart-neutron-ovs
 
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/neutron/neutron.sqlite state=absent
+  notify: restart-neutron
 
 
 - name: Updating neutron.conf
@@ -69,6 +52,7 @@
             backup=yes
   when: item.os_project == "neutron"
   with_items: mysql_databases
+  notify: restart-neutron
 
 
 - name: Updating ml2_conf.ini
@@ -78,6 +62,7 @@
             group=neutron
             mode=0640
             backup=yes
+  notify: restart-neutron
 
 
 - name: Updating linuxbridge_agent.ini
@@ -88,6 +73,7 @@
             mode=0640
             backup=yes
   when: br_mode == 'LBR'
+  notify: restart-neutron-lbr
 
 
 - name: Updating openvswitch_agent.ini
@@ -98,16 +84,7 @@
             mode=0640
             backup=yes
   when: br_mode == 'OVS'
-
-
-- name: Updating linuxbridge_agent.ini
-  template: src={{openstack_release}}/ml2/linuxbridge_agent.ini
-            dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
-            owner=root
-            group=neutron
-            mode=0640
-            backup=yes
-  when: br_mode == 'LBR'
+  notify: restart-neutron-ovs
 
 
 - name: Updating dhcp_agent.ini
@@ -117,6 +94,7 @@
             group=neutron
             mode=0644
             backup=yes
+  notify: restart-neutron
 
 
 - name: Updating dnsmasq-neutron.conf
@@ -126,6 +104,7 @@
         group=neutron
         mode=0644
         backup=yes
+  notify: restart-neutron
 
 
 - name: Updating l3_agent.ini
@@ -135,6 +114,7 @@
             group=neutron
             mode=0644
             backup=yes
+  notify: restart-neutron
 
 
 - name: Updating metadata_agent.ini
@@ -144,6 +124,7 @@
             group=neutron
             mode=0644
             backup=yes
+  notify: restart-neutron
 
 
 - name: Updating fwaas_driver.ini
@@ -153,6 +134,7 @@
             group=neutron
             mode=0644
             backup=yes
+  notify: restart-neutron
 
 
 - name: Populating Neutron Database
@@ -172,25 +154,18 @@
   when: br_mode == 'OVS'
 
 
-- name: Starting Neutron Server and Agents
-  service: name={{item}} state=restarted enabled=yes
-  with_items:
-    - neutron-server
-    - neutron-dhcp-agent
-    - neutron-l3-agent
-    - neutron-metadata-agent
-
-- name: Starting Neutron Linux Bridge Agent
-  service: name=neutron-plugin-linuxbridge-agent state=restarted enabled=yes
+- name: Write custom sysctl.conf
+  copy: src=sysctl.conf
+        dest=/etc/sysctl.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
   when: br_mode == 'LBR'
-
-- name: Starting Neutron Open vSwitch Agent
-  service: name=neutron-plugin-openvswitch-agent state=restarted enabled=yes
-  when: br_mode == 'OVS'
+  notify: reload-sysctl
 
 
-- name: Wait a bit until Neutron starts up properly...
-  pause: seconds=3
+- meta: flush_handlers
 
 
 - name: Creating Neutron External Network
@@ -202,14 +177,3 @@
   environment: "{{admin_openrc_env}}"
   shell: neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
   when: openstack_installation == 'yes'
-
-
-- name: Write custom sysctl.conf
-  copy: src=sysctl.conf
-        dest=/etc/sysctl.conf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-  notify:
-    - Reload sysctl

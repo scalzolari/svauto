@@ -19,20 +19,12 @@
     - heat-api-cfn
     - heat-engine
     - python-heatclient
-
-
-- name: Stopping Heat API
-  service: name=heat-api state=stopped
-
-- name: Stopping Heat API CFN
-  service: name=heat-api-cfn state=stopped
-
-- name: Stopping Heat Engine
-  service: name=heat-engine state=stopped
+  notify: restart-heat
 
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/heat/heat.sqlite state=absent
+  notify: restart-heat
 
 
 - name: Updating heat.conf
@@ -44,17 +36,11 @@
         backup=yes
   when: item.os_project == "heat"
   with_items: mysql_databases
+  notify: restart-heat
 
 
 - name: Populating Heat Database
   shell: su -s /bin/sh -c "heat-manage db_sync" heat
 
 
-- name: Starting Heat API
-  service: name=heat-api state=restarted
-
-- name: Starting Heat API CFN
-  service: name=heat-api-cfn state=restarted
-
-- name: Starting Heat Engine
-  service: name=heat-engine state=restarted
+- meta: flush_handlers

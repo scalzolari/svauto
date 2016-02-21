@@ -12,5 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Restart libvirt-bin
-  service: name=libvirt-bin state=restarted
+
+- name: restart-nova
+  service: name={{item}} state=started enabled=yes
+  with_items:
+    - nova-api
+    - nova-cert
+    - nova-compute
+    - nova-conductor
+    - nova-consoleauth
+    - nova-scheduler
+    - nova-spiceproxy
+
+
+- name: restart-libvirt-bin
+  service: name=libvirt-bin state=restarted enabled=yes

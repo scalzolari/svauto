@@ -12,21 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing Memcached Server
-  apt: name={{item}} state=latest
+- name: restart-cinder
+  service: name={{item}} state=restarted enabled=yes
   with_items:
-    - memcached
-  notify: restart-memcached
-
-
-- name: Updating memcached.conf
-  copy: src=memcached.conf
-        dest=/etc/memcached.conf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-  notify: restart-memcached
-
-
-- meta: flush_handlers
+    - cinder-api
+    - cinder-scheduler

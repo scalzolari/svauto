@@ -12,5 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Reload sysctl
+- name: restart-neutron
+  service: name={{item}} state=restarted enabled=yes
+  with_items:
+    - neutron-server
+    - neutron-dhcp-agent
+    - neutron-l3-agent
+    - neutron-metadata-agent
+
+- name: restart-neutron-lbr
+  service: name=neutron-plugin-linuxbridge-agent state=restarted enabled=yes
+  when: br_mode == 'LBR'
+
+- name: restart-neutron-ovs
+  service: name=neutron-plugin-openvswitch-agent state=restarted enabled=yes
+  when: br_mode == 'OVS'
+
+
+- name: reload-sysctl
   command: sysctl -p

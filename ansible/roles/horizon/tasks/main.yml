@@ -14,10 +14,12 @@
 
 - name: Installing Horizon Dashboard
   apt: name=openstack-dashboard state=latest
+  notify: reload-apache2
 
 
 - name: Removing Horizon Ubuntu theme
   apt: name=openstack-dashboard-ubuntu-theme state=absent
+  notify: reload-apache2
 
 
 - name: Updating local_settings.py
@@ -27,6 +29,7 @@
             group=root
             mode=0644
             backup=yes
+  notify: reload-apache2
 
 
 - name: Updating openstack-dashboard.conf
@@ -36,11 +39,12 @@
             group=root
             mode=0644
             backup=yes
+  notify: reload-apache2
 
 
 - name: Running manage.py collectstatic and compress
   shell: cd /usr/share/openstack-dashboard ; python manage.py collectstatic --noinput ; python manage.py compress
+  notify: reload-apache2
 
 
-- name: Restarting Apache
-  service: name=apache2 state=restarted
+- meta: flush_handlers

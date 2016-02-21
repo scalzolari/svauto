@@ -16,6 +16,7 @@
   apt: name={{item}} state=latest
   with_items:
     - mysql-server
+  notify: restart-mysql
 
 
 - name: Updating mysqld.cnf
@@ -25,10 +26,10 @@
         group=root
         mode=0644
         backup=yes
+  notify: restart-mysql
 
 
-- name: Restarting MySQL
-  service: name=mysql state=restarted
+- meta: flush_handlers
 
 
 - name: Creating OpenStack MySQL databases
