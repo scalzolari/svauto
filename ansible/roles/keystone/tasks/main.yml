@@ -35,7 +35,7 @@
 
 
 - name: Updating keystone.conf
-  template: src=keystone.conf
+  template: src={{openstack_release}}/keystone.conf
             dest=/etc/keystone/keystone.conf
             owner=root
             group=root

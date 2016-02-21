@@ -28,13 +28,11 @@ case $i in
         	shift
 		;;
 
-
         --base-os=*)
 
                 BASE_OS="${i#*=}"
                 shift
                 ;;
-
 
 	--base-os-upgrade)
 
@@ -42,13 +40,11 @@ case $i in
 		shift
 		;;
 
-
         --use-dummies)
 
 	        USE_DUMMIES="yes"
 		shift
         	;;
-
 
         --dry-run)
 
@@ -56,13 +52,17 @@ case $i in
 		shift
         	;;
 
+        --openstack-release=*)
+
+	        OPENSTACK_RELEASE="${i#*=}"
+		shift
+        	;;
 
         --openstack-installation)
 
 	        OPENSTACK_INSTALLATION="yes"
 		shift
         	;;
-
 
 esac
 done
@@ -204,8 +204,11 @@ fi
 echo
 echo "Configuring ansible/group_vars/all & ansible/hosts file based on current environment..."
 
+sed -i -e 's/openstack_release:.*/openstack_release: "'$OPENSTACK_RELEASE'"/' ansible/group_vars/all
+
 sed -i -e 's/base_os:.*/base_os: "ubuntu16"/' ansible/group_vars/all
 sed -i -e 's/base_os_upgrade:.*/base_os_upgrade: "yes"/' ansible/group_vars/all
+
 sed -i -e 's/use_dummies:.*/use_dummies: "yes"/' ansible/group_vars/all
 
 sed -i -e 's/controller-1.yourdomain.com/'$FQDN'/g' ansible/group_vars/all
@@ -233,8 +236,8 @@ echo "Preparing Ansible templates based on current default primary interface..."
 
 sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
 
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/nova_aio/templates/nova.conf
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/cinder/templates/cinder.conf
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/nova_aio/templates/$OPENSTACK_RELEASE/nova.conf
+sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/cinder/templates/$OPENSTACK_RELEASE/cinder.conf
 
 
 echo

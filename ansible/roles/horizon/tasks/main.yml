@@ -21,7 +21,7 @@
 
 
 - name: Updating local_settings.py
-  template: src=local_settings.py
+  template: src={{openstack_release}}/local_settings.py
             dest=/etc/openstack-dashboard/local_settings.py
             owner=root
             group=root

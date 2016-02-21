@@ -45,7 +45,7 @@ echo
 echo "Bridge Mode: Linux Bridges"
 echo
 cd ~/svauto
-./os-deploy.sh --br-mode=LBR --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-installation
+./os-deploy.sh --br-mode=LBR --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation
 
 
 echo

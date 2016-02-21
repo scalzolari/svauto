@@ -36,7 +36,7 @@
 
 
 - name: Updating heat.conf
-  template: src=heat.conf
+  template: src={{openstack_release}}/heat.conf
         dest=/etc/heat/heat.conf
         owner=heat
         group=heat

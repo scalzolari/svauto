@@ -29,7 +29,7 @@
 
 
 - name: Updating cinder.conf
-  template: src=cinder.conf
+  template: src={{openstack_release}}/cinder.conf
         dest=/etc/cinder/cinder.conf
         owner=cinder
         group=cinder

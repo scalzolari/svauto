@@ -13,14 +13,14 @@
 # limitations under the License.
 
 - name: Creating admin-openrc.sh file
-  template: src=admin-openrc.sh
+  template: src={{openstack_release}}/admin-openrc.sh
             dest=/home/{{ubuntu_user}}/admin-openrc.sh
             owner={{ubuntu_user}}
             group={{ubuntu_user}}
             mode=0640
 
 - name: Creating demo-openrc.sh file
-  template: src=demo-openrc.sh
+  template: src={{openstack_release}}/demo-openrc.sh
             dest=/home/{{ubuntu_user}}/demo-openrc.sh
             owner={{ubuntu_user}}
             group={{ubuntu_user}}

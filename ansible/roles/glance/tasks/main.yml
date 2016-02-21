@@ -31,7 +31,7 @@
 
 
 - name: Updating glance-api.conf
-  template: src=glance-api.conf
+  template: src={{openstack_release}}/glance-api.conf
         dest=/etc/glance/glance-api.conf
         owner=glance
         group=glance
@@ -42,7 +42,7 @@
 
 
 - name: Updating glance-registry.conf
-  template: src=glance-registry.conf
+  template: src={{openstack_release}}/glance-registry.conf
         dest=/etc/glance/glance-registry.conf
         owner=glance
         group=glance
@@ -64,7 +64,7 @@
 
 
 - name: Wait a bit until Glance starts up properly...
-  pause: seconds=5
+  pause: seconds=3
 
 
 - include: default-images.yml
