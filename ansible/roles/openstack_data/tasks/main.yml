@@ -12,21 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing MySQL Server
-  apt: name={{item}} state=latest
-  with_items:
-    - mysql-server
-  notify: restart-mysql
+- include: openstack-services.yml
+  when: openstack_installation == 'yes'
 
+- include: openstack-endpoints.yml
+  when: openstack_installation == 'yes'
 
-- name: Updating mysqld.cnf
-  copy: src=mysqld.cnf
-        dest=/etc/mysql/mysql.conf.d/mysqld.cnf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-  notify: restart-mysql
-
-
-- meta: flush_handlers
+- include: openstack-pur.yml
+  when: openstack_installation == 'yes'

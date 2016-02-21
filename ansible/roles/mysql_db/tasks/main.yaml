@@ -12,21 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing MySQL Server
-  apt: name={{item}} state=latest
-  with_items:
-    - mysql-server
-  notify: restart-mysql
+- name: Creating OpenStack MySQL databases
+  mysql_db: name={{item.db_name}} state=present
+  with_items: mysql_databases
 
-
-- name: Updating mysqld.cnf
-  copy: src=mysqld.cnf
-        dest=/etc/mysql/mysql.conf.d/mysqld.cnf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-  notify: restart-mysql
-
-
-- meta: flush_handlers
+  
+- name: Creating OpenStack MySQL users 
+  mysql_user:
+    host="{{item.db_host}}"
+    name="{{item.db_user}}"
+    password="{{item.db_pass}}"
+    priv="{{item.db_name}}.*:ALL,GRANT"
+    state=present
+  with_items: mysql_databases

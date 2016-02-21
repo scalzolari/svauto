@@ -54,7 +54,3 @@
 
 
 - meta: flush_handlers
-
-
-- include: default-images.yml
-  when: openstack_installation == 'yes'

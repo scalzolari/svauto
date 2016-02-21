@@ -73,10 +73,6 @@
 - meta: flush_handlers
 
 
-- include: nova-flavors-standards.yml
-  when: openstack_installation == 'yes'
-
-
 #- name: "Reconfiguring Libvirt and enabling VHOST_NET + KSM at the Compute Node (QEmu-KVM)"
 #  command: "{{item}}"
 #  with_items:

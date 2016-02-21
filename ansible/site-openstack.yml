@@ -22,13 +22,18 @@
   roles:
   - role: bootstrap
   - role: mysql
+  - role: mysql_db
   - role: rabbitmq
   - role: memcached
   - role: apache2
   - role: keystone
+  - role: openstack_data
   - role: glance
+  - role: glance_images
   - role: nova_aio
+  - role: nova_flavors
   - role: neutron_aio
+  - role: neutron_net
   - role: horizon
   - role: cinder
   - role: heat

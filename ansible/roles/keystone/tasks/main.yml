@@ -90,12 +90,3 @@
 
 - include: openrc-files.yml
   when: openstack_installation == 'yes'
-
-- include: openstack-services.yml
-  when: openstack_installation == 'yes'
-
-- include: openstack-endpoints.yml
-  when: openstack_installation == 'yes'
-
-- include: openstack-pur.yml
-  when: openstack_installation == 'yes'
