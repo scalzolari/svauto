@@ -23,6 +23,7 @@
   - role: bootstrap
   - role: mysql
   - role: mysql_db
+#  - role: mongodb
   - role: rabbitmq
   - role: memcached
   - role: apache2
@@ -37,6 +38,7 @@
   - role: horizon
   - role: cinder
   - role: heat
+#  - role: ceilometer
 
 - hosts: controller_nodes
   user: "{{ubuntu_user}}"
@@ -44,17 +46,18 @@
   roles:
   - role: bootstrap
   - role: mysql
+  - role: mysql_db
+#  - role: mongodb
   - role: rabbitmq
   - role: memcached
   - role: apache2
   - role: keystone
-#  - role: openstack_data
-#  - role: keystone_web
+  - role: openstack_data
   - role: glance
-#  - role: glance_images
-#  - role: nova_lbr_ctrl
-#  - role: nova_flavors
-#  - role: neutron_lbr_ctrl
+  - role: glance_images
+#  - role: nova_ctrl
+  - role: nova_flavors
+#  - role: neutron_ctrl
   - role: horizon
   - role: cinder
   - role: heat
@@ -81,13 +84,18 @@
   roles:
   - role: bootstrap
   - role: mysql
+  - role: mysql_db
   - role: rabbitmq
   - role: memcached
   - role: apache2
   - role: keystone
+  - role: openstack_data
   - role: glance
+  - role: glance_images
   - role: nova_aio
+  - role: nova_flavors
   - role: neutron_aio
+  - role: neutron_net
   - role: horizon
   - role: cinder
   - role: heat
