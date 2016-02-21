@@ -210,7 +210,7 @@ then
 		# Web Public directory details
 
 		# Apache or NGinx DocumentRoot of a Virtual Host:
-		DOCUMENT_ROOT="/home/ubuntu/public_dir"
+		DOCUMENT_ROOT="public_dir"
 
 		# Sandvine Stock images directory:
 		WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
@@ -460,7 +460,7 @@ then
 				mv sandvine-stack-nubo-0.1-stock-gui-1.yaml cloudservices-stack-nubo-$RELEASE-stock-gui-1.yaml
 				#mv sandvine-stack-0.1-four-1.yaml cloudservices-stack-$RELEASE-four-1.yaml
 
- 				rm sandvine-stack-0.1-four-1.yaml sandvine-stack-nubo-0.1-stock-1.yaml
+				rm sandvine-stack-0.1-four-1.yaml
 
 				mv libvirt-qemu.hook cs-svsde-$RELEASE-centos6-amd64.hook
 
@@ -474,7 +474,9 @@ then
 
 				chmod +x cloudservices-helper.sh
 
-				cp cloudservices-helper.sh $WEB_ROOT_CS_RELEASE
+				cd - &>/dev/null
+
+				cp tmp/cs-rel/cloudservices-helper.sh $WEB_ROOT_CS_RELEASE
 
 			fi
 
@@ -763,7 +765,9 @@ then
 
 				chmod +x sandvine-cs-helper.sh
 
-				cp sandvine-cs-helper.sh $WEB_ROOT_CS
+				cd - &>/dev/null
+
+				cp tmp/cs/sandvine-cs-helper.sh $WEB_ROOT_CS
 
 			fi
 
@@ -1053,7 +1057,9 @@ then
 
 				chmod +x sandvine-helper.sh
 
-				cp sandvine-helper.sh $WEB_ROOT_STOCK
+				cd - &>/dev/null
+
+				cp tmp/sv/sandvine-helper.sh $WEB_ROOT_STOCK
 
 			fi
 
