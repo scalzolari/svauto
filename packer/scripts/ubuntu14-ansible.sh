@@ -20,5 +20,7 @@ echo 'sandvine' | sudo -S -E sed -i -e 's/^%sudo.*/%sudo ALL=NOPASSWD:ALL/' /etc
 # Updating
 echo 'sandvine' | sudo -S -E apt-get update
 
-# Install Ansible
-echo 'sandvine' | sudo -S -E apt-get install -y ansible=1.7.2+dfsg-1~ubuntu14.04.1
+# Install Ansible 2.0
+echo 'sandvine' | sudo -S -E apt-get install -y software-properties-common
+echo 'sandvine' | sudo -S -E add-apt-repository -y ppa:ansible/ansible
+echo 'sandvine' | sudo -S -E apt-get install -y ansible
