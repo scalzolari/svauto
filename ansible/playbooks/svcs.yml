@@ -21,4 +21,4 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: csd
+  - role: svcs

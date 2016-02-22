@@ -21,4 +21,4 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: spb
+  - role: svspb
