@@ -41,4 +41,4 @@ echo
 echo "Installing SDE..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/svsde.yml
+ansible-playbook -c local svsde.yml

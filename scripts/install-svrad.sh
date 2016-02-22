@@ -41,4 +41,4 @@ echo
 echo "Installing RAD Protowizard daemon"
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/svrad.yml
+ansible-playbook -c local svrad.yml

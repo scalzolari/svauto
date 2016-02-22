@@ -41,4 +41,4 @@ echo
 echo "Installing SPB..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/svspb.yml
+ansible-playbook -c local svspb.yml
