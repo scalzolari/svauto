@@ -264,7 +264,7 @@ then
 	echo
 	echo "Creating "$PACKER_VM_NAME" VM OVF file for "$PACKER_VM_NAME"..."
 
-	if [ "$PRODUCT" == "svpts" ]; then
+	if [ "$PRODUCT" == "svpts" ] || [ "$PRODUCT" == "cs-svpts" ] ; then
 		cp packer/ovf-template-4nic.ovf packer/$PACKER_FILES/"$PACKER_VM_NAME".ovf
 	else
 		cp packer/ovf-template-2nic.ovf packer/$PACKER_FILES/"$PACKER_VM_NAME".ovf
