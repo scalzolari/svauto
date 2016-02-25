@@ -40,3 +40,4 @@
 
 - name: Sandvine Auto Configuration book for PTS
   include: sv-auto-config.yml
+  when: sv_auto_config == 'yes'

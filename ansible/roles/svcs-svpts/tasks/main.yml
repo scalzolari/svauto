@@ -24,3 +24,4 @@
 
 - name: Sandvine Auto Configuration book for Cloud Services PTS
   include: cs-auto-config.yml
+  when: cs_auto_config == 'yes'

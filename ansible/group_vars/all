@@ -49,6 +49,10 @@ cs_db_host: "%"
 cs_db_user: "svadmin"
 cs_db_pass: "sandvine"
 
+# Usage of Sandvine / Cloud Services Auto Configuration books
+sv_auto_config: "yes"
+cs_auto_config: "yes"
+
 # Is it labified?
 labifyit: "no"
 

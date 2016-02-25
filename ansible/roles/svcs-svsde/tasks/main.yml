@@ -26,3 +26,4 @@
 
 - name: Sandvine Auto Configuration book for Cloud Services SDE
   include: cs-auto-config.yml
+  when: cs_auto_config == 'yes'

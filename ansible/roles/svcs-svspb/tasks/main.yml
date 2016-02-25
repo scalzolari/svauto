@@ -19,3 +19,4 @@
 
 - name: Sandvine Auto Configuration book for Cloud Services SPB
   include: cs-auto-config.yml
+  when: cs_auto_config == 'yes'

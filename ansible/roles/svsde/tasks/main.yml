@@ -26,6 +26,7 @@
 
 - name: Sandvine Auto Configuration book for SDE
   include: sv-auto-config.yml
+  when: sv_auto_config == 'yes'
 
 
 - name: Copying Sandvine SDE login logo

@@ -87,6 +87,7 @@
 
 - name: Sandvine Auto Configuration book for SPB
   include: sv-auto-config.yml
+  when: sv_auto_config == 'yes'
 
 
 - name: Copying Sandvine SPB login logo
