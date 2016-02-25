@@ -347,6 +347,10 @@ if [ "$BASE_OS_UPGRADE" == "yes" ]; then
 	EXTRA_VARS="$EXTRA_VARS base_os_upgrade="yes""
 fi
 
+if [ "$LABIFY" == "yes" ]; then
+	EXTRA_VARS="$EXTRA_VARS labifyit="yes""
+fi
+
 
 case "$PRODUCT" in
 

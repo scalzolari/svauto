@@ -49,6 +49,9 @@ cs_db_host: "%"
 cs_db_user: "svadmin"
 cs_db_pass: "sandvine"
 
+# Is it labified?
+labifyit: "no"
+
 # Is this running under Packer build?
 is_packer_building: "no"
 

@@ -24,7 +24,5 @@
   notify: reload sandvine
 
 
-- name: Sandvine Auto Configuration book for Cloud Services PTS
+- name: Sandvine Auto Configuration book for Cloud Services SDE
   include: cs-auto-config.yml
-
-

@@ -17,5 +17,5 @@
   when: base_os == 'centos67'
 
 
-- name: Sandvine Auto Configuration book for Cloud Services PTS
+- name: Sandvine Auto Configuration book for Cloud Services SPB
   include: cs-auto-config.yml
