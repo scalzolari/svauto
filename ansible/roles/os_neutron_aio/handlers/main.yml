@@ -21,11 +21,11 @@
     - neutron-metadata-agent
 
 - name: restart-neutron-lbr
-  service: name=neutron-plugin-linuxbridge-agent state=restarted enabled=yes
+  service: name=neutron-linuxbridge-agent state=restarted enabled=yes
   when: br_mode == 'LBR'
 
 - name: restart-neutron-ovs
-  service: name=neutron-plugin-openvswitch-agent state=restarted enabled=yes
+  service: name=neutron-openvswitch-agent state=restarted enabled=yes
   when: br_mode == 'OVS'
 
 
