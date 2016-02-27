@@ -108,6 +108,12 @@ case $i in
 		shift
 		;;
 
+	--yum-repo-builder)
+
+		YUM_REPO_BUILDER="yes"
+		shift
+		;;
+
 	--clean-all)
 
 		CLEAN_ALL="yes"
@@ -181,6 +187,87 @@ then
 	sudo wget -c https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip
 	sudo unzip -q -o packer_0.8.6_linux_amd64.zip
 	sudo rm -f packer_0.8.6_linux_amd64.zip
+
+	exit 1
+
+fi
+
+
+if [ "$YUM_REPO_BUILDER" == "yes" ]
+then
+
+	#
+	# PTS stuff
+	#
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.20.0223 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.20.0223 --latest
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svprotocols --version=16.02.2108 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svprotocols --version=16.02.2108 --latest
+
+	# Usage Management
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagementpts --version=5.00.0402 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagementpts --version=5.00.0402 --latest
+
+	# Experimental
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.30.0072 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.30.0035 --latest-of-serie
+
+
+	#
+	# SDE stuff
+	#
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.30.0303 --latest
+
+	# Usage Management
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagement --version=5.00.0402 --latest
+
+	# Subscriber Mapping
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.30.0101 --latest
+
+
+	# Experimental
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.40.0025 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.45.0078 --latest-of-serie
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.40.0055 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.45.0078 --latest-of-serie
+
+	# Usage Management
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagement --version=5.00.0402 --latest
+
+	# Subscriber Mapping
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.40.0005 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.45.0003 --latest-of-serie
+
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.40-0005 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.45-0003 --latest-of-serie
+
+
+	#
+	# SPB stuff
+	#
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=6.60.0309 --latest
+
+	# NDS
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svreports --version=6.65.0005 --latest
+
+
+	# Experimental
+
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=7.00.0018 --latest-of-serie
+
 
 	exit 1
 
