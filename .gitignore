@@ -8,3 +8,4 @@ packer/ubuntu*-tmpl
 packer/centos*-tmpl
 packer_cache
 public_dir
+yum_repos
