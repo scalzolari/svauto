@@ -18,7 +18,6 @@
     - heat-api
     - heat-api-cfn
     - heat-engine
-    - python-heatclient
   notify: restart-heat
 
 

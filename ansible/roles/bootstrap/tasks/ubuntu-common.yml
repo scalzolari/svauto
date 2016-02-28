@@ -39,6 +39,7 @@
     - byobu
     - socat
     - monit
+    - ipset
     - ifstat
     - strace
     - ltrace
@@ -60,9 +61,11 @@
     - psmisc
     - tzdata
     - vim-nox
+    - pm-utils
     - iptraf-ng
     - subnetcalc
     - traceroute
+    - sysfsutils
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag

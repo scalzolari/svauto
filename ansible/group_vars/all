@@ -107,6 +107,8 @@ csd_versioned: false
 
 ubuntu_user: "administrative"
 
+ubuntu_virt: "server"
+
 openstack_installation: "no"
 
 openstack_release: "mitaka"

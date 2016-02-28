@@ -16,7 +16,6 @@
   apt: name={{item}} state=latest
   with_items:
     - glance
-    - python-swiftclient
   notify: restart-glance
 
 

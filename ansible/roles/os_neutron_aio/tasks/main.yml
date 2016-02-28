@@ -15,10 +15,8 @@
 - name: Installing Neutron Server and Agents
   apt: name={{item}} state=latest
   with_items:
-    - python-ryu
     - neutron-server
     - neutron-plugin-ml2
-    - python-neutronclient
     - neutron-l3-agent
     - neutron-dhcp-agent
     - neutron-metadata-agent

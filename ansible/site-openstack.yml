@@ -21,6 +21,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: os_clients
   - role: ssh_keypair
   - role: os_mysql
   - role: os_mysql_db
@@ -32,6 +33,7 @@
   - role: os_openstack_data
   - role: os_glance
   - role: os_glance_images
+  - role: hyper_kvm
   - role: os_nova_aio
   - role: os_keypair
   - role: os_nova_flavors
@@ -47,6 +49,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: os_clients
   - role: ssh_keypair
   - role: os_mysql
   - role: os_mysql_db
@@ -79,6 +82,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: hyper_kvm
 #  - role: os_nova_cmpt_node
 #  - role: os_neutron_cmpt_node
 
@@ -87,6 +91,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: os_clients
   - role: ssh_keypair
   - role: os_mysql
   - role: os_mysql_db
@@ -98,6 +103,7 @@
   - role: os_openstack_data
   - role: os_glance
   - role: os_glance_images
+  - role: hyper_kvm
   - role: os_nova_aio
   - role: os_keypair
   - role: os_nova_flavors

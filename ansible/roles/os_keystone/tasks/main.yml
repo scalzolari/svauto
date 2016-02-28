@@ -16,7 +16,6 @@
   apt: name={{item}} state=latest
   with_items:
     - keystone
-    - python-openstackclient
 
 
 - name: Stopping Keystone

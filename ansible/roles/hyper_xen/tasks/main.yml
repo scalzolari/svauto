@@ -12,15 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu16 - copy Ubuntu Xenial default sources.list
-  copy: src=ubuntu/xenial_apt_sources.list
-        dest=/etc/apt/sources.list
-        owner=root
-        group=root
-        mode=0644
-
-
-- name: ubuntu16 - apt installing basic tools
+- name: ubuntu | apt installing Xen Hypervisor
   apt: name={{item}} state=latest
   with_items:
-    - nftables
+    - xen-system-amd64
