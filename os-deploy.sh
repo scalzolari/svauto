@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # Get options, both Linux Bridges and Open vSwitch (default) are supported.
 # You can also use --dry-run to NOT run Ansible in the end, just prepare the
 # configuration files.
+
 for i in "$@"
 do
 case $i in
@@ -258,40 +258,6 @@ else
 		cd ~/svauto/ansible
         	ansible-playbook site-openstack.yml
 	fi
-fi
-
-
-# Uploading and/or creating SSH Keypair, only if Nova binary available.
-if [ "$DRYRUN" == "yes" ]
-then
-
-        echo
-	echo "WARNING!!!"
-        echo "Not creating / uploading SSH Keypairs on --dry-run..."
-
-else
-
-	if [ -f ~/.ssh/id_rsa.pub ] && [ -f /usr/bin/nova ]
-	then
-
-		echo
-		echo "Uploding your existing SSH Keypair into OpenStack..."
-
-		source ~/demo-openrc.sh
-		nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
-
-	else
-
-		echo
-		echo "Creating and uploding your SSH Keypair into OpenStack..."
-		echo
-
-	        ssh-keygen -b 2048 -t rsa -N "" -f ~/.ssh/id_rsa
-	        source ~/demo-openrc.sh
-	        nova keypair-add --pub-key ~/.ssh/id_rsa.pub default
-
-	fi
-
 fi
 
 

@@ -145,13 +145,23 @@ openstack_env:
   OS_URL: "http://{{controller_addr}}:35357/v3"
   OS_IDENTITY_API_VERSION: "3"
 
+demo_openrc_env:
+  OS_PROJECT_DOMAIN_ID: "default"
+  OS_USER_DOMAIN_ID: "default"
+  OS_PROJECT_NAME: "demo"
+  OS_USERNAME: "demo"
+  OS_PASSWORD: "demo_pass"
+  OS_AUTH_URL: "http://{{public_addr}}:5000/v3"
+  OS_IDENTITY_API_VERSION: "3"
+  OS_IMAGE_API_VERSION: "1"
+
 admin_openrc_env:
   OS_PROJECT_DOMAIN_ID: "default"
   OS_USER_DOMAIN_ID: "default"
   OS_PROJECT_NAME: "admin"
   OS_USERNAME: "admin"
   OS_PASSWORD: "admin_pass"
-  OS_AUTH_URL: "http://controller-1.yourdomain.com:35357/v3"
+  OS_AUTH_URL: "http://{{controller_addr}}:35357/v3"
   OS_IDENTITY_API_VERSION: "3"
   OS_IMAGE_API_VERSION: "1"
 

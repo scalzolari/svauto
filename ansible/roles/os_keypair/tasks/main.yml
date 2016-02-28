@@ -12,16 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu16 - copy Ubuntu Xenial default sources.list
-  copy: src=ubuntu/xenial_apt_sources.list
-        dest=/etc/apt/sources.list
-        owner=root
-        group=root
-        mode=0644
+- name: ubuntu | uploading SSH Keypair into OpenStack
+  environment: "{{ demo_openrc_env }}"
+  shell: nova keypair-add --pub-key "/home/{{ubuntu_user}}/.ssh/id_rsa.pub" default
+  when: openstack_installation == 'yes'
 
 
-- name: ubuntu16 - apt installing basic tools
-  apt: name={{item}} state=latest
-  with_items:
-    - nftables
-    - python-shade
+# TODO:
+# - Move from "shell:", to "os_keypair".
+# - Then, get rid of openstack_installation var!
+
+#- name: ubuntu | uploading SSH Keypair into OpenStack
+#  environment: "{{ demo_openrc_env }}"
+#  os_keypair:
+#      state: present
+#      name: default
+#      public_key_file: "/home/{{ubuntu_user}}/.ssh/id_rsa.pub"
