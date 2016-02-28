@@ -54,4 +54,4 @@
 
 # Adding support for running Linux PTS on CentOS 7 without systemd:
 #- name: centos7 | including hack to remove systemd
-#  include: c6_7-no-systemd.yaml
+#  include: c6_7-no-systemd.yml

@@ -32,4 +32,4 @@
 
 
 # Adding support for running Linux SDE on CentOS 7 without systemd:
-- include: c6_7-no-systemd.yaml
+- include: c6_7-no-systemd.yml
