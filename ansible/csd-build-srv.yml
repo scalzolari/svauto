@@ -21,4 +21,5 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: csd-build-srv
+  - role: golang-env
+  - role: nodejs-env
