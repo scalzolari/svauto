@@ -1,4 +1,6 @@
-# Copyright 2016, Sandvine Incorporated
+#! /bin/bash
+
+# Copyright 2016, Sandvine Incorporated.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +14,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: centos6.yml
-  when: base_os == 'centos67'
+mkdir -p $GOPATH/src/github.com/influxdb
+cd $GOPATH/src/github.com/influxdb
+git clone --branch v0.8.8 https://github.com/influxdb/influxdb.git
 
+mkdir -p $GOPATH/src/github.com/fiorix
+cd $GOPATH/src/github.com/fiorix
 
-- include: centos7.yml
-  when: base_os == 'centos72'
+git clone https://github.com/fiorix/go-diameter.git
+cd go-diameter
+git checkout b4c1bac20b8e8e1ac7e17fb54dc83b155aacba21
 
+mkdir -p $GOPATH/src/git.svc.rocks/octo
+cd $GOPATH/src/git.svc.rocks/octo
 
-- include: centos-common.yml
-  when: base_os == 'centos72' or base_os == 'centos67'
+pwd

@@ -12,6 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: centos - copy script to download Golang dependencies
+  copy: src=go-get-deps.sh
+        dest=/etc/skel/go-get-deps.sh
+        owner=root
+        group=root
+        mode=0755
+
+
 - name: centos - creating Golang skel work subdirectory
   file: path=/etc/skel/work/bin
         state=directory
