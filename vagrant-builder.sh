@@ -123,6 +123,7 @@ cp vagrant/Vagrantfile_template vagrant/$VM_NAME/Vagrantfile
 VBOX_SANITIZED=$(echo $VBOX | sed -e 's/\//\\\//g')
 
 
+sed -i -e 's/{{base_os}}/'$BASE_OS'/g' vagrant/$VM_NAME/Vagrantfile
 sed -i -e 's/{{vm_box}}/'$VBOX_SANITIZED'/g' vagrant/$VM_NAME/Vagrantfile
 sed -i -e 's/{{vm_name}}/'$VM_NAME'/g' vagrant/$VM_NAME/Vagrantfile
 sed -i -e 's/{{ssh_local_port}}/'$RAND_PORT'/g' vagrant/$VM_NAME/Vagrantfile
