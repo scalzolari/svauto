@@ -180,13 +180,13 @@ then
 
 
 	echo
-	echo "Installing Packer 0.8.6 into /usr/local/bin:"
+	echo "Installing Packer 0.9.0 into /usr/local/bin:"
 	echo
 
 	cd /usr/local/bin
-	sudo wget -c https://releases.hashicorp.com/packer/0.8.6/packer_0.8.6_linux_amd64.zip
-	sudo unzip -q -o packer_0.8.6_linux_amd64.zip
-	sudo rm -f packer_0.8.6_linux_amd64.zip
+	sudo wget -c https://releases.hashicorp.com/packer/0.9.0/packer_0.9.0_linux_amd64.zip
+	sudo unzip -q -o packer_0.9.0_linux_amd64.zip
+	sudo rm -f packer_0.9.0_linux_amd64.zip
 
 	exit 1
 
