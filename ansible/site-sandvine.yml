@@ -21,7 +21,7 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: spb
+  - role: svspb
   - role: power-cycle
 
 - hosts: sde-servers
@@ -29,7 +29,7 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: sde
+  - role: svsde
   - role: power-cycle
 
 - hosts: pts-servers
@@ -37,7 +37,7 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: pts
+  - role: svpts
   - role: power-cycle
 
 - hosts: csd-servers
@@ -45,5 +45,5 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: csd
+  - role: svcsd
   - role: power-cycle
