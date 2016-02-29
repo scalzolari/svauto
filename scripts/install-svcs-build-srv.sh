@@ -41,4 +41,4 @@ echo
 echo "Installing Cloud Services..."
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local playbooks/csd-build-srv.yml
+ansible-playbook -c local svcs-build-srv.yml
