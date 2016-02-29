@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | creating SSH Keypair
+- name: ubuntu - creating SSH Keypair
   user: name={{ubuntu_user}} generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa

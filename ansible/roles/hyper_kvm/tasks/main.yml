@@ -12,14 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | apt installing QEmu/KVM Hypervisor - Server
+- name: ubuntu - apt installing QEmu/KVM Hypervisor - Server
   apt: name={{item}} state=latest
   with_items:
     - ubuntu-virt-server
   when: ubuntu_virt == 'server'
 
 
-- name: ubuntu | apt installing QEmu/KVM Hypervisor - Desktop
+- name: ubuntu - apt installing QEmu/KVM Hypervisor - Desktop
   apt: name={{item}} state=latest
   with_items:
     - ubuntu-virt
