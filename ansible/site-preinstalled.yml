@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- hosts: spb-servers
+- hosts: svspb-servers
   user: sandvine
   become: yes
   roles:
@@ -20,7 +20,7 @@
   - role: svspb
   - role: svcs-svspb
 
-- hosts: sde-servers
+- hosts: svsde-servers
   user: sandvine
   become: yes
   roles:
@@ -29,14 +29,14 @@
   - role: svcs-svsde
   - role: svcs
 
-- hosts: pts-servers
+- hosts: svpts-servers
   user: sandvine
   become: yes
   roles:
   - role: svpts
   - role: svcs-svpts
 
-- hosts: csd-servers
+- hosts: svcs-servers
   user: sandvine
   become: yes
   roles:

@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys Sandvine Platform:
 #
 
-- hosts: spb-servers
+- hosts: svspb-servers
   user: sandvine
   become: yes
   roles:
@@ -24,7 +24,7 @@
   - role: svspb
   - role: power-cycle
 
-- hosts: sde-servers
+- hosts: svsde-servers
   user: sandvine
   become: yes
   roles:
@@ -32,7 +32,7 @@
   - role: svsde
   - role: power-cycle
 
-- hosts: pts-servers
+- hosts: svpts-servers
   user: sandvine
   become: yes
   roles:
@@ -40,7 +40,7 @@
   - role: svpts
   - role: power-cycle
 
-- hosts: csd-servers
+- hosts: svcs-servers
   user: sandvine
   become: yes
   roles:
