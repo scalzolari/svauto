@@ -47,6 +47,10 @@
   ignore_errors: yes
 
 
+- name: centos7 - yum installing epel repository
+  yum: pkg=epel-release state=installed
+
+
 - name: centos7 - yum installing basic tools
   yum: pkg={{item}} state=installed
   with_items:
