@@ -96,6 +96,15 @@
   command: /sbin/dracut -f
 
 
+- name: centos7 - copy SSH Daemon config
+  copy: src=centos7/sshd_config
+        dest=/etc/ssh/sshd_config
+        owner=root
+        group=root
+        mode=0600
+        backup=yes
+
+
 # Lock Kernel upgrade only when building Linux PTS on CentOS 7.
 # It is realy, really required, only if "release == 'prod'".
 # This is a DPDK RPM Package limitation, that we're work arouding it.
