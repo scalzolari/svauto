@@ -20,8 +20,11 @@
     - python-novaclient
     - python-heatclient
     - python-swiftclient
+    - python-senlinclient
     - python-glanceclient
     - python-cinderclient
     - python-neutronclient
     - python-keystoneclient
     - python-openstackclient
+    - python-ceilometerclient
+    - python-openstacksdk
