@@ -56,15 +56,15 @@ case $i in
 		shift
 		;;
 
-	--kvm-define-cs)
+	--libvirt-define)
 
-		KVM_DEFINE_CS="yes"
+		LIBVIRT_DEFINE="yes"
 		shift
 		;;
 
-	--kvm-destroy)
+	--libvirt-undefine)
 
-		DESTROY_ALL="YES"
+		LIBVIRT_UNDEFINE="YES"
 		shift
 		;;
 
@@ -74,9 +74,9 @@ case $i in
 		shift
 		;;
 
-	--kvm-install-images)
+	--libvirt-install-images)
 
-		INSTALL_IMAGES="yes"
+		LIBVIRT_INSTALL_IMAGES="yes"
 		shift
 		;;
 
@@ -149,15 +149,18 @@ then
 fi
 
 
-if [ "$DESTROY_ALL" == "YES" ]
+if [ "$LIBVIRT_UNDEFINE" == "YES" ]
 then
 	clear
 
 	echo
 	echo "WARNING!!!"
 	echo
-	echo "You are about to DESTROY your Network and Virtual Machine definitons!"
+	echo "You are about to UNDEFINE your Network and Virtual Machine definitons!"
+	echo
 	echo "However, your QCoW2s will be left intact."
+	echo
+	echo "About to shutdown your Virtual Machines."
 	echo
 	echo "You have 10 seconds to hit CONTROL +C to cancel this operation."
 
@@ -174,9 +177,9 @@ then
 	virsh net-undefine service
 
 
-	virsh destroy $SVPTS
-	virsh destroy $SVSDE
-	virsh destroy $SVSPB
+	virsh shutdown $SVPTS
+	virsh shutdown $SVSDE
+	virsh shutdown $SVSPB
 
 	virsh undefine $SVPTS
 	virsh undefine $SVSDE
@@ -208,7 +211,7 @@ then
 fi
 
 
-if [ "$INSTALL_IMAGES" == "yes" ]
+if [ "$LIBVIRT_INSTALL_IMAGES" == "yes" ]
 then
 	echo
 	echo "Deploying QCoW2 images into /var/lib/libvirt/images subdirectory..."
@@ -340,7 +343,7 @@ then
 fi
 
 
-if [ "$KVM_DEFINE_CS" == "yes" ]
+if [ "$LIBVIRT_DEFINE" == "yes" ]
 then
 
 	echo
