@@ -33,21 +33,13 @@
   notify: reload sandvine
 
 
-- name: Customizing "rc.conf.default.ptsd" file
-  copy: src=rc.conf.default.ptsd
-        dest=/usr/local/sandvine/etc/rc.conf.default.ptsd
-        owner=root
-        group=sv_service
+- name: copy new "subnets.txt" file
+  copy: src=subnets.txt
+        dest=/usr/local/sandvine/etc/subnets.txt
+        owner=sv_admin
+        group=sv_admin
         mode=0644
-  notify: reload sandvine
-
-
-- name: Customizing "rc.conf.default.diameter" file
-  copy: src=rc.conf.default.diameter
-        dest=/usr/local/sandvine/etc/rc.conf.default.diameter
-        owner=root
-        group=sv_service
-        mode=0644
+        backup=yes
   notify: reload sandvine
 
 
@@ -57,4 +49,44 @@
         owner=root
         group=sv_service
         mode=0644
+  notify: reload sandvine
+
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_limitInMessageRate=\"false\""
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_limitOutMessageRate=\"false\""
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_enableCreationFailureLogging=\"true\""
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_maxOutgoingPendingRequests=16000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_maxOutgoingPerPeerMessages=2000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_maxOutgoingPerPeerBlockedMessages=2000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_pendingAnswerTimeoutMS=3000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_incomingMaxAgeEarlyThresholdMS=2000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_incomingMaxAgeThresholdIncrementMS=1000"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_maxMessageSize=16384"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="diameter_stack_maxPerSessionBlockedMessages=32"
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="skip_header_counting_mode=\"padding min64bytes\""
+  notify: reload sandvine
+
+- lineinfile: dest=/usr/local/sandvine/etc/rc.conf line="ptsd_publicationInterval=60"
   notify: reload sandvine
