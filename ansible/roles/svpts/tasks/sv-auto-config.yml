@@ -58,4 +58,4 @@
             owner=sv_admin
             group=sv_admin
             mode=0644
-  when: base_os == 'centos72' or base_os == 'centos67' and labifyit == 'yes'
+  when: labifyit == 'yes'
