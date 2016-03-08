@@ -346,8 +346,14 @@ then
 	echo
 	echo "Defining Virtual Machines..."
 	virsh define $SVPTS.xml
+	virsh autostart $SVPTS
+
 	virsh define $SVSDE.xml
+	virsh autostart $SVSDE
+
 	virsh define $SVSPB.xml
+	virsh autostart $SVSPB
+
 
 	echo
 	echo "Finding Virtual Machine's MAC addresses..."
