@@ -375,11 +375,11 @@ then
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT
+		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
 #	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svspb,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
+#		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
 	# PTS 7.20 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
@@ -602,11 +602,11 @@ then
 
 	# SPB 6.60 on CentOS 6 + Cloud Services
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT
+		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services - Labified
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
+		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \

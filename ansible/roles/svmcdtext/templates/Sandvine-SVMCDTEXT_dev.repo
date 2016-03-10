@@ -1,0 +1,16 @@
+# Sandvine-SVMCDTEXT.repo
+#
+#
+
+[sandvine-svmcdtext]
+name=Sandvine-$releasever - SVMCDTEXT
+# New, sane URL, for Yum Repo:
+# DEV URL:
+baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svmcdtext
+#baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svmcdtext
+# Packages are from (old URL format):
+# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/RPM_COMMON/SVMCDTEXT
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0
