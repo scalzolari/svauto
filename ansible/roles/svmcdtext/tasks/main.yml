@@ -30,7 +30,7 @@
 
 
 - name: Installing required SVMCDTEXT packages
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=installed state=latest
   with_items:
     - perl-XML-Simple
     - svmcdtext
