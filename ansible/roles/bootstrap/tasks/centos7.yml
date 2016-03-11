@@ -70,6 +70,7 @@
     - mlocate
     - ansible
     - man-pages
+    - firewalld
     - bind-utils
     - dracut-config-generic
     - traceroute
@@ -82,6 +83,10 @@
     - cronie
     - acpid
     - which
+
+
+- name: centos7 - service firewalld enabled
+  service: name=firewalld state=started enabled=yes
 
 
 - name: centos7 - yum uninstalling Network Manager

@@ -32,3 +32,7 @@
 
 - name: Enabling Labify on system boot
   command: chkconfig fetchlabify on
+
+
+- name: centos7 - service firewalld disabled
+  service: name=firewalld state=stopped enabled=no

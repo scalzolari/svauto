@@ -1,6 +1,6 @@
 TYPE="Ethernet"
 NM_CONTROLLED="no"
-ONBOOT="yes"
+ONBOOT="no"
 NAME="eth3"
 DEVICE="eth3"
 BOOTPROTO="none"
