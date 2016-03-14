@@ -60,6 +60,7 @@
     - man
     - zip
     - ntp
+    - gpm
     - wget
     - tmux
     - lsof

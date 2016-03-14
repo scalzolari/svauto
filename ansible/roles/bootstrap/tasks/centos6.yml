@@ -71,6 +71,7 @@
     - man
     - zip
     - ntp
+    - gpm
     - wget 
     - lsof 
     - tmux
