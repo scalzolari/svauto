@@ -15,6 +15,11 @@
 # TODO:
 # 1- Update Glance images with: shorter names plus description
 
+
+- name: Wait a bit until Glance starts up properly...
+  pause: seconds=3
+
+
 - name: Adding a few Operating System images into Glance
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"

@@ -12,14 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# "keystone bootstrap" already does:
+#
+# Created domain default
+# Created project admin
+# Created user admin
+# Created Role admin
+# Granted admin on admin to user admin.
+
 - name: Creating OpenStack Projects, Users and Roles
   environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
-  - openstack project create --domain default --description "Admin Project" admin
-  - openstack user create --domain default --password "{{admin_password}}" --email admin@{{your_domain}} admin
-  - openstack role create admin
-  - openstack role add --project admin --user admin admin
+#  - openstack project create --domain default --description "Admin Project" admin
+#  - openstack user create --domain default --password "{{admin_password}}" --email admin@{{your_domain}} admin
+#  - openstack role create admin
+#  - openstack role add --project admin --user admin admin
   - openstack project create --domain default --description "Service Project" service
   - openstack project create --domain default --description "Demo Project" demo
   - openstack user create --domain default --password "{{demo_password}}" --email demo@{{your_domain}} demo

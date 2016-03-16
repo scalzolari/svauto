@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 
 from django.utils.translation import ugettext_lazy as _
@@ -40,26 +42,37 @@ WEBROOT = '/'
 #CSRF_COOKIE_SECURE = True
 #SESSION_COOKIE_SECURE = True
 
+# The absolute path to the directory where message files are collected.
+# The message file must have a .json file extension. When the user logins to
+# horizon, the message files collected are processed and displayed to the user.
+#MESSAGES_PATH=None
+
 # Overrides for OpenStack API versions. Use this setting to force the
 # OpenStack dashboard to use a specific API version for a given service API.
 # Versions specified here should be integers or floats, not strings.
 # NOTE: The version should be formatted as it appears in the URL for the
 # service API. For example, The identity service APIs have inconsistent
 # use of the decimal point, so valid options would be 2.0 or 3.
-#OPENSTACK_API_VERSIONS = {
-#    "data-processing": 1.1,
-#    "identity": 3,
-#    "volume": 2,
-#    "compute": 2
-#}
+OPENSTACK_API_VERSIONS = {
+    "data-processing": 1.1,
+    "identity": 3,
+    "volume": 2,
+    "compute": 2
+}
 
 # Set this to True if running on multi-domain model. When this is enabled, it
 # will require user to enter the Domain name in addition to username for login.
-#OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = False
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
 
 # Overrides the default domain used when running on single-domain model
 # with Keystone V3. All entities will be created in the default domain.
-#OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'Default'
+OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'
+
+# Set this to True to enable panels that provide the ability for users to
+# manage Identity Providers (IdPs) and establish a set of rules to map
+# federation protocol attributes to Identity API attributes.
+# This extension requires v3.0+ of the Identity API.
+#OPENSTACK_KEYSTONE_FEDERATION_MANAGEMENT = False
 
 # Set Console type:
 # valid options are "AUTO"(default), "VNC", "SPICE", "RDP", "SERIAL" or None
@@ -140,7 +153,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #]
 
 OPENSTACK_HOST = "{{public_addr}}"
-OPENSTACK_KEYSTONE_URL = "http://%s:5000/v2.0" % OPENSTACK_HOST
+OPENSTACK_KEYSTONE_URL = "http://%s:5000/v3" % OPENSTACK_HOST
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 
 # Enables keystone web single-sign-on if set to True.
@@ -215,6 +228,12 @@ OPENSTACK_KEYSTONE_BACKEND = {
 # both.
 LAUNCH_INSTANCE_LEGACY_ENABLED = False
 LAUNCH_INSTANCE_NG_ENABLED = True
+
+# A dictionary of settings which can be used to provide the default values for
+# properties found in the Launch Instance modal.
+#LAUNCH_INSTANCE_DEFAULTS = {
+#    'config_drive': False
+#}
 
 # The Xen Hypervisor has the ability to set the mount point for volumes
 # attached to instances (other Hypervisors currently do not). Setting
@@ -410,9 +429,13 @@ TIME_ZONE = "UTC"
 #TROVE_ADD_USER_PERMS = []
 #TROVE_ADD_DATABASE_PERMS = []
 
-# Change this patch to the appropriate static directory containing
-# two files: _variables.scss and _styles.scss
-#CUSTOM_THEME_PATH = 'themes/default'
+# Change this patch to the appropriate list of tuples containing
+# a key, label and static directory containing two files:
+# _variables.scss and _styles.scss
+#AVAILABLE_THEMES = [
+#    ('default', 'Default', 'themes/default'),
+#    ('material', 'Material', 'themes/material'),
+#]
 
 LOGGING = {
     'version': 1,
@@ -424,7 +447,7 @@ LOGGING = {
     'handlers': {
         'null': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
+            'class': 'logging.NullHandler',
         },
         'console': {
             # Set the level to "DEBUG" for verbose output logging.
@@ -675,7 +698,8 @@ SECURITY_GROUP_RULES = {
 # the enabled panel configuration.
 # You should not add settings to this list for out of tree extensions.
 # See: https://wiki.openstack.org/wiki/Horizon/RESTAPI
-REST_API_REQUIRED_SETTINGS = ['OPENSTACK_HYPERVISOR_FEATURES']
+REST_API_REQUIRED_SETTINGS = ['OPENSTACK_HYPERVISOR_FEATURES',
+                              'LAUNCH_INSTANCE_DEFAULTS']
 
 # Additional settings can be made available to the client side for
 # extensibility by specifying them in REST_API_ADDITIONAL_SETTINGS

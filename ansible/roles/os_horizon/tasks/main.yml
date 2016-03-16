@@ -13,12 +13,7 @@
 # limitations under the License.
 
 - name: Installing Horizon Dashboard
-  apt: name=openstack-dashboard state=latest
-  notify: reload-apache2
-
-
-- name: Removing Horizon Ubuntu theme
-  apt: name=openstack-dashboard-ubuntu-theme state=absent
+  apt: name=openstack-dashboard install_recommends=no state=latest
   notify: reload-apache2
 
 
