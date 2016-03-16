@@ -17,15 +17,21 @@
   with_items:
     - python-ryu
     - python-shade
+    - python-croniter
     - python-novaclient
     - python-heatclient
+    - python-zaqarclient
     - python-swiftclient
+    - python-manilaclient
     - python-saharaclient
     - python-openstacksdk
     - python-senlinclient
     - python-glanceclient
     - python-cinderclient
+    - python-magnumclient
+    - python-mistralclient
     - python-neutronclient
+    - python-barbicanclient
     - python-keystoneclient
     - python-openstackclient
     - python-ceilometerclient
