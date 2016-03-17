@@ -13,7 +13,6 @@
       "vm_name": "xenial-server-amd64.raw",
       "ssh_wait_timeout": "30s",
       "shutdown_command": "echo 'sandvine' | sudo -S -E shutdown -P now",
-      "qemu_binary":"/usr/bin/qemu-system-x86_64",
       "qemuargs": [
         ["-m","2048M"]
       ],
