@@ -200,8 +200,8 @@ then
 	# PTS stuff
 	#
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.20.0223 --latest
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.20.0223 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.30.0082 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.30.0035 --latest
 
 	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svprotocols --version=16.02.2108 --latest
 	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svprotocols --version=16.02.2108 --latest
@@ -213,8 +213,8 @@ then
 
 	# Experimental
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.30.0072 --latest-of-serie
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.30.0035 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.40.0009 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.40.0009 --latest-of-serie
 
 
 	#
@@ -381,12 +381,12 @@ then
 #	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
-	# PTS 7.20 on CentOS 7 + Cloud Services customizations
+	# PTS 7.30 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT \
 		--lock-el7-kernel-upgrade
 
-	# PTS 7.20 on CentOS 7 + Cloud Services customizations - Labified
+	# PTS 7.30 on CentOS 7 + Cloud Services customizations - Labified
 #	./image-factory.sh --release=prod --base-os=centos72 --base-os-upgrade --product=cs-svpts --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
@@ -608,12 +608,12 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
-	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# PTS 7.20 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
@@ -697,7 +697,7 @@ then
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/cs
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/cs
 
-			sed -i -e 's/{{pts_image}}/svpts-7.20-cs-1-centos7-amd64/g' tmp/cs/*.yaml
+			sed -i -e 's/{{pts_image}}/svpts-7.30-cs-1-centos7-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-cs-1-centos6-amd64/g' tmp/cs/*.yaml
 			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-cs-1-centos6-amd64/g' tmp/cs/*.yaml
@@ -914,12 +914,12 @@ then
 	# STABLE
 	#
 
-	# PTS 7.20 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# PTS 7.20 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.20 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SDE 7.30 on CentOS 6
@@ -943,20 +943,20 @@ then
 	# EXPERIMENTAL
 	#
 
-	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.40 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
-	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.40 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
-	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.40 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
 
-	# PTS 7.30 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.40 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
 
 	# SDE 7.45 on CentOS 7
@@ -989,7 +989,7 @@ then
 			cp misc/os-heat-templates/sandvine-stack-0.1* tmp/sv
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/sv
 
-			sed -i -e 's/{{pts_image}}/svpts-7.20-1-centos7-amd64/g' tmp/sv/*.yaml
+			sed -i -e 's/{{pts_image}}/svpts-7.30-1-centos7-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-1-centos6-amd64/g' tmp/sv/*.yaml
 			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-1-centos6-amd64/g' tmp/sv/*.yaml
