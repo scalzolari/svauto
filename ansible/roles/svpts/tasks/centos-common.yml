@@ -12,40 +12,61 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos | copy Sandvine PTS Repository - Production
-  template: src=common/Sandvine-PTS.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+# New style URLs - upgradeable
+- name: centos | copy Sandvine SVPTS Repository - Production
+  template: src=common/Sandvine-SVPTS.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
             owner=root
             group=root
             mode=0644
   when: release == 'prod'
 
 
-- name: centos | copy Sandvine PTS Repository - Development
-  template: src=common/Sandvine-PTS_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+- name: centos | copy Sandvine SVPTS Repository - Development
+  template: src=common/Sandvine-SVPTS_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
             owner=root
             group=root
             mode=0644
-  when: release == 'dev'
+  when: release == 'dev' and static_repo != 'true'
 
 
-- name: centos | copy Sandvine PTS Repository - Development - Versioned
-  template: src=common/Sandvine-PTS_versioned.repo
-            dest=/etc/yum.repos.d/Sandvine-PTS.repo
+- name: centos | copy Sandvine SVPTS Repository - Development - Versioned
+  template: src=common/Sandvine-SVPTS_versioned.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
             owner=root
             group=root
             mode=0644
-  when: pts_versioned == 'true' and release == 'dev'
+  when: pts_versioned == 'true' and release == 'dev' and static_repo != 'true'
 
 
-- name: centos | yum installing the Linux PTS
+# Old style URLs - non-upgradeable
+- name: centos | copy Sandvine SVPTS Repository - Static - Production
+  template: src=common/Sandvine-SVPTS_static_versioned.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
+            owner=root
+            group=root
+            mode=0644
+  when: static_repo == 'true' and pts_versioned == 'true' and release == 'prod'
+
+
+- name: centos | copy Sandvine SVPTS Repository - Static - Versioned
+  template: src=common/Sandvine-SVPTS_static_versioned_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
+            owner=root
+            group=root
+            mode=0644
+  when: static_repo == 'true' and pts_versioned == 'true' and release == 'dev'
+
+
+# Deployment
+- name: centos | yum installing the Linux SVPTS
   yum: pkg={{item}} state=installed
   with_items:
     - svpts
 
 
-- name: centos | copy Sandvine PTS login logo
+- name: centos | copy Sandvine SVPTS login logo
   copy: src=etc-issue-pts-logo
         dest=/etc/issue
         owner=root

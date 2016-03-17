@@ -70,6 +70,18 @@ case $i in
 		shift
 		;;
 
+	--disable-autoconf)
+
+		DISABLE_AUTOCONF="yes"
+		shift
+		;;
+
+	--static-repo)
+
+		STATIC_REPO="yes"
+		shift
+		;;
+
 	--versioned-repo)
 
 		VERSIONED_REPO="yes"
@@ -334,6 +346,14 @@ fi
 
 # Build extra_vars "nicely"!
 EXTRA_VARS="base_os="$BASE_OS" release="$RELEASE" activate_eth1="no" is_packer_building="yes""
+
+if [ "$DISABLE_AUTOCONF" == "yes" ] ; then
+	EXTRA_VARS="$EXTRA_VARS disable_autoconf="yes" sv_auto_config="no" cs_auto_config="no""
+fi
+
+if [ "$STATIC_REPO" == "yes" ] ; then
+	EXTRA_VARS="$EXTRA_VARS static_repo="true""
+fi
 
 if [ "$EXPERIMENTAL_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS is_experimental="yes""

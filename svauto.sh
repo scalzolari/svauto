@@ -142,8 +142,6 @@ then
 
 	rm -rf packer/build*
 
-	[ -d packer_cache ] && rm -rf packer_cache
-
 	rm -f tmp/cs-rel/* tmp/cs/* tmp/sv/*
 
 	echo

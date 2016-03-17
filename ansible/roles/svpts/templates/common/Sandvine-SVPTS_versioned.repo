@@ -7,8 +7,8 @@ name=Sandvine-$releasever - PTS (Policy Traffic Switch)
 # New, sane URL, for Yum versioned Repo:
 baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svpts-{{pts_version}}
 # Packages are from (old URL format):
-# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/SVPTS/svpts-LNX-X.XX.XXXX
-# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS7-x64/SVPTS/svpts-LNX-X.XX.XXXX
+# - ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/CENTOS6-x64/SVPTS/svpts-LNX-X.XX.XXXX
+# - ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/CENTOS7-x64/SVPTS/svpts-LNX-X.XX.XXXX
 enabled=1
 protect=0
 gpgcheck=0

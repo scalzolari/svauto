@@ -1,0 +1,14 @@
+# Sandvine-SVPTS.repo
+#
+#
+
+[sandvine-svpts]
+name=Sandvine-$releasever - SVPTS (Sandvine Policy Traffic Switch)
+# Internal URL:
+baseurl=ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/CENTOS7-x64/SVPTS/svpts-LNX-{{pts_version}}
+# Public URL:
+#baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/PTS/PTSVPL/{{pts_version}}/software/linux-rpm/repo/$releasever/$basearch
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

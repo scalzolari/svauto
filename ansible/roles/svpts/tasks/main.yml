@@ -25,7 +25,7 @@
 
 - name: centos6 | include custom book
   include: centos6.yml
-  when: base_os == 'centos67'
+  when: base_os == 'centos67' and disable_autoconf != 'yes'
 
 
 - name: centos | yum clean local cache

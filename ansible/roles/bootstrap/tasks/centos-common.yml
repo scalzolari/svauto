@@ -28,7 +28,7 @@
             mode=0644
   when: release == 'dev'
 
-- name: centos - copy Sandvine Main Repository - Development
+- name: centos - copy Sandvine Main Repository - Experimental
   template: src=common/Sandvine-Main_dev_experimental.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root

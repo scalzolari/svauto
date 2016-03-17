@@ -14,6 +14,7 @@
 
 - name: centos7 - config /etc/hosts
   shell: HOSTNAME=$(cat /etc/hostname | cut -d \. -f 1) ; DOMAIN=$(cat /etc/hostname | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
+  when: disable_autoconf != 'yes'
 
 
 - name: centos7 - copy "hostname-fix" init script
@@ -22,9 +23,11 @@
         owner=root
         group=root
         mode=0755
+  when: disable_autoconf != 'yes'
 
 - name: centos7 - service hostname-fix enabled
   service: name=etc-hosts-fix state=started enabled=yes
+  when: disable_autoconf != 'yes'
 
 
 - name: centos7 - copy eth0 config file
@@ -40,6 +43,7 @@
         owner=root
         group=root
         mode=0644
+  when: disable_autoconf != 'yes'
 
 - name: centos7 - starting up eth1
   shell: ifup eth1
@@ -71,7 +75,6 @@
     - mlocate
     - ansible
     - man-pages
-    - firewalld
     - bind-utils
     - dracut-config-generic
     - traceroute
@@ -86,8 +89,16 @@
     - which
 
 
+- name: centos7 - yum installing extra tools
+  yum: pkg={{item}} state=installed
+  with_items:
+    - firewalld
+  when: disable_autoconf != 'yes'
+
+
 - name: centos7 - service firewalld enabled
   service: name=firewalld state=started enabled=yes
+  when: disable_autoconf != 'yes'
 
 
 - name: centos7 - yum uninstalling Network Manager

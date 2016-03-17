@@ -53,6 +53,8 @@ cs_db_pass: "sandvine"
 sv_auto_config: "yes"
 cs_auto_config: "yes"
 
+disable_autoconf: "no"
+
 # Is it labified?
 labifyit: "no"
 
@@ -82,8 +84,11 @@ base_os: centos67
 # Upgrade Base OS:
 base_os_upgrade: "no"
 
-# Release ver: ca, dev
+# Release ver: ca, dev, prod
 release: dev
+
+# Use static, non-upgradable, old fashion, Yum repositories:
+static_repo: "false"
 
 # Products and versions
 pts_version: "7.20"
