@@ -169,6 +169,7 @@ then
 		unzip \
 		ec2-ami-tools \
 		ec2-api-tools \
+		createrepo \
 		python-keystoneclient \
 		python-glanceclient \
 		python-novaclient \
