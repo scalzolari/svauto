@@ -203,9 +203,9 @@ then
         read -s FTP_PASS
 
 	echo
-	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVPTS-disk1.qcow2
-	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVSPB-disk1.qcow2
-	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVSDE-disk1.qcow2
+	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVPTS-disk1.qcow2c
+	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVSPB-disk1.qcow2c
+	wget -c --user=$FTP_USER --password=$FTP_PASS ftp://ftp.support.sandvine.com/release/CloudServices/$RELEASE/$SVSDE-disk1.qcow2c
 
 	exit 0
 fi
