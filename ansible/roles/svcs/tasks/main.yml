@@ -30,7 +30,7 @@
 
 
 - name: Installing required packages and the CSD
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - redis
     - mysql

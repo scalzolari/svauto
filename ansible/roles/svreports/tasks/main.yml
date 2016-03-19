@@ -30,7 +30,7 @@
 
 
 - name: Installing required NDS packages
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - dmidecode
     - svreports

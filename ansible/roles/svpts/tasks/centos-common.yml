@@ -41,27 +41,36 @@
 
 
 # Old style URLs - non-upgradeable
-- name: centos | copy Sandvine SVPTS Repository - Static - Production
-  template: src=common/Sandvine-SVPTS_static_versioned.repo
+- name: centos7 | copy Sandvine SVPTS Repository - Static - Production
+  template: src=centos7/Sandvine-SVPTS_static_versioned.repo
             dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
             owner=root
             group=root
             mode=0644
-  when: static_repo == 'true' and pts_versioned == 'true' and release == 'prod'
+  when: base_os == 'centos72' and static_repo == 'true' and pts_versioned == 'true' and release == 'prod'
 
 
-- name: centos | copy Sandvine SVPTS Repository - Static - Versioned
-  template: src=common/Sandvine-SVPTS_static_versioned_dev.repo
+- name: centos7 | copy Sandvine SVPTS Repository - Static - Versioned
+  template: src=centos7/Sandvine-SVPTS_static_versioned_dev.repo
             dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
             owner=root
             group=root
             mode=0644
-  when: static_repo == 'true' and pts_versioned == 'true' and release == 'dev'
+  when: base_os == 'centos72' and static_repo == 'true' and pts_versioned == 'true' and release == 'dev'
+
+
+- name: centos6 | copy Sandvine SVPTS Repository - Static - Versioned
+  template: src=centos6/Sandvine-SVPTS_static_versioned_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVPTS.repo
+            owner=root
+            group=root
+            mode=0644
+  when: base_os == 'centos67' and static_repo == 'true' and pts_versioned == 'true' and release == 'dev'
 
 
 # Deployment
 - name: centos | yum installing the Linux SVPTS
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - svpts
 

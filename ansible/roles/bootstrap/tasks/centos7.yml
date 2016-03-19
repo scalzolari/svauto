@@ -75,6 +75,7 @@
     - mlocate
     - ansible
     - man-pages
+    - firewalld
     - bind-utils
     - dracut-config-generic
     - traceroute
@@ -87,13 +88,6 @@
     - cronie
     - acpid
     - which
-
-
-- name: centos7 - yum installing extra tools
-  yum: pkg={{item}} state=installed
-  with_items:
-    - firewalld
-  when: disable_autoconf != 'yes'
 
 
 - name: centos7 - service firewalld enabled

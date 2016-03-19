@@ -53,7 +53,7 @@
 
 
 - name: Installing required packages and the SPB
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - svspb
 

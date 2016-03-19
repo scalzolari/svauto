@@ -1,0 +1,11 @@
+# Sandvine-SVSDE.repo
+#
+#
+
+[sandvine-svsde]
+name=Sandvine-$releasever - SVSDE (Sandvine Service Delivery Engine)
+baseurl=ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/RHEL7-x64/SDE/svsde-LNX-{{sde_version}}
+enabled=1
+protect=0
+gpgcheck=0
+sslverify=0

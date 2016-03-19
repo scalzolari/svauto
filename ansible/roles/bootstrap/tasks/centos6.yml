@@ -14,6 +14,7 @@
 
 - name: centos6 - config /etc/hosts
   shell: HOSTNAME=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 1) ; DOMAIN=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
+  when: disable_autoconf != 'yes'
 
 
 - name: centos6 - copy "hostname-fix" init script
@@ -22,9 +23,11 @@
         owner=root
         group=root
         mode=0755
+  when: disable_autoconf != 'yes'
 
 - name: centos6 - service hostname-fix enabled
   service: name=hostname-fix state=started enabled=yes
+  when: disable_autoconf != 'yes'
 
 
 - name: centos6 - copy "etc-hosts-fix" init script
@@ -33,9 +36,11 @@
         owner=root
         group=root
         mode=0755
+  when: disable_autoconf != 'yes'
 
 - name: centos6 - service etc-hosts-fix enabled
   service: name=etc-hosts-fix state=started enabled=yes
+  when: disable_autoconf != 'yes'
 
 
 - name: centos6 - copy eth0 config file
@@ -51,6 +56,7 @@
         owner=root
         group=root
         mode=0644
+  when: disable_autoconf != 'yes'
 
 - name: centos6 - starting up eth1
   shell: ifup eth1

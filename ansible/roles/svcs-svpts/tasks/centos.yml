@@ -26,6 +26,6 @@
 
 
 - name: centos | yum installing Cloud Services packages
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
      - cloud-services-pts

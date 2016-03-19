@@ -31,6 +31,6 @@
 
 
 - name: Installing Usage Management packages
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - usage_management_pts

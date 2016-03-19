@@ -12,17 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Sandvine SDE Repository - Development
-  template: src=common/Sandvine-SDE_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-SDE.repo
+
+# New style URLs - upgradeable 
+- name: Creating Sandvine SVSDE Repository - Development
+  template: src=common/Sandvine-SVSDE_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSDE.repo
             owner=root
             group=root
             mode=0644
   when: release == 'dev'
 
 
-- name: Installing required packages and the SDE
-  yum: pkg={{item}} state=installed
+# Old style URLs - non-upgradeable
+- name: Creating Sandvine SVSDE Repository - Static - Versioned
+  template: src=centos7/Sandvine-SVSDE_static_versioned_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSDE.repo
+            owner=root
+            group=root
+            mode=0644
+  when: static_repo == 'true' and sde_versioned == 'true' and release == 'dev'
+
+
+# Deployment
+- name: Installing required packages and the SVSDE
+  yum: pkg={{item}} state=latest
   with_items:
     - sde
     - perl-libs
@@ -31,5 +44,5 @@
     - perl-libwww-perl
 
 
-# Adding support for running Linux SDE on CentOS 7 without systemd:
-- include: c6_7-no-systemd.yml
+# Adding support for running Linux SVSDE on CentOS 7 without systemd:
+# - include: c6_7-no-systemd.yml

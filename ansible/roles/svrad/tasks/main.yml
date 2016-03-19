@@ -37,7 +37,7 @@
 
 
 - name: Installing required packages
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest
   with_items:
     - protowizard
     - ipfixd
