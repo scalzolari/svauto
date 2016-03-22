@@ -96,6 +96,7 @@
     - mlocate
     - ansible
     - pciutils 
+    - deltarpm
     - dmidecode
     - man-pages
     - bind-utils

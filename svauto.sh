@@ -169,6 +169,7 @@ then
 		ansible \
 		lxd \
 		ubuntu-virt-server \
+		nbd-client \
 		virtualbox \
 		vagrant \
 		zip \
@@ -622,12 +623,12 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	#
@@ -668,21 +669,21 @@ then
 
 
 	# Cloud Services Build Server (back) on CentOS 6.7 (new Golang 1.5)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (front) on CentOS 6.7 (NodeJS)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	# Cloud Services Build Server (back) on CentOS 7.2 (old Golang 1.4)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Build Server (front) on CentOS 7.2 (NodeJS)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
@@ -957,12 +958,12 @@ then
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
 	# PTS 7.40 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
 
 	# PTS 7.40 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo
 
 	# SDE 7.45 on CentOS 7
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \

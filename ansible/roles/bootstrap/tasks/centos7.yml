@@ -74,6 +74,7 @@
     - parted
     - mlocate
     - ansible
+    - deltarpm
     - man-pages
     - firewalld
     - bind-utils
