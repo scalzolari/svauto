@@ -22,9 +22,9 @@ for i in "$@"
 do
 case $i in
 
-	--install-dependencies)
+	--bootstrap-svauto)
 
-		INSTALL_DEPENDENCIES="yes"
+		BOOTSTRAP_SVAUTO="yes"
 		shift
 		;;
 
@@ -157,42 +157,14 @@ then
 fi
 
 
-if [ "$INSTALL_DEPENDENCIES" == "yes" ]
+if [ "$BOOTSTRAP_SVAUTO" == "yes" ]
 then
 
 	echo
 	echo "Installing SVAuto dependencies via APT:"
 	echo
 
-	sudo apt -y install \
-		git \
-		ansible \
-		lxd \
-		ubuntu-virt-server \
-		nbd-client \
-		virtualbox \
-		vagrant \
-		zip \
-		unzip \
-		ec2-ami-tools \
-		ec2-api-tools \
-		createrepo \
-		python-keystoneclient \
-		python-glanceclient \
-		python-novaclient \
-		python-neutronclient \
-		python-cinderclient \
-		python-heatclient
-
-
-	echo
-	echo "Installing Packer 0.9.0 into /usr/local/bin:"
-	echo
-
-	cd /usr/local/bin
-	sudo wget -c https://releases.hashicorp.com/packer/0.9.0/packer_0.9.0_linux_amd64.zip
-	sudo unzip -q -o packer_0.9.0_linux_amd64.zip
-	sudo rm -f packer_0.9.0_linux_amd64.zip
+	sudo ~/svauto/scripts/bootstrap-svauto.sh
 
 	exit 1
 

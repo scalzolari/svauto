@@ -36,8 +36,8 @@
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
 
 - name: ubuntu - include custom book
-  include: ubuntu-dummies.yml
-  when: base_os == 'ubuntu16' or base_os == 'ubuntu14' and use_dummies == 'yes' 
+  include: ubuntu-networking.yml
+  when: (base_os == 'ubuntu16' or base_os == 'ubuntu14') and disable_autoconf != 'yes'
 
 
 # Common across distributions

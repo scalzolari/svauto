@@ -12,13 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu14 - apt install software-properties-common
-  apt: name=software-properties-common state=latest
+#
+# The following hosts definitions, bootstrap SVAuto dependencies:
+#
 
-
-- name: ubuntu14 - apt Installing Cloud Archive Keyring
-  apt: name=ubuntu-cloud-keyring state=latest
-
-
-- name: ubuntu14 - apt enabling Mitaka Ubuntu Cloud Archive
-  shell: add-apt-repository -y ppa:ubuntu-cloud-archive/mitaka-staging
+- hosts: localhost
+  become: yes
+  roles:
+  - role: bootstrap
+  - role: hyper_kvm
+  - role: hyper_lxd
+  - role: hyper_virtualbox
+  - role: vagrant
+  - role: amazon_ec2_tools
+  - role: redhat_tools_ubuntu
+  - role: os_clients
+  - role: packer

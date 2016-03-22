@@ -12,13 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu14 - apt install software-properties-common
-  apt: name=software-properties-common state=latest
-
-
-- name: ubuntu14 - apt Installing Cloud Archive Keyring
-  apt: name=ubuntu-cloud-keyring state=latest
-
-
-- name: ubuntu14 - apt enabling Mitaka Ubuntu Cloud Archive
-  shell: add-apt-repository -y ppa:ubuntu-cloud-archive/mitaka-staging
+- name: ubuntu | apt installing RedHat tools
+  apt: name={{item}} state=latest
+  with_items:
+    - rpm
+    - yum
+    - createrepo

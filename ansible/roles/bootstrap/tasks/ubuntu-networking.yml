@@ -17,6 +17,32 @@
 #  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist nf_conntrack"
 
 
+- name: ubuntu - config br_netfilter module
+  lineinfile: dest=/etc/modules line="br_netfilter"
+
+- name: ubuntu - loading br_netfilter module
+  command: 'modprobe br_netfilter'
+
+
+- name: ubuntu - copy global network config file
+  copy: src=ubuntu/etc_network_interfaces
+        dest=/etc/network/interfaces
+        owner=root
+        group=root
+        mode=0644
+
+- name: ubuntu - creating global network config directory
+  file: path=/etc/network/interfaces.d
+        state=directory
+
+- name: ubuntu - copy primary network interface config (DHCP)
+  template: src=ubuntu/primary_interface_dhcp_cfg
+            dest=/etc/network/interfaces.d/{{primary_interface_name}}.cfg
+            owner=root
+            group=root
+            mode=0644
+
+
 - name: ubuntu - config dummy module options
   lineinfile: dest=/etc/modprobe.d/dummy.conf line="options dummy numdummies=6" create=yes
 

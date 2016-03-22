@@ -17,6 +17,13 @@
 #
 
 #
+# Globl definitions
+#
+
+disable_autoconf: "no"
+
+
+#
 # Sandvine Platform Definitions
 #
 
@@ -52,8 +59,6 @@ cs_db_pass: "sandvine"
 # Usage of Sandvine / Cloud Services Auto Configuration books
 sv_auto_config: "yes"
 cs_auto_config: "yes"
-
-disable_autoconf: "no"
 
 # Is it labified?
 labifyit: "no"
@@ -119,8 +124,6 @@ openstack_installation: "no"
 openstack_release: "mitaka"
 
 primary_interface_name: "eth0"
-
-use_dummies: "no"
 
 br_mode: "LBR"
 

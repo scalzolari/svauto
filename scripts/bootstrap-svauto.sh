@@ -37,11 +37,17 @@ fi
 
 
 echo
-echo "You'll need to install all the dependencies for running SVAuto."
+echo "Bootstrapping SVAuto..."
+
 echo
-echo "To install the dependences, run:"
+echo "Configuring sudores, so, members of group \"sudo\" will not require to type passwords."
+echo "You'll need to type your password now (you need to be member of group sudo already):"
+
+sudo sed -i -e 's/%sudo.*/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
+
 echo
-echo "cd ~/svauto"
-echo "./svauto.sh --bootstrap-svauto"
+sudo apt install ansible
+
 echo
-echo "NOTE: To use all features that SVAuto provides, you need an Ubuntu 16.04."
+cd ~/svauto/ansible
+ansible-playbook -c local bootstrap-svauto.yml --extra-vars "base_os=ubuntu16 disable_autoconf=yes"

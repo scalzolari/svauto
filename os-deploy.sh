@@ -208,7 +208,7 @@ sed -i -e 's/openstack_release:.*/openstack_release: "'$OPENSTACK_RELEASE'"/' an
 sed -i -e 's/base_os:.*/base_os: "ubuntu16"/' ansible/group_vars/all
 sed -i -e 's/base_os_upgrade:.*/base_os_upgrade: "yes"/' ansible/group_vars/all
 
-sed -i -e 's/use_dummies:.*/use_dummies: "yes"/' ansible/group_vars/all
+sed -i -e 's/disable_autoconf:.*/disable_autoconf: "yes"/' ansible/group_vars/all
 
 sed -i -e 's/controller-1.yourdomain.com/'$FQDN'/g' ansible/group_vars/all
 sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
