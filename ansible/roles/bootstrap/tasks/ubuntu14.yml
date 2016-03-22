@@ -20,7 +20,7 @@
         mode=0644
 
 
-- name: ubuntu14 - apt installing Linux 4.2 for Trusty
-  apt: name={{item}} state=installed
+- name: ubuntu14 - apt installing Linux 4.4 for Trusty
+  apt: name={{item}} state=latest
   with_items:
-    - linux-generic-lts-wily
+    - linux-generic-lts-xenial

@@ -67,6 +67,7 @@
     - subnetcalc
     - traceroute
     - sysfsutils
+    - nbd-client
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag
