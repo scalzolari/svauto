@@ -12,31 +12,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Sandvine SPB Repository - Production
-  template: src=Sandvine-SPB.repo
-            dest=/etc/yum.repos.d/Sandvine-SPB.repo
+- name: Creating Sandvine SVSPB Repository - Production
+  template: src=Sandvine-SVSPB.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSPB.repo
             owner=root
             group=root
             mode=0644
   when: release == 'prod'
 
 
-- name: Creating Sandvine SPB Repository - Development
-  template: src=Sandvine-SPB_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-SPB.repo
+- name: Creating Sandvine SVSPB Repository - Development
+  template: src=Sandvine-SVSPB_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSPB.repo
             owner=root
             group=root
             mode=0644
-  when: spb_version == '6.60' and release == 'dev'
+  when: release == 'dev' and static_repo != 'true'
 
 
-- name: Creating Sandvine SPB Repository - Development - Versioned
-  template: src=Sandvine-SPB_versioned.repo
-            dest=/etc/yum.repos.d/Sandvine-SPB.repo
+- name: Creating Sandvine SVSPB Repository - Development - Versioned
+  template: src=Sandvine-SVSPB_versioned.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSPB.repo
             owner=root
             group=root
             mode=0644
-  when: spb_versioned == 'true' and release == 'dev'
+  when: spb_versioned == 'true' and release == 'dev' and static_repo != 'true'
+
+
+- name: Creating Sandvine SVSPB Repository - Static - Versioned
+  template: src=Sandvine-SVSPB_static_versioned_dev.repo
+            dest=/etc/yum.repos.d/Sandvine-SVSPB.repo
+            owner=root
+            group=root
+            mode=0644
+  when: static_repo == 'true' and spb_versioned == 'true' and release == 'dev'
 
 
 # PostgreSQL 9.3
@@ -52,7 +61,7 @@
   when: base_os == 'centos67'
 
 
-- name: Installing required packages and the SPB
+- name: Installing required packages and the SVSPB
   yum: pkg={{item}} state=latest
   with_items:
     - svspb
@@ -64,7 +73,7 @@
   - lokkit --port=22:tcp --update
   - lokkit -t eth1
   - service iptables save
-  when: is_container != 'yes'
+  when: is_container != 'yes' and disable_autoconf != 'yes'
 
 
 - name: Enabling PostgreSQL on system boot
@@ -85,12 +94,12 @@
   command: yum clean all
 
 
-- name: Sandvine Auto Configuration book for SPB
+- name: Sandvine Auto Configuration book for SVSPB
   include: sv-auto-config.yml
   when: sv_auto_config == 'yes'
 
 
-- name: Copying Sandvine SPB login logo
+- name: Copying Sandvine SVSPB login logo
   copy: src=etc-issue-spb-logo
         dest=/etc/issue
         owner=root
