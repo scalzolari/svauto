@@ -1203,6 +1203,15 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
+	# Linux SVSPB 6.60 on CentOS 6.7
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0508 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
+
+	# Linux SVSPB 6.60 on CentSO 6.7
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0508 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
+
+
 	exit 0
 
 fi

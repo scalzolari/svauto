@@ -4,7 +4,7 @@
 
 [sandvine-svspb]
 name=Sandvine-$releasever - SVSPB
-baseurl=ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/CENTOS6-x64/SPB/svsde-{{spb_version}}
+baseurl=ftp://fbsd-ftp.phaedrus.sandvine.com/images/Linux/CENTOS6-x64/SPB/svspb-{{spb_version}}
 enabled=1
 protect=0
 gpgcheck=0

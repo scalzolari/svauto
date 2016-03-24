@@ -22,6 +22,19 @@
 
 disable_autoconf: "no"
 
+# Base O.S.:
+# Ubuntu: ubuntu14, ubuntu16
+# Debian: jessie, stretch
+# CentOS: centos67, centos72
+# FreeBSD: freebsd8
+base_os: centos67
+
+# Upgrade Base OS:
+base_os_upgrade: "no"
+
+# Release ver: ca, dev, prod
+release: dev
+
 
 #
 # Sandvine Platform Definitions
@@ -79,36 +92,23 @@ activate_eth1: "yes"
 lock_el7_kernel_upgrade: "no"
 el7_kernel_version: "3.10.0-327.10.1.el7.x86_64"
 
-# Base O.S.:
-# Ubuntu: ubuntu14, ubuntu16
-# Debian: jessie, stretch
-# CentOS: centos67, centos72
-# FreeBSD: freebsd8
-base_os: centos67
-
-# Upgrade Base OS:
-base_os_upgrade: "no"
-
-# Release ver: ca, dev, prod
-release: dev
-
 # Use static, non-upgradable, old fashion, Yum repositories:
 static_repo: "false"
 
-# Products and versions
-pts_version: "7.20"
-pts_versioned: false
+# Use versioned URL repo
+versioned_repo: "false"
 
+# Deploy FreeBSD packages
 deploy_pts_freebsd_pkgs: "no"
 
+# Products and versions
+pts_version: "7.20"
+
 sde_version: "7.30"
-sde_versioned: false
 
 spb_version: "6.60"
-spb_versioned: false
 
 csd_version: "1.00"
-csd_versioned: false
 
 
 #

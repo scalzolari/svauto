@@ -355,6 +355,10 @@ if [ "$STATIC_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS static_repo="true""
 fi
 
+if [ "$VERSIONED_REPO" == "yes" ]; then
+	EXTRA_VARS="$EXTRA_VARS versioned_repo="true""
+fi
+
 if [ "$EXPERIMENTAL_REPO" == "yes" ] ; then
 	EXTRA_VARS="$EXTRA_VARS is_experimental="yes""
 fi
@@ -376,35 +380,14 @@ case "$PRODUCT" in
 
         *svsde)
 		EXTRA_VARS=""$EXTRA_VARS" sde_version="$VERSION""
-
-		if [ "$VERSIONED_REPO" == "yes" ]
-		then
-			EXTRA_VARS=""$EXTRA_VARS" sde_versioned=true"
-		else
-			EXTRA_VARS=""$EXTRA_VARS" sde_versioned=false"
-		fi
 		;;
 
         *svpts)
 		EXTRA_VARS=""$EXTRA_VARS" pts_version="$VERSION""
-
-		if [ "$VERSIONED_REPO" == "yes" ]
-		then
-			EXTRA_VARS=""$EXTRA_VARS" pts_versioned=true"
-		else
-			EXTRA_VARS=""$EXTRA_VARS" pts_versioned=false"
-		fi
 		;;
 
         *svspb)
 		EXTRA_VARS=""$EXTRA_VARS" spb_version="$VERSION""
-
-		if [ "$VERSIONED_REPO" == "yes" ]
-		then
-			EXTRA_VARS=""$EXTRA_VARS" spb_versioned=true"
-		else
-			EXTRA_VARS=""$EXTRA_VARS" spb_versioned=false"
-		fi
 		;;
 
 	svcsd)

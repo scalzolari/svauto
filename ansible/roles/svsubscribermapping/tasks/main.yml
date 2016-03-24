@@ -36,7 +36,7 @@
             owner=root
             group=root
             mode=0644
-  when: sde_versioned == 'true' and release == 'dev'
+  when: versioned_repo == 'true' and release == 'dev'
 
 
 - name: Installing Usage Management packages

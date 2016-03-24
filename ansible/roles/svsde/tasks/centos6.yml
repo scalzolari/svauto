@@ -44,7 +44,7 @@
             owner=root
             group=root
             mode=0644
-  when: sde_versioned == 'true' and release == 'dev' and static_repo != 'true'
+  when: versioned_repo == 'true' and release == 'dev' and static_repo != 'true'
 
 
 # Old style URLs - non-upgradeable
@@ -54,7 +54,7 @@
             owner=root
             group=root
             mode=0644
-  when: static_repo == 'true' and sde_versioned == 'true' and release == 'dev'
+  when: static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
 
 
 # Old style URLs - non-upgradeable 
