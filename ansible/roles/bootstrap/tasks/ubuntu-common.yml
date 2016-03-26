@@ -41,6 +41,7 @@
     - socat
     - monit
     - ipset
+    - bwm-ng
     - ifstat
     - strace
     - ltrace

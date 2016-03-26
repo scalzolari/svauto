@@ -86,6 +86,7 @@
     - iotop 
     - iftop
     - which
+    - bwm-ng
     - telnet 
     - parted
     - psmisc 
