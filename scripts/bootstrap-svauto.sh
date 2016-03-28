@@ -46,7 +46,7 @@ echo "You'll need to type your password now (you need to be member of group sudo
 sudo sed -i -e 's/%sudo.*/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 echo
-sudo apt install ansible
+sudo apt -y install ansible
 
 echo
 cd ~/svauto/ansible
