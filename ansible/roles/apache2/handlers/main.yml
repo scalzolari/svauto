@@ -12,12 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing Apache2 Web Server
-  apt: name={{item}} state=latest
-  with_items:
-    - apache2
-    - libapache2-mod-wsgi
-
-
-- name: Enabling Apache2 WSGI module
-  apache2_module: state=present name=wsgi
+- name: reload-apache2
+  service: name=apache2 state=reloaded

@@ -35,6 +35,9 @@ base_os_upgrade: "no"
 # Release ver: ca, dev, prod
 release: dev
 
+# Enable the Apache Virtual Host
+enable_apache_vhost: "no"
+
 
 #
 # Sandvine Platform Definitions

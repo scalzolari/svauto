@@ -20,6 +20,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: apache2
   - role: hyper_kvm
   - role: hyper_lxd
   - role: hyper_virtualbox

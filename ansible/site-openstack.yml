@@ -28,7 +28,7 @@
 #  - role: os_mongodb
   - role: os_rabbitmq
   - role: os_memcached
-  - role: os_apache2
+  - role: apache2
   - role: os_keystone
   - role: os_openstack_data
   - role: os_glance
@@ -56,7 +56,7 @@
 #  - role: os_mongodb
   - role: os_rabbitmq
   - role: os_memcached
-  - role: os_apache2
+  - role: apache2
   - role: os_keystone
   - role: os_openstack_data
   - role: os_glance
@@ -98,7 +98,7 @@
 #  - role: os_mongodb
   - role: os_rabbitmq
   - role: os_memcached
-  - role: os_apache2
+  - role: apache2
   - role: os_keystone
   - role: os_openstack_data
   - role: os_glance
