@@ -81,6 +81,7 @@
     - wget 
     - lsof 
     - tmux
+    - nmap
     - unzip
     - acpid 
     - iotop 
