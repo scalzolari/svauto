@@ -23,4 +23,5 @@ echo 'sandvine' | sudo -S -E apt-get update
 # Install Ansible 2.0
 echo 'sandvine' | sudo -S -E apt-get install -y software-properties-common
 echo 'sandvine' | sudo -S -E add-apt-repository -y ppa:ansible/ansible
+echo 'sandvine' | sudo -S -E apt-get update
 echo 'sandvine' | sudo -S -E apt-get install -y ansible
