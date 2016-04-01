@@ -12,16 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | include config
-  include: ubuntu-common.yml
-  when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
-
-
-- name: centos7 | include config
-  include: centos7.yml
-  when: base_os == 'centos72'
-
-
-- name: centos6 | include config
-  include: centos6.yml
-  when: base_os == 'centos67'
+- name: centos6 | grub custom config
+  lineinfile: dest=/etc/grub.conf
+              insertafter='^hiddenmenu'
+              line='serial --unit=0 --speed=115200\nterminal --timeout=5 serial console'

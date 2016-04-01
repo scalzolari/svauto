@@ -93,10 +93,10 @@ Resource to build a clean Ubuntu or CentOS images, without Ansible roles, just P
 Resource to build a clean Ubuntu or CentOS images, with Packer and Ansible, plus upstream ISO media.
 
     # Ubuntu Trusty 14.04 - Blank server - Bootstrapped
-    ./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap
+    ./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,grub-conf
     
     # Ubuntu Xenial 16.04 - Blank server - Bootstrapped
-    ./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap
+    ./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,grub-conf
 
     # CentOS 6.7 - Blank server - Old Linux 2.6 - Bootstrapped
     ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init,grub-conf

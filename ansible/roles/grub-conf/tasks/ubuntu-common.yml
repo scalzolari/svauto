@@ -12,16 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | include config
-  include: ubuntu-common.yml
-  when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
+- name: ubuntu | grub custom config
+  copy: src=ubuntu/grub_defaults
+        dest=/etc/default/grub
+        owner=root
+        group=root
+        mode=0644
 
 
-- name: centos7 | include config
-  include: centos7.yml
-  when: base_os == 'centos72'
-
-
-- name: centos6 | include config
-  include: centos6.yml
-  when: base_os == 'centos67'
+- name: ubuntu | grub updating config
+  command: update-grub
