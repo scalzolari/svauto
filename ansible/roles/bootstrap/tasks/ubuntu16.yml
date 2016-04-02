@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: ubuntu16 - copy Ubuntu Xenial default sources.list
-  copy: src=ubuntu/xenial_apt_sources.list
+  copy: src=ubuntu16/sources.list.j2
         dest=/etc/apt/sources.list
         owner=root
         group=root

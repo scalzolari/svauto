@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: ubuntu14 - copy Ubuntu Trusty default sources.list
-  copy: src=ubuntu/trusty_apt_sources.list
+  copy: src=ubuntu14/sources.list.j2
         dest=/etc/apt/sources.list
         owner=root
         group=root
@@ -24,3 +24,11 @@
   apt: name={{item}} state=latest
   with_items:
     - linux-generic-lts-xenial
+
+
+- name: ubuntu14 - copy ttyS0 upstart job
+  copy: src=ubuntu14/ttyS0.conf.j2
+        dest=/etc/init/ttyS0.conf
+        owner=root
+        group=root
+        mode=0644

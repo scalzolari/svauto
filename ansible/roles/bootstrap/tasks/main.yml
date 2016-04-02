@@ -37,7 +37,7 @@
 
 - name: ubuntu - include custom book
   include: ubuntu-networking.yml
-  when: (base_os == 'ubuntu16' or base_os == 'ubuntu14') and disable_autoconf != 'yes'
+  when: (base_os == 'ubuntu16' or base_os == 'ubuntu14') and ubuntu_network_setup == 'yes'
 
 
 # Common across distributions

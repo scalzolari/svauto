@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: centos - copy Sandvine Main Repository - Production
-  template: src=common/Sandvine-Main.repo
+  template: src=centos-common/Sandvine-Main.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
             group=root
@@ -21,7 +21,7 @@
   when: release == 'prod'
 
 - name: centos - copy Sandvine Main Repository - Development
-  template: src=common/Sandvine-Main_dev.repo
+  template: src=centos-common/Sandvine-Main_dev.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
             group=root
@@ -29,7 +29,7 @@
   when: release == 'dev'
 
 - name: centos - copy Sandvine Main Repository - Experimental
-  template: src=common/Sandvine-Main_dev_experimental.repo
+  template: src=centos-common/Sandvine-Main_dev_experimental.repo
             dest=/etc/yum.repos.d/Sandvine-Main.repo
             owner=root
             group=root
@@ -64,7 +64,7 @@
 
 
 - name: centos - copy root's Bash RC 
-  copy: src=common/_bashrc-root
+  copy: src=centos-common/bashrc.j2
         dest=/root/.bashrc
         owner=root
         group=root
@@ -72,7 +72,7 @@
         backup=yes
 
 - name: centos - copy root's Bash Profile
-  copy: src=common/_bash_profile-root
+  copy: src=centos-common/bash_profile.j2
         dest=/root/.bash_profile
         owner=root
         group=root

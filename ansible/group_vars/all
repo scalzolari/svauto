@@ -122,6 +122,8 @@ ubuntu_user: "administrative"
 
 ubuntu_virt: "server"
 
+ubuntu_network_setup: "no"
+
 openstack_installation: "no"
 
 openstack_release: "mitaka"

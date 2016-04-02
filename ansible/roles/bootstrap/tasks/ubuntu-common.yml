@@ -82,7 +82,7 @@
         state=directory
 
 - name: ubuntu - copy root's htoprc config file
-  copy: src=ubuntu/htoprc
+  copy: src=ubuntu-common/htoprc.j2
         dest=/root/.config/htop/htoprc
         owner=root
         group=root

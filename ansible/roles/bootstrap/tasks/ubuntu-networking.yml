@@ -18,14 +18,15 @@
 
 
 - name: ubuntu - config br_netfilter module
-  lineinfile: dest=/etc/modules line="br_netfilter"
+  lineinfile: dest=/etc/modules
+              line="br_netfilter"
 
 - name: ubuntu - loading br_netfilter module
   command: 'modprobe br_netfilter'
 
 
 - name: ubuntu - copy global network config file
-  copy: src=ubuntu/etc_network_interfaces
+  copy: src=ubuntu-common/etc_network_interfaces
         dest=/etc/network/interfaces
         owner=root
         group=root
@@ -36,7 +37,7 @@
         state=directory
 
 - name: ubuntu - copy primary network interface config (DHCP)
-  template: src=ubuntu/primary_interface_dhcp_cfg
+  template: src=ubuntu-common/primary_interface_dhcp_cfg
             dest=/etc/network/interfaces.d/{{primary_interface_name}}.cfg
             owner=root
             group=root
@@ -44,17 +45,20 @@
 
 
 - name: ubuntu - config dummy module options
-  lineinfile: dest=/etc/modprobe.d/dummy.conf line="options dummy numdummies=6" create=yes
+  lineinfile: dest=/etc/modprobe.d/dummy.conf
+              line="options dummy numdummies=6"
+              create=yes
 
 - name: ubuntu - config dummy module
-  lineinfile: dest=/etc/modules line="dummy"
+  lineinfile: dest=/etc/modules
+              line="dummy"
 
 - name: ubuntu - loading dummy module
   command: 'modprobe dummy'
 
 
 - name: ubuntu - copy dummy0 config file for LBR
-  copy: src=ubuntu/interface_dummy0_lbr
+  copy: src=ubuntu-common/interface_dummy0_lbr
         dest=/etc/network/interfaces.d/dummy0.cfg
         owner=root
         group=root
@@ -66,7 +70,7 @@
   when: br_mode == 'LBR'
 
 - name: ubuntu - copy dummy1 config file for LBR
-  copy: src=ubuntu/interface_dummy1_lbr
+  copy: src=ubuntu-common/interface_dummy1_lbr
         dest=/etc/network/interfaces.d/dummy1.cfg
         owner=root
         group=root
@@ -79,7 +83,7 @@
 
 
 - name: ubuntu - copy dummy0 config file for OVS
-  copy: src=ubuntu/interface_br-ex_ovs
+  copy: src=ubuntu-common/interface_br-ex_ovs
         dest=/etc/network/interfaces.d/br-ex.cfg
         owner=root
         group=root
@@ -87,7 +91,7 @@
   when: br_mode == 'OVS'
 
 - name: ubuntu - copy dummy1 config file for OVS
-  copy: src=ubuntu/interface_dummy1_ovs
+  copy: src=ubuntu-common/interface_dummy1_ovs
         dest=/etc/network/interfaces.d/dummy1.cfg
         owner=root
         group=root
