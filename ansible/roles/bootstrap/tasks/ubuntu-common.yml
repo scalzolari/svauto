@@ -65,6 +65,7 @@
     - tzdata
     - vim-nox
     - pm-utils
+    - conntrack
     - iptraf-ng
     - subnetcalc
     - traceroute

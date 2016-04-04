@@ -103,6 +103,7 @@
     - man-pages
     - bind-utils
     - traceroute
+    - conntrack-tools
 
 
 - name: centos6 - copy SSH Daemon config
