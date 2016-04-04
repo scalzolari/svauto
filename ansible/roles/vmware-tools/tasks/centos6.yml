@@ -12,13 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: centos6.yml
-  when: base_os == 'centos67'
+# Only for CentOS 6.*
+- name: centos6 - yum configuring VMWare Tools repository
+  copy: src=VMware-Tools.repo
+        dest=/etc/yum.repos.d/VMware-Tools.repo
+        owner=root
+        group=root
+        mode=0644
 
 
-- include: centos7.yml
-  when: base_os == 'centos72'
+- name: centos6 - yum installing VMWare Tools
+  yum: pkg=vmware-tools-esx-nox state=latest
 
 
-- include: ubuntu.yml
-  when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
+- name: centos6 - service enabling VMWare Tools
+  service: name=vmware-tools-services state=started enabled=yes

@@ -12,11 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Installing VMWare Tools
-  yum: pkg={{item}} state=installed
+- name: ubuntu - apt installing VMWare Tools
+  apt: pkg={{item}} state=latest
   with_items:
     - open-vm-tools
-
-
-- name: Ensure Open VM Tools is running (and enable it at boot)
-  service: name=vmtoolsd state=started enabled=yes

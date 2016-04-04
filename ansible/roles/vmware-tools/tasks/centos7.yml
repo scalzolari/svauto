@@ -12,18 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Only for CentOS 6.*
-- name: Configuring VMWare Tools repository
-  copy: src=VMware-Tools.repo
-        dest=/etc/yum.repos.d/VMware-Tools.repo
-        owner=root
-        group=root
-        mode=0644
+- name: centos7 - yum installing VMWare Tools
+  yum: pkg={{item}} state=latest
+  with_items:
+    - open-vm-tools
 
 
-- name: Installing VMWare Tools
-  yum: pkg=vmware-tools-esx-nox state=installed
-
-
-- name: Ensure VMWare Tools is running (and enable it at boot)
-  service: name=vmware-tools-services state=started enabled=yes
+- name: centos7 - service enabling VMWare Tools
+  service: name=vmtoolsd state=started enabled=yes
