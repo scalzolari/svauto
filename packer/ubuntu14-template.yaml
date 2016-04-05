@@ -73,12 +73,6 @@
       "extra_arguments": [
           "--extra-vars \"\""
       ]
-    },
-    {
-      "type": "shell",
-      "scripts": [
-            "packer/scripts/ubuntu14-cleanup.sh"
-      ]
     }
   ]
 }

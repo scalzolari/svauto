@@ -12,31 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#- name: centos | yum removing old kernels
-#  shell: package-cleanup --oldkernels --count=2 -y
+- name: ubuntu | include config
+  include: ubuntu.yml
+  when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
 
 
-- name: centos | yum cleaning up cache
-  shell: yum clean all
-
-
-- name: centos | deleting files
-  file: path={{ item }}
-        state=absent
-  with_items:
-    - /etc/udev/rules.d/70-persistent-net.rules
-  when: is_packer_building == 'yes'
-
-
-- name: removing SSH Host keys
-  command: rm -f /etc/ssh/ssh_host_*
-
-
-- name: write zeroes
-  shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY
-  when: is_packer_building == 'yes'
-
-
-- name: running sync
-  command: sync
-  when: is_packer_building == 'yes'
+- name: centos | include config
+  include: centos.yml
+  when: base_os == 'centos72' or base_os == 'centos67'
