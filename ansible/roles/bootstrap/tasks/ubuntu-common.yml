@@ -33,6 +33,7 @@
     - htop
     - bmon
     - nmap
+    - gdisk
     - unzip
     - ngrep
     - iftop
@@ -65,12 +66,14 @@
     - tzdata
     - vim-nox
     - pm-utils
+    - xfsprogs
     - conntrack
     - iptraf-ng
     - subnetcalc
     - traceroute
     - sysfsutils
     - nbd-client
+    - btrfs-tools
     - python-mysqldb
     - python-httplib2
     - silversearcher-ag
