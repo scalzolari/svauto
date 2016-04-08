@@ -28,6 +28,7 @@
     - zip
     - git
     - zsh
+    - lftp
     - tmux
     - curl
     - htop
