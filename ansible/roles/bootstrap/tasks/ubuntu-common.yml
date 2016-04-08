@@ -79,6 +79,7 @@
     - python-httplib2
     - silversearcher-ag
     - command-not-found
+    - linux-image-generic
     - ubuntu-cloud-keyring
 
 
