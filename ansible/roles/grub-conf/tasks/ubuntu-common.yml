@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | grub custom config
+- name: ubuntu - grub custom config
   copy: src=ubuntu/grub_defaults
         dest=/etc/default/grub
         owner=root
@@ -20,5 +20,5 @@
         mode=0644
 
 
-- name: ubuntu | grub updating config
+- name: ubuntu - grub updating config
   command: update-grub

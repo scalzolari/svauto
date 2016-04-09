@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos6 | grub custom config
+- name: centos6 - grub custom config
   lineinfile: dest=/etc/grub.conf
               insertafter='^hiddenmenu'
               line='serial --unit=0 --speed=115200\nterminal --timeout=5 serial console'
