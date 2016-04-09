@@ -12,15 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#- name: centos | yum removing old kernels
-#  shell: package-cleanup --oldkernels --count=2 -y
+- name: centos - yum removing old kernels, keep two around
+  shell: package-cleanup --oldkernels --count=2 -y
+  when: is_packer_building != 'yes'
 
 
-- name: centos | yum cleaning up cache
+- name: centos - yum cleaning up cache
   shell: yum clean all
 
 
-- name: centos | deleting files
+- name: centos - deleting files
   file: path={{ item }}
         state=absent
   with_items:
@@ -28,15 +29,15 @@
   when: is_packer_building == 'yes'
 
 
-- name: removing SSH Host keys
+- name: centos - removing SSH Host keys
   command: rm -f /etc/ssh/ssh_host_*
+  when: is_packer_building == 'yes'
 
 
-- name: write zeroes
+- name: centos - write zeroes
   shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY
   when: is_packer_building == 'yes'
 
 
-- name: running sync
+- name: centos - running sync
   command: sync
-  when: is_packer_building == 'yes'

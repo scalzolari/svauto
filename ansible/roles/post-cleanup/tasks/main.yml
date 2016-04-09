@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | include config
+- name: ubuntu - include config
   include: ubuntu.yml
   when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
 
 
-- name: centos | include config
+- name: centos - include config
   include: centos.yml
   when: base_os == 'centos72' or base_os == 'centos67'

@@ -16,6 +16,14 @@
   shell: apt-get clean
 
 
+- name: ubuntu - apt autoremoving unused packages, old kernels
+  shell: apt-get -y autoremove
+
+
+- name: ubuntu - dpkg autoremoving remainings of uninstalled packages
+  shell: purge_uninstalled_packages=$(dpkg -l | grep ^rc | awk $'{print $2}' | xargs) ; if [ ! -z "$purge_uninstalled_packages" ] ; then dpkg -P $purge_uninstalled_packages ; fi
+
+
 - name: ubuntu - deleting files
   file: path={{ item }}
         state=absent
@@ -26,6 +34,7 @@
 
 - name: ubuntu - removing SSH Host keys
   command: rm -f /etc/ssh/ssh_host_*
+  when: is_packer_building == 'yes'
 
 
 - name: ubuntu - write zeroes
@@ -35,4 +44,3 @@
 
 - name: ubuntu - running sync
   command: sync
-  when: is_packer_building == 'yes'
