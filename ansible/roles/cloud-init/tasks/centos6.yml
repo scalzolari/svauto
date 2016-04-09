@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos6 | yum install EPEL release
+- name: centos6 - yum install EPEL release
   yum: pkg=http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
 
-- name: centos6 | yum install Cloud Init
+- name: centos6 - yum install Cloud Init
   yum: pkg={{item}} state=latest
   with_items:
     - cloud-init
@@ -24,11 +24,11 @@
     - dracut-modules-growroot
  
 
-- name: centos6 | dracut updating CentOS RAMDisk
+- name: centos6 - dracut updating CentOS RAMDisk
   command: dracut -f
 
 
-- name: centos6 | copy Cloud Init config file
+- name: centos6 - copy Cloud Init config file
   copy: src=10_timeouts.cfg
         dest=/etc/cloud/cloud.cfg.d/10_timeouts.cfg
         owner=root

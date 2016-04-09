@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | apt installing Cloud Init
+- name: ubuntu - apt installing Cloud Init
   apt: pkg={{item}} state=latest
   with_items:
     - cloud-init
