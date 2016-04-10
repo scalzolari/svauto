@@ -21,7 +21,7 @@
 
 
 - name: ubuntu14 - apt installing Linux 4.4 for Trusty
-  apt: name={{item}} state=latest
+  apt: name={{item}} state=installed update_cache=yes
   with_items:
     - linux-generic-lts-xenial
 

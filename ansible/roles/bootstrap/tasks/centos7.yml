@@ -56,7 +56,7 @@
 
 
 - name: centos7 - yum installing basic tools
-  yum: pkg={{item}} state=installed
+  yum: pkg={{item}} state=latest update_cache=yes
   with_items:
     - at
     - git

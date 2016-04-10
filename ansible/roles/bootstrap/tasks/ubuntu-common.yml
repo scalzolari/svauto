@@ -12,16 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - apt updating O.S. with 'apt update'
-  apt: update_cache=yes
-
-- name: ubuntu - apt upgrading O.S. with 'apt full-upgrade'
-  apt: upgrade=dist
+- name: ubuntu - apt upgrading O.S.
+  apt: upgrade=dist update_cache=yes
   when: base_os_upgrade == 'yes'
 
 
 - name: ubuntu - apt installing basic tools
-  apt: name={{item}} state=latest
+  apt: name={{item}} state=latest update_cache=yes
   with_items:
     - pv
     - gpm
@@ -81,6 +78,14 @@
     - command-not-found
     - linux-image-generic
     - ubuntu-cloud-keyring
+
+
+- name: ubuntu - updating Init RAMDisk
+  shell: update-initramfs -k all -u
+
+
+- name: ubuntu - grub updating menu
+  shell: update-grub
 
 
 - name: ubuntu - copy root's htop config directory
