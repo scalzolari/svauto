@@ -50,6 +50,7 @@
     - netcat
     - telnet
     - openssl
+    - numactl
     - sysstat
     - ansible
     - iptables
@@ -67,6 +68,7 @@
     - xfsprogs
     - conntrack
     - iptraf-ng
+    - hugepages
     - subnetcalc
     - traceroute
     - sysfsutils

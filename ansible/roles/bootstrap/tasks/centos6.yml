@@ -97,6 +97,7 @@
     - sysstat 
     - rsyslog
     - tcpdump  
+    - numactl
     - mlocate
     - ansible
     - pciutils 
@@ -106,6 +107,7 @@
     - bind-utils
     - traceroute
     - conntrack-tools
+    - libhugetlbfs-utils
 
 
 - name: centos6 - copy SSH Daemon config
