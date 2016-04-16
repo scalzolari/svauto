@@ -103,5 +103,18 @@
   when: br_mode == 'OVS'
 
 
+- name: ubuntu - copy new rc.local
+  copy: src=ubuntu-common/rc.local.j2
+        dest=/etc/rc.local
+        owner=root
+        group=root
+        mode=0644
+
+
+- name: ubuntu - running /etc/rc.local
+  command: '/etc/rc.local'
+  when: openstack_installation: == 'yes'
+
+ 
 - name: ubuntu - re-read facts after configuring network interfaces
   setup: filter=ansible_*

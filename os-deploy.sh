@@ -259,34 +259,3 @@ else
         	ansible-playbook site-openstack.yml
 	fi
 fi
-
-
-# Tell about iptables required rules and configure it at /etc/rc.local:
-if [ "$DRYRUN" == "yes" ]
-then
-
-        echo
-	echo "WARNING!!!"
-        echo "Not telling about iptables neither configuring it at /etc/rc.local."
-
-else
- 
-	# Displaying information about the need for an iptables MASQUERADE rule.
-	echo 
-	echo "You'll need an iptables MASQUERADE rule to allow your Instances to reach the"
-	echo "Internet, so, lets add the following line to your /etc/rc.local file:"
-	echo
-	echo "iptables -t nat -I POSTROUTING 1 -o $PRIMARY_INTERFACE -j MASQUERADE"
-	
-	sudo sed -i -e '/exit/d' /etc/rc.local
-	
-	sudo tee --append /etc/rc.local > /dev/null <<EOF
-iptables -t nat -I POSTROUTING 1 -o $PRIMARY_INTERFACE -j MASQUERADE
-EOF
-	
-	echo
-	echo "Running /etc/rc.local for you..."
-	
-	sudo /etc/rc.local
-
-fi

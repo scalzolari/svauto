@@ -58,21 +58,16 @@ sed -i -e 's/{{ubuntu_user}}/'$WHOAMI'/g' ansible/group_vars/all
 
 DEFAULT_GW_INT=eth0
 
+
 echo 
 echo "Your primary network interface is:"
 echo "dafault route via:" $DEFAULT_GW_INT
 
+
 echo
 echo "Preparing Ansible templates based on current default gateway interface..."
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/nova_aio/templates/nova.conf
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/cinder/templates/cinder.conf
-
-
-echo 
-echo "After the deployment, you'll need a iptables MASQUERADE rule to allow your"
-echo "Instances to reach the Internet, add the following to your /etc/rc.local:"
-echo
-echo "iptables -t nat -I POSTROUTING 1 -o $DEFAULT_GW_INT -j MASQUERADE"
+sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/os_nova_aio/templates/mitaka/nova.conf
+sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/os_cinder/templates/mitaka/cinder.conf
 
 
 echo
