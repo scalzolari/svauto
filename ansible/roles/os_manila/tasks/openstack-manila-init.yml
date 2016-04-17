@@ -27,12 +27,12 @@
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
-  - openstack endpoint create --region "{{region}}" share public http://controller:8786/v1/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" share internal http://controller:8786/v1/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" share admin http://controller:8786/v1/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" sharev2 public http://controller:8786/v2/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" sharev2 internal http://controller:8786/v2/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" sharev2 admin http://controller:8786/v2/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" share public http://{{public_addr}}:8786/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" share internal http://{{controller_addr}}:8786/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" share admin http://{{controller_addr}}:8786/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" sharev2 public http://{{public_addr}}:8786/v2/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" sharev2 internal http://{{controller_addr}}:8786/v2/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" sharev2 admin http://{{controller_addr}}:8786/v2/%\(tenant_id\)s
 
 
 - name: Creating OpenStack Manila User and Role
