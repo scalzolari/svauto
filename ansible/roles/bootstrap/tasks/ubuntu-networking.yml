@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-#- name: Blacklist nf_conntrack module
+#- name: ubuntu - module nf_conntrack blacklisted
 #  lineinfile: dest=/etc/modprobe.d/blacklist.conf line="blacklist nf_conntrack"
 
 
@@ -82,7 +82,7 @@
   when: br_mode == 'LBR'
 
 
-- name: ubuntu - copy dummy0 config file for OVS
+- name: ubuntu - copy br-ex config file for OVS
   copy: src=ubuntu-common/interface_br-ex_ovs
         dest=/etc/network/interfaces.d/br-ex.cfg
         owner=root

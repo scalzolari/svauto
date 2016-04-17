@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - apt upgrading O.S.
+- name: ubuntu - apt full-upgrade
   apt: upgrade=dist update_cache=yes
   when: base_os_upgrade == 'yes'
 

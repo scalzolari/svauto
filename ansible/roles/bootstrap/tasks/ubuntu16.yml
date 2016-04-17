@@ -20,10 +20,6 @@
         mode=0644
 
 
-- name: ubuntu16 - apt updating
-  apt: update_cache=yes
-
-
 - name: ubuntu16 - apt installing basic tools
   apt: name={{item}} state=latest update_cache=yes
   with_items:

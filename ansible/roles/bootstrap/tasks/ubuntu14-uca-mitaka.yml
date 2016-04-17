@@ -17,4 +17,4 @@
 
 
 - name: ubuntu14 - apt Installing Cloud Archive Keyring
-  apt: name=ubuntu-cloud-keyring state=latest
+  apt: name=ubuntu-cloud-keyring state=latest update_cache=yes
