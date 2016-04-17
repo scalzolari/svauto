@@ -103,21 +103,8 @@
   when: br_mode == 'OVS'
 
 
-- name: ubuntu - copy new rc.local
-  template: src=ubuntu-common/rc.local.j2
-            dest=/etc/rc.local
-            owner=root
-            group=root
-            mode=0755
-
-
-- name: ubuntu - running /etc/rc.local
-  command: '/etc/rc.local'
-  when: openstack_installation == 'yes'
-
-
-# TODO: iptables module instead of rc.local above
-# - iptables: table=nat chain=POSTROUTING out_interface="{{primary_interface_name}}" jump=MASQUERADE comment="Masquerade rule for demo box"
+- name: ubuntu - iptables rule for OpenStack AIO demo box
+  iptables: table=nat chain=POSTROUTING out_interface="{{primary_interface_name}}" jump=MASQUERADE comment="Masquerade rule for OpenStack demo box"
 
  
 - name: ubuntu - re-read facts after configuring network interfaces
