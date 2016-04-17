@@ -45,16 +45,6 @@
   notify: reload-apache2
 
 
-#- name: Updating keystone-paste.ini
-#  copy: src={{openstack_release}}/keystone-paste.ini
-#        dest=/etc/keystone/keystone-paste.ini
-#        owner=root
-#        group=root
-#        mode=0644
-#        backup=yes
-#  notify: reload-apache2
-
-
 - name: Populating Keystone Database
   shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
 
@@ -97,6 +87,22 @@
 - meta: flush_handlers
 
 
+- include: openstack-keystone-init.yml
+  when: openstack_installation == 'yes'
+
+
+- name: Updating keystone-paste.ini
+  copy: src={{openstack_release}}/keystone-paste.ini
+        dest=/etc/keystone/keystone-paste.ini
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+  notify: reload-apache2
+
+
+- meta: flush_handlers
+
+
 - name: Copying OpenStack RC files for your current system user
   include: openrc-files.yml
-  when: openstack_installation == 'yes'

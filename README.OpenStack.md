@@ -42,7 +42,6 @@ D- Your `IP + FQDN + hostname + aliases` should be configured in your `/etc/host
 
     sudo apt update
     sudo apt -y full-upgrade
-    sudo apt -y install linux-generic-lts-vivid
     sudo reboot
 
 ## 3- Basic requirements:
@@ -84,7 +83,7 @@ Make sure it is working:
 
 Then, you'll be able to deploy `OpenStack` by running:
 
-    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/os-install.sh)
+    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/os-install-lbr.sh)
 
 Well done!
 
@@ -104,6 +103,8 @@ Well done!
       mtu 1550
       address 10.0.0.1
       netmask 24
+
+*NOTE: Dummy interfaces can be managed by ansible (hardcoded settings)*
 
 ## For local deployments:
 

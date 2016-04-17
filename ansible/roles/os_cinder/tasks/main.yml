@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- include: openstack-cinder-init.yml
+  when: openstack_installation == 'yes'
+
+
 - name: Installing Cinder Server
   apt: name={{item}} state=latest
   with_items:

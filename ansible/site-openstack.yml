@@ -30,7 +30,6 @@
   - role: os_memcached
   - role: apache2
   - role: os_keystone
-  - role: os_openstack_data
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
@@ -59,7 +58,6 @@
   - role: os_memcached
   - role: apache2
   - role: os_keystone
-  - role: os_openstack_data
   - role: os_glance
   - role: os_glance_images
 #  - role: os_nova_ctrl
@@ -101,7 +99,6 @@
   - role: os_memcached
   - role: apache2
   - role: os_keystone
-  - role: os_openstack_data
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
