@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: Wait a bit until Neutron starts up properly...
+  pause: seconds=10
+
+
 - name: Creating Neutron External Network
   environment: "{{admin_openrc_env}}"
   shell: neutron net-create ext-net --router:external --provider:physical_network external --provider:network_type flat
@@ -19,5 +23,12 @@
 
 - name: Creating Neutron External Subnet
   environment: "{{admin_openrc_env}}"
-  shell: neutron subnet-create ext-net --name ext-subnet --allocation-pool start={{ext_net_start}},end={{ext_net_end}} --disable-dhcp --gateway {{ext_net_gateway}} {{ext_net_subnet}}
-  when: openstack_installation == 'yes'
+  os_subnet:
+    state: present
+    network_name: ext-net
+    name: ext-subnet
+    enable_dhcp: False
+    cidr: "{{ext_net_subnet}}"
+    allocation_pool_start: "{{ext_net_start}}"
+    allocation_pool_end: "{{ext_net_end}}"
+    gateway_ip: "{{ext_net_gateway}}"

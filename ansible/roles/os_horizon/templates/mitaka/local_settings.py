@@ -54,10 +54,9 @@ WEBROOT = '/'
 # service API. For example, The identity service APIs have inconsistent
 # use of the decimal point, so valid options would be 2.0 or 3.
 OPENSTACK_API_VERSIONS = {
-    "data-processing": 1.1,
     "identity": 3,
+    "image": 2,
     "volume": 2,
-    "compute": 2
 }
 
 # Set this to True if running on multi-domain model. When this is enabled, it
@@ -66,6 +65,10 @@ OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
 
 # Overrides the default domain used when running on single-domain model
 # with Keystone V3. All entities will be created in the default domain.
+# NOTE: This value must be the ID of the default domain, NOT the name.
+# Also, you will most likely have a value in the keystone policy file like this
+#    "cloud_admin": "rule:admin_required and domain_id:<your domain id>"
+# This value must match the domain id specified there.
 OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'
 
 # Set this to True to enable panels that provide the ability for users to
@@ -122,11 +125,14 @@ SECRET_KEY = secret_key.generate_or_read_from_file('/var/lib/openstack-dashboard
 # We recommend you use memcached for development; otherwise after every reload
 # of the django development server, you will have to login again. To use
 # memcached set CACHES to something like
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '{{controller_addr}}:11211',
-    }
+    },
 }
 
 #CACHES = {
@@ -175,7 +181,7 @@ OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 #    ("oidc", _("OpenID Connect")),
 #    ("saml2", _("Security Assertion Markup Language")),
 #    ("acme_oidc", "ACME - OpenID Connect"),
-#    ("acme_saml2", "ACME - SAML2")
+#    ("acme_saml2", "ACME - SAML2"),
 #)
 
 # A dictionary of specific identity provider and federation protocol
@@ -187,7 +193,7 @@ OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 # NOTE: The value is expected to be a tuple formatted as: (<idp_id>, <protocol_id>).
 #WEBSSO_IDP_MAPPING = {
 #    "acme_oidc": ("acme", "oidc"),
-#    "acme_saml2": ("acme", "saml2")
+#    "acme_saml2": ("acme", "saml2"),
 #}
 
 # Disable SSL certificate checks (useful for self-signed certificates):
@@ -232,7 +238,7 @@ LAUNCH_INSTANCE_NG_ENABLED = True
 # A dictionary of settings which can be used to provide the default values for
 # properties found in the Launch Instance modal.
 #LAUNCH_INSTANCE_DEFAULTS = {
-#    'config_drive': False
+#    'config_drive': False,
 #}
 
 # The Xen Hypervisor has the ability to set the mount point for volumes
@@ -293,7 +299,7 @@ OPENSTACK_NEUTRON_NETWORK = {
     # port.
     # VNIC types include 'normal', 'macvtap' and 'direct'.
     # Set to empty list or None to disable VNIC type selection.
-    'supported_vnic_types': ['*']
+    'supported_vnic_types': ['*'],
 }
 
 # The OPENSTACK_HEAT_STACK settings can be used to disable password
@@ -317,9 +323,9 @@ OPENSTACK_HEAT_STACK = {
 #        ('qcow2', _('QCOW2 - QEMU Emulator')),
 #        ('raw', _('Raw')),
 #        ('vdi', _('VDI - Virtual Disk Image')),
-#        ('vhd', ('VHD - Virtual Hard Disk')),
+#        ('vhd', _('VHD - Virtual Hard Disk')),
 #        ('vmdk', _('VMDK - Virtual Machine Disk')),
-#    ]
+#    ],
 #}
 
 # The IMAGE_CUSTOM_PROPERTY_TITLES settings is used to customize the titles for
@@ -539,7 +545,7 @@ LOGGING = {
             'handlers': ['null'],
             'propagate': False,
         },
-    }
+    },
 }
 
 # 'direction' should not be specified for all_tcp/udp/icmp.
@@ -724,7 +730,7 @@ except ImportError:
 # By default, validation of the HTTP Host header is disabled.  Production
 # installations should have this set accordingly.  For more information
 # see https://docs.djangoproject.com/en/dev/ref/settings/.
-ALLOWED_HOSTS = '*'
+ALLOWED_HOSTS = ['*', ]
 
 # Compress all assets offline as part of packaging installation
 COMPRESS_OFFLINE = True

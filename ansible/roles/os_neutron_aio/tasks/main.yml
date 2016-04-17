@@ -16,9 +16,9 @@
   apt: name={{item}} state=latest
   with_items:
     - neutron-server
-    - neutron-plugin-ml2
     - neutron-l3-agent
     - neutron-dhcp-agent
+    - neutron-plugin-ml2
     - neutron-metadata-agent
   notify: restart-neutron
 
@@ -28,9 +28,7 @@
   notify: restart-neutron-lbr
 
 - name: Installing Neutron Open vSwitch Agent
-  apt: name={{item}} state=latest
-  with_items:
-    - neutron-openvswitch-agent
+  apt: name=neutron-openvswitch-agent state=latest
   when: br_mode == 'OVS'
   notify: restart-neutron-ovs
 

@@ -130,10 +130,13 @@ openstack_release: "mitaka"
 
 primary_interface_name: "eth0"
 
+neutron_external_interface: "dummy0"
+neutron_data_interface: "dummy1"
+
 br_mode: "LBR"
 
 linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"
-neutron_interface_driver: "linuxbridge"
+neutron_interface_driver: "neutron.agent.linux.interface.BridgeInterfaceDriver"
 mechanism_drivers: "linuxbridge"
 firewall_driver: "neutron.agent.linux.iptables_firewall.IptablesFirewallDriver"
 
@@ -159,11 +162,10 @@ openstack_env:
   OS_TOKEN: "{{admin_token}}"
   OS_URL: "http://{{controller_addr}}:35357/v3"
   OS_IDENTITY_API_VERSION: "3"
-  OS_BOOTSTRAP_PASSWORD: "{{admin_password}}"
 
 demo_openrc_env:
-  OS_PROJECT_DOMAIN_ID: "default"
-  OS_USER_DOMAIN_ID: "default"
+  OS_PROJECT_DOMAIN_NAME: "default"
+  OS_USER_DOMAIN_NAME: "default"
   OS_PROJECT_NAME: "demo"
   OS_USERNAME: "demo"
   OS_PASSWORD: "demo_pass"
@@ -172,8 +174,8 @@ demo_openrc_env:
   OS_IMAGE_API_VERSION: "1"
 
 admin_openrc_env:
-  OS_PROJECT_DOMAIN_ID: "default"
-  OS_USER_DOMAIN_ID: "default"
+  OS_PROJECT_DOMAIN_NAME: "default"
+  OS_USER_DOMAIN_NAME: "default"
   OS_PROJECT_NAME: "admin"
   OS_USERNAME: "admin"
   OS_PASSWORD: "admin_pass"
@@ -195,6 +197,7 @@ mysql_databases:
   - { os_project: "cinder", db_name: "cinder", db_host: "%", db_user: "cinderUser", db_pass: "cinderPass" }
   - { os_project: "heat", db_name: "heat", db_host: "%", db_user: "heatUser", db_pass: "heatPass" }
   - { os_project: "trove", db_name: "trove", db_host: "%", db_user: "troveUser", db_pass: "trovePass" }
+  - { os_project: "manila", db_name: "manila", db_host: "%", db_user: "manilaUser", db_pass: "manilaPass" }
 
 # TODO: Remove the following lines, in favor of "mysql_databases / os_project logic":
 nova_api_db_name: "nova_api"

@@ -16,10 +16,6 @@
   environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
-  # Identify v2.0
-  #- openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v2.0
-  #- openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v2.0
-  #- openstack endpoint create --region "{{region}}" identity admin http://{{controller_addr}}:35357/v2.0
   # Identify v3
   - openstack endpoint create --region "{{region}}" identity public http://{{public_addr}}:5000/v3
   - openstack endpoint create --region "{{region}}" identity internal http://{{controller_addr}}:5000/v3
@@ -29,13 +25,9 @@
   - openstack endpoint create --region "{{region}}" image internal http://{{controller_addr}}:9292
   - openstack endpoint create --region "{{region}}" image admin http://{{controller_addr}}:9292
   # Compute
-  - openstack endpoint create --region "{{region}}" compute public http://{{public_addr}}:8774/v2/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" compute internal http://{{controller_addr}}:8774/v2/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" compute admin http://{{controller_addr}}:8774/v2/%\(tenant_id\)s
-  # Compute v3
-  #- openstack endpoint create --region "{{region}}" computev3 public http://{{public_addr}}:8774/v3
-  #- openstack endpoint create --region "{{region}}" computev3 internal http://{{controller_addr}}:8774/v3
-  #- openstack endpoint create --region "{{region}}" computev3 admin http://{{controller_addr}}:8774/v3
+  - openstack endpoint create --region "{{region}}" compute public http://{{public_addr}}:8774/v2.1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" compute internal http://{{controller_addr}}:8774/v2.1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" compute admin http://{{controller_addr}}:8774/v2.1/%\(tenant_id\)s
   # Network
   - openstack endpoint create --region "{{region}}" network public http://{{public_addr}}:9696
   - openstack endpoint create --region "{{region}}" network internal http://{{controller_addr}}:9696
@@ -48,10 +40,11 @@
   - openstack endpoint create --region "{{region}}" object-store public http://{{public_addr}}:8080/v1/AUTH_%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" object-store internal http://{{controller_addr}}:8080/v1/AUTH_%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" object-store admin http://{{controller_addr}}:8080/v1
-  # Heat
+  # Heat - Orchestration
   - openstack endpoint create --region "{{region}}" orchestration public http://{{public_addr}}:8004/v1/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" orchestration internal http://{{controller_addr}}:8004/v1/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" orchestration admin http://{{controller_addr}}:8004/v1/%\(tenant_id\)s
+  # Heat - Cloudformation
   - openstack endpoint create --region "{{region}}" cloudformation public http://{{public_addr}}:8000/v1
   - openstack endpoint create --region "{{region}}" cloudformation internal http://{{controller_addr}}:8000/v1
   - openstack endpoint create --region "{{region}}" cloudformation admin http://{{controller_addr}}:8000/v1
@@ -63,3 +56,11 @@
   - openstack endpoint create --region "{{region}}" metering public http://{{public_addr}}:8777
   - openstack endpoint create --region "{{region}}" metering internal http://{{controller_addr}}:8777
   - openstack endpoint create --region "{{region}}" metering admin http://{{controller_addr}}:8777
+  # Manila
+  - openstack endpoint create --region "{{region}}" share public http://controller:8786/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" share internal http://controller:8786/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" share admin http://controller:8786/v1/%\(tenant_id\)s
+  # Manila v2
+  - openstack endpoint create --region "{{region}}" sharev2 public http://controller:8786/v2/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" sharev2 internal http://controller:8786/v2/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" sharev2 admin http://controller:8786/v2/%\(tenant_id\)s

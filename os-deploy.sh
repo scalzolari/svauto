@@ -48,7 +48,7 @@ case $i in
 
         --dry-run)
 
-	        DRYRUN="yes"
+	        DRY_RUN="yes"
 		shift
         	;;
 
@@ -86,13 +86,11 @@ fi
 
 
 # Doing CPU checks
-if [ "$DRYRUN" == "yes" ]
+if [ "$DRY_RUN" == "yes" ]
 then
 
 	echo
-	echo "WARNING!!!"
-	echo
-        echo "Not running CPU checks..."
+        echo "Not running CPU checks on --dry-run..."
 
 else
  
@@ -168,22 +166,26 @@ fi
 echo
 echo "The detected local configuration are:"
 echo
-echo "You are:" $WHOAMI
-echo "Hostname:" $HOSTNAME
-echo "FQDN:" $FQDN
-echo "Domain:" $DOMAIN
+echo -e "* Username:"'\t'$WHOAMI
+echo -e "* Hostname:"'\t'$HOSTNAME
+echo -e "* FQDN:"'\t''\t'$FQDN
+echo -e "* Domain:"'\t'$DOMAIN
 
+
+# Message about ansible/group_vars/all configuration
+echo
+echo "Configuring your ansible/group_vars/all file, as follows:"
 
 # Configuring Bridge Mode on group_vars/all
 echo
-echo "Configuring Bridge Mode to "$BR_MODE" on ansible/group_vars/all file..."
+echo "* The Bridge Mode is set to "$BR_MODE"..."
 
 # http://docs.openstack.org/networking-guide/scenario_legacy_lb.html
 if [ "$BR_MODE" = "LBR" ]
 then
 	sed -i -e 's/br_mode:.*/br_mode: "LBR"/' ansible/group_vars/all
 	sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.NeutronLinuxBridgeInterfaceDriver"/' ansible/group_vars/all
-	sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "linuxbridge"/' ansible/group_vars/all
+	sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.BridgeInterfaceDriver"/' ansible/group_vars/all
 	sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "linuxbridge"/' ansible/group_vars/all
 	sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.linux.iptables_firewall.IptablesFirewallDriver"/' ansible/group_vars/all
 fi
@@ -193,7 +195,7 @@ if [ "$BR_MODE" = "OVS" ]
 then 
          sed -i -e 's/br_mode:.*/br_mode: "OVS"/' ansible/group_vars/all
          sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.LinuxOVSInterfaceDriver"/' ansible/group_vars/all
-         sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "openvswitch"/' ansible/group_vars/all
+         sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.OVSInterfaceDriver"/' ansible/group_vars/all
          sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "openvswitch"/' ansible/group_vars/all
          sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver"/' ansible/group_vars/all
 fi
@@ -201,7 +203,7 @@ fi
 
 # Configuring FQDN and Domain on group_vars/all
 echo
-echo "Configuring ansible/group_vars/all & ansible/hosts file based on current environment..."
+echo "* The detected settings like OpenStack release, Ubuntu, hostnames, etc..."
 
 sed -i -e 's/openstack_release:.*/openstack_release: "'$OPENSTACK_RELEASE'"/' ansible/group_vars/all
 
@@ -213,12 +215,10 @@ sed -i -e 's/ubuntu_network_setup:.*/ubuntu_network_setup: "yes"/' ansible/group
 sed -i -e 's/controller-1.yourdomain.com/'$FQDN'/g' ansible/group_vars/all
 sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
 
-sed -i -e 's/^#localhost/localhost/g' ansible/hosts
-
 
 # Configuring site-openstack.yml and some roles
 echo
-echo "Configuring ansible/group_vars/all with your current \"$WHOAMI\" user..."
+echo "* Your current \"$WHOAMI\" user..."
 
 sed -i -e 's/ubuntu_user:.*/ubuntu_user: "'$WHOAMI'"/g' ansible/group_vars/all
 
@@ -231,31 +231,35 @@ echo "Your primary network interface is:"
 echo "dafault route via:" $PRIMARY_INTERFACE
 
 echo
-echo "Preparing Ansible templates based on current default primary interface..."
+echo "* Preparing Ansible variable based on current default primary interface..."
 
 sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
 
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/os_nova_aio/templates/$OPENSTACK_RELEASE/nova.conf
-sed -i -e 's/eth0/'$PRIMARY_INTERFACE'/g' ansible/roles/os_cinder/templates/$OPENSTACK_RELEASE/cinder.conf
 
-
-echo
-echo "Running Ansible, deploying OpenStack:"
-if [ "$DRYRUN" == "yes" ]
+if [ "$DRY_RUN" == "yes" ]
 then
         echo
-	echo "WARNING!!!"
-        echo "Not running Ansible! Just preparing the environment variables..."
+        echo "Not running Ansible on --dry-run!"
+	echo "Just preparing the environment variables, so you can run Ansible manually, like:"
+	echo
+	echo "cd ~/svauto/ansible"
+	echo "ansible-playbook site-openstack.yml --extra-vars \"openstack_installation=yes\""
+	echo
+	echo "And a second run after a successful deployment:"
+	echo
+	echo "ansible-playbook site-openstack.yml"
+	echo
 else
-        echo
+	echo
+	echo "Running Ansible, deploying OpenStack:"
 
 	if [ "$OPENSTACK_INSTALLATION" == "yes" ];
 	then
 		cd ~/svauto/ansible
-        	ansible-playbook site-openstack.yml --extra-vars "openstack_installation=yes"
+        	ansible-playbook -c local site-openstack.yml --extra-vars "openstack_installation=yes"
 	else
 
 		cd ~/svauto/ansible
-        	ansible-playbook site-openstack.yml
+        	ansible-playbook -c local site-openstack.yml
 	fi
 fi

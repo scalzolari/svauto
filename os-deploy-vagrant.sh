@@ -21,12 +21,14 @@ FQDN=controller-1.yourdomain.com
 DOMAIN=yourdomain.com
 
 
+# Display local configuration
 echo
-echo "The local configuration:"
-echo "You are:" $WHOAMI
-echo Hostname: $HOSTNAME
-echo FQDN: $FQDN
-echo Domain: $DOMAIN
+echo "The detected local configuration are:"
+echo
+echo -e "* Username:"'\t'$WHOAMI
+echo -e "* Hostname:"'\t'$HOSTNAME
+echo -e "* FQDN:"'\t''\t'$FQDN
+echo -e "* Domain:"'\t'$DOMAIN
 
 
 if [ -z $HOSTNAME ]; then
@@ -65,9 +67,9 @@ echo "dafault route via:" $DEFAULT_GW_INT
 
 
 echo
-echo "Preparing Ansible templates based on current default gateway interface..."
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/os_nova_aio/templates/mitaka/nova.conf
-sed -i -e 's/eth0/'$DEFAULT_GW_INT'/g' ansible/roles/os_cinder/templates/mitaka/cinder.conf
+echo "Preparing Ansible variable based on current default gateway interface..."
+
+sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
 
 
 echo

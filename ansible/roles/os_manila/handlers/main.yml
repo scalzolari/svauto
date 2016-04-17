@@ -12,18 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-- name: restart-nova
-  service: name={{item}} state=started enabled=yes
+- name: restart-manila
+  service: name={{item}} state=restarted enabled=yes
   with_items:
-    - nova-api
-    - nova-cert
-    - nova-compute
-    - nova-conductor
-    - nova-scheduler
-    - nova-spiceproxy
-    - nova-consoleauth
-
-
-- name: restart-libvirt-bin
-  service: name=libvirt-bin state=restarted enabled=yes
+    - manila-scheduler
+    - manila-api

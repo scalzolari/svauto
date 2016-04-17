@@ -46,22 +46,17 @@
 
 
 #- name: Updating keystone-paste.ini
-#  cpy: src={{openstack_release}}/keystone-paste.ini
-#       dest=/etc/keystone/keystone-paste.ini
-#       owner=root
-#       group=root
-#       mode=0644
-#       backup=yes
+#  copy: src={{openstack_release}}/keystone-paste.ini
+#        dest=/etc/keystone/keystone-paste.ini
+#        owner=root
+#        group=root
+#        mode=0644
+#        backup=yes
 #  notify: reload-apache2
 
 
 - name: Populating Keystone Database
   shell: su -s /bin/sh -c "keystone-manage db_sync" keystone
-
-
-- name: Boostrap Keystone
-  environment: "{{openstack_env}}"
-  shell: keystone-manage bootstrap
 
 
 - name: Initialize Fernet keys
@@ -102,5 +97,6 @@
 - meta: flush_handlers
 
 
-- include: openrc-files.yml
+- name: Copying OpenStack RC files for your current system user
+  include: openrc-files.yml
   when: openstack_installation == 'yes'

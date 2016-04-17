@@ -17,7 +17,7 @@
 
 
 - name: Wait a bit until Glance starts up properly...
-  pause: seconds=3
+  pause: seconds=5
 
 
 - name: Adding a few Operating System images into Glance

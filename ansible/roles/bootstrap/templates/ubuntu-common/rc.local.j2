@@ -10,4 +10,4 @@
 #
 # By default this script does nothing.
 
-iptables -t nat -I POSTROUTING 1 -o ens3 -j MASQUERADE
+iptables -t nat -I POSTROUTING 1 -o {{primary_interface_name}} -j MASQUERADE

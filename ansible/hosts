@@ -24,7 +24,7 @@
 #
 
 [all-in-one]
-#localhost ansible_connection=local
+localhost
 
 [controller_nodes]
 #192.168.122.10

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: restart-heat
-  service: name=heat-api state=restarted enabled=yes
+  service: name={{item}} state=restarted enabled=yes
   with_items:
     - heat-api
     - heat-api-cfn

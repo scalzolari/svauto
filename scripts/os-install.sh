@@ -51,7 +51,7 @@ cd ~/svauto
 echo
 echo "Well done!"
 echo
-echo "Point your browser to http://$FQDN/horizon"
+echo "Point your browser to http://$FQDN"
 echo
 echo "The credentials for both admin and demo users are stored at the"
 echo "admin-openrc.sh and demo-openrc.sh files located inside your home."

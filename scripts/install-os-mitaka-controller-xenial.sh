@@ -45,13 +45,16 @@ echo
 echo "Bridge Mode: Linux Bridges"
 echo
 cd ~/svauto
-./os-deploy.sh --br-mode=LBR --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation
+./os-deploy.sh --br-mode=LBR --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation --os-controller
 
 
 echo
-echo "Well done!"
+echo "OpenStack Controller installed, well done!"
 echo
-echo "Point your browser to http://$FQDN"
+echo "Now you can continue to deply the rest of your OpenStack components."
+echo "After that, you'll be able to launch Instances or Stacks!"
+echo
+echo "Point your browser to http://$FQDN/horizon"
 echo
 echo "The credentials for both admin and demo users are stored at the"
 echo "admin-openrc.sh and demo-openrc.sh files located inside your home."

@@ -12,43 +12,51 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# "keystone bootstrap" already does:
-#
-# Created domain default
-# Created project admin
-# Created user admin
-# Created Role admin
-# Granted admin on admin to user admin.
-
 - name: Creating OpenStack Projects, Users and Roles
   environment: "{{openstack_env}}"
   command: "{{item}}"
   with_items:
-#  - openstack project create --domain default --description "Admin Project" admin
-#  - openstack user create --domain default --password "{{admin_password}}" --email admin@{{your_domain}} admin
-#  - openstack role create admin
-#  - openstack role add --project admin --user admin admin
+  # Keystone initial data, requires "openstack_env"
+  - openstack domain create --description "Default Domain" default
+  - openstack project create --domain default --description "Admin Project" admin
+  - openstack user create --domain default --password "{{admin_password}}" --email admin@{{your_domain}} admin
+  - openstack role create admin
+  - openstack role add --project admin --user admin admin
   - openstack project create --domain default --description "Service Project" service
   - openstack project create --domain default --description "Demo Project" demo
   - openstack user create --domain default --password "{{demo_password}}" --email demo@{{your_domain}} demo
   - openstack role create user
   - openstack role add --project demo --user demo user
+  # Glance
   - openstack user create --domain default --password "{{service_password}}" --email glance@{{your_domain}} glance
   - openstack role add --project service --user glance admin
+  # Nova
   - openstack user create --domain default --password "{{service_password}}" --email nova@{{your_domain}} nova
   - openstack role add --project service --user nova admin
+  # Neutron
   - openstack user create --domain default --password "{{service_password}}" --email neutron@{{your_domain}} neutron
   - openstack role add --project service --user neutron admin
+  # Cinder
   - openstack user create --domain default --password "{{service_password}}" --email cinder@{{your_domain}} cinder
   - openstack role add --project service --user cinder admin
+  # Swift
   - openstack user create --domain default --password "{{service_password}}" --email swift@{{your_domain}} swift
   - openstack role add --project service --user swift admin
+  # Heat
   - openstack user create --domain default --password "{{service_password}}" --email heat@{{your_domain}} heat
   - openstack role add --project service --user heat admin
+  - openstack domain create --description "Stack projects and users" heat
+  - openstack user create --domain heat --password "{{service_password}}" heat_domain_admin
+  - openstack role add --domain heat --user heat_domain_admin admin
   - openstack role create heat_stack_owner
   - openstack role add --project demo --user demo heat_stack_owner
   - openstack role create heat_stack_user
+  # Ceilometer
   - openstack user create --domain default --password "{{service_password}}" --email ceilometer@{{your_domain}} ceilometer
   - openstack role add --project service --user ceilometer admin
+  # Trove
   - openstack user create --domain default --password "{{service_password}}" --email trove@{{your_domain}} trove
   - openstack role add --project service --user trove admin
+  # Manila
+  - openstack user create --domain default --password "{{service_password}}" --email manila@{{your_domain}} manila
+  - openstack role add --project service --user manila admin
