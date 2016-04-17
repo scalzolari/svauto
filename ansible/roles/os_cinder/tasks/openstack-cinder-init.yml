@@ -15,7 +15,7 @@
 # Reference:
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/cinder-controller-install.html
 
-- name: Creating OpenStack Cinder Service
+- name: Creating OpenStack Cinder Services
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
@@ -27,9 +27,9 @@
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
-  - openstack endpoint create --region "{{region}}" volume public http://controller:8776/v1/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" volume internal http://controller:8776/v1/%\(tenant_id\)s
-  - openstack endpoint create --region "{{region}}" volume admin http://controller:8776/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" volume public http://{{public_addr}}:8776/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" volume internal http://{{controller_addr}}:8776/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" volume admin http://{{controller_addr}}:8776/v1/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 public http://{{public_addr}}:8776/v2/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 internal http://{{controller_addr}}:8776/v2/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 admin http://{{controller_addr}}:8776/v2/%\(tenant_id\)s
