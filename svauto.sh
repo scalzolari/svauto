@@ -178,64 +178,64 @@ then
 	# PTS stuff
 	#
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.30.0082 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.30.0202 --latest
 	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.30.0035 --latest
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svprotocols --version=16.02.2108 --latest
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svprotocols --version=16.02.2108 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svprotocols --version=16.03.2121 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svprotocols --version=16.03.2121 --latest
 
 	# Usage Management
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagementpts --version=5.00.0402 --latest
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagementpts --version=5.00.0402 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagementpts --version=5.20.0050 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagementpts --version=5.20.0050 --latest
 
 	# Experimental
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.40.0009 --latest-of-serie
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.40.0009 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svpts --version=7.40.0019 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svpts --version=7.40.0019 --latest-of-serie
 
 
 	#
 	# SDE stuff
 	#
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.30.0303 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.45.0087 --latest
 
 	# Usage Management
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagement --version=5.00.0402 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svusagemanagement --version=5.20.0050 --latest
 
 	# Subscriber Mapping
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.30.0101 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.45.0003 --latest
 
 
 	# Experimental
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.40.0025 --latest
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.45.0078 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.45.0087 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svsde --version=7.50.0019 --latest-of-serie
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.40.0055 --latest-of-serie
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.45.0078 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.45.0087 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsde --version=7.50.0019 --latest-of-serie
 
 	# Usage Management
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagement --version=5.00.0402 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=svusagemanagement --version=5.20.0050 --latest
 
 	# Subscriber Mapping
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.40.0005 --latest-of-serie
 	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.45.0003 --latest-of-serie
+#	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svsubscribermapping --version=7.45.0003 --latest-of-serie
 
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.40-0005 --latest
-	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.45-0003 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.45-0003 --latest
+#	./yum-repo-builder.sh --release=dev --base-os=centos72 --product=subscriber_mapping --version=7.45-0003 --latest-of-serie
 
 
 	#
 	# SPB stuff
 	#
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=6.60.0508 --latest
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=6.60.0530 --latest
 
 	# NDS
 
@@ -244,7 +244,7 @@ then
 
 	# Experimental
 
-	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=7.00.0018 --latest-of-serie
+	./yum-repo-builder.sh --release=dev --base-os=centos67 --product=svspb --version=7.00.0032 --latest-of-serie
 
 
 	exit 1
@@ -343,11 +343,11 @@ then
 	# Production ready images for being released to the public
 	#
 
-	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
+	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
 	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT
 
-	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
+	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
 #	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
@@ -570,12 +570,12 @@ then
 	# STABLE
 	#
 
-	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# SDE 7.30 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# SPB 6.60 on CentOS 6 + Cloud Services
@@ -607,21 +607,21 @@ then
 	# EXPERIMENTAL
 	#
 
-	# SDE 7.40 on CentOS 7
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.50 on CentOS 7
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# SDE 7.45 on CentOS 7
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.50 on CentOS 7
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.45 on CentOS 6
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.40 on CentOS 6
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
 	# SPB 7.00 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -896,25 +896,25 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# PTS 7.30 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	# PTS 7.30 on CentOS 7 - Linux 3.10, DPDK 2.2, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# SDE 7.30 on CentOS 6
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.45 on CentOS 6
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# SDE 7.40 on CentOS 7
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# SDE 7.45 on CentOS 7
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-       	# SDE 7.40 on CentOS 6
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
+       	# SDE 7.45 on CentOS 6
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo
 
 	# SPB 6.60 on CentOS 6 - No NDS
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup $DRY_RUN_OPT
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
 	#
@@ -1150,11 +1150,11 @@ then
 
 
 	# Linux SVPTS 7.30 on CentOS 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0082 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
 	# Linux SVPTS 7.30 on CentOS 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0082 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
@@ -1167,48 +1167,48 @@ then
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
-	# Linux SVSDE 7.30 on CentOS 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30.0303 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Linux SVSDE 7.45 on CentOS 6.7
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45.0087 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
-	# Linux SVSDE 7.30 on CentSO 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30.0303 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	# Linux SVSDE 7.45 on CentSO 6.7
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.45.0087 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
 	# Linux SVSDE 7.40 on CentOS 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
 	# Linux SVSDE 7.40 on CentSO 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
+#	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
 	# Linux SVSDE 7.40 on CentOS 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
 	# Linux SVSDE 7.40 on CentSO 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.40.0025 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
 	# Linux SVSDE 7.45 on CentOS 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45.0078 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45.0078 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
 	# Linux SVSDE 7.45 on CentSO 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45.0078 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
+#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.45.0078 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=cloud-init,bootstrap,grub-conf,svsde,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
 	# Linux SVSPB 6.60 on CentOS 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0508 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0530 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
 	# Linux SVSPB 6.60 on CentSO 6.7
-	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0508 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60.0530 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
 
 
