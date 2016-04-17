@@ -14,7 +14,7 @@
 
 
 - name: restart-nova
-  service: name={{item}} state=started enabled=yes
+  service: name={{item}} state=restarted enabled=yes
   with_items:
     - nova-api
     - nova-cert
