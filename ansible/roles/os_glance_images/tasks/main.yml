@@ -15,6 +15,8 @@
 # TODO:
 # 1- Update Glance images with: shorter names plus description
 
+# Reference:
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/glance-verify.html
 
 - name: Wait a bit until Glance starts up properly...
   pause: seconds=5

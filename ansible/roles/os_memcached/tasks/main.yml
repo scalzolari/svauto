@@ -12,10 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Reference:
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/environment-memcached.html
+
 - name: Installing Memcached Server
   apt: name={{item}} state=latest
   with_items:
     - memcached
+    - python-memcache
   notify: restart-memcached
 
 

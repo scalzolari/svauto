@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# References:
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/nova-controller-install.html
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/nova-compute-install.html
+
 - include: openstack-nova-init.yml
   when: openstack_installation == 'yes'
 

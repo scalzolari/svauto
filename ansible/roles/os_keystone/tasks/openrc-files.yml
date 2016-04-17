@@ -12,6 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Reference:
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/keystone-openrc.html
+
 - name: Creating admin-openrc.sh file
   template: src={{openstack_release}}/admin-openrc.sh
             dest=/home/{{ubuntu_user}}/admin-openrc.sh
