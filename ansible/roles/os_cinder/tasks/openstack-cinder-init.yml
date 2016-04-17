@@ -19,7 +19,7 @@
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
-  #- openstack service create --name cinder --description "OpenStack Block Storage" volume
+  - openstack service create --name cinder --description "OpenStack Block Storage" volume
   - openstack service create --name cinderv2 --description "OpenStack Block Storage" volumev2
 
 
@@ -27,6 +27,9 @@
   environment: "{{admin_openrc_env}}"
   command: "{{item}}"
   with_items:
+  - openstack endpoint create --region "{{region}}" volume public http://controller:8776/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" volume internal http://controller:8776/v1/%\(tenant_id\)s
+  - openstack endpoint create --region "{{region}}" volume admin http://controller:8776/v1/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 public http://{{public_addr}}:8776/v2/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 internal http://{{controller_addr}}:8776/v2/%\(tenant_id\)s
   - openstack endpoint create --region "{{region}}" volumev2 admin http://{{controller_addr}}:8776/v2/%\(tenant_id\)s
