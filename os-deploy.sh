@@ -243,11 +243,11 @@ then
 	echo "Just preparing the environment variables, so you can run Ansible manually, like:"
 	echo
 	echo "cd ~/svauto/ansible"
-	echo "ansible-playbook site-openstack.yml --extra-vars \"openstack_installation=yes\""
+	echo "ansible-playbook -c local site-openstack.yml --extra-vars \"openstack_installation=yes\""
 	echo
 	echo "And a second run after a successful deployment:"
 	echo
-	echo "ansible-playbook site-openstack.yml"
+	echo "ansible-playbook -c local site-openstack.yml"
 	echo
 else
 	echo
