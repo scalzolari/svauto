@@ -213,7 +213,7 @@ resources:
       dns_nameservers: [8.8.4.4, 8.8.8.8]
       network: { get_resource: ctrl_net }
       enable_dhcp: True
-      cidr: 192.168.192/25
+      cidr: 192.168.192.0/25
       allocation_pools:
         - start: 192.168.192.50
           end: 192.168.192.126
@@ -248,7 +248,7 @@ resources:
       dns_nameservers: [8.8.4.4, 8.8.8.8]
       network: { get_resource: data_sub_net1 }
       enable_dhcp: True
-      cidr: 10.192/16
+      cidr: 10.192.0.0/16
       gateway_ip: 10.192.0.1
       allocation_pools:
         - start: 10.192.0.50
@@ -268,7 +268,7 @@ resources:
       name: { str_replace: { params: { $stack_name: { get_param: 'OS::stack_name' } }, template: '$stack_name-subscribers-si1' } }
       network: { get_resource: data_int_net1 }
       enable_dhcp: False
-      cidr: 10.192/16
+      cidr: 10.192.0.0/16
       allocation_pools:
         - start: 10.192.0.2
           end: 10.192.0.49
