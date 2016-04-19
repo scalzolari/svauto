@@ -20,6 +20,7 @@
 
 - name: Wait a bit until Glance starts up properly...
   pause: seconds=5
+  when: openstack_installation == 'yes'
 
 
 - name: Adding a few Operating System images into Glance

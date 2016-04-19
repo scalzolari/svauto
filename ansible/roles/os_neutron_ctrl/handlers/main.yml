@@ -13,21 +13,4 @@
 # limitations under the License.
 
 - name: restart-neutron
-  service: name={{item}} state=restarted enabled=yes
-  with_items:
-    - neutron-server
-    - neutron-dhcp-agent
-    - neutron-l3-agent
-    - neutron-metadata-agent
-
-- name: restart-neutron-lbr
-  service: name=neutron-linuxbridge-agent state=restarted enabled=yes
-  when: br_mode == 'LBR'
-
-- name: restart-neutron-ovs
-  service: name=neutron-openvswitch-agent state=restarted enabled=yes
-  when: br_mode == 'OVS'
-
-
-- name: reload-sysctl
-  command: sysctl -p
+  service: name=neutron-server state=restarted enabled=yes

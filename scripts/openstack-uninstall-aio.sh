@@ -21,7 +21,7 @@ ifdown dummy1
 rm /etc/network/interfaces.d/br-ex.cfg
 rm /etc/network/interfaces.d/dummy*
 
-apt-get purge chrony libvirt0 ubuntu-virt-server apache2 libapache2-mod-wsgi memcached mysql-common rabbitmq-server keystone "glance-*" "nova-*" "neutron-*" "cinder-*" "heat-*" "openstack-*" "manila-*" "openvswitch-*" -y
+apt-get purge chrony dnsmasq-base libvirt0 ubuntu-virt-server apache2 libapache2-mod-wsgi memcached mysql-common rabbitmq-server keystone "glance-*" "nova-*" "neutron-*" "cinder-*" "heat-*" "openstack-*" "manila-*" "openvswitch-*" -y
 
 apt-get autoremove -y
 

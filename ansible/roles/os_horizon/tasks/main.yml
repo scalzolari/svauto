@@ -16,7 +16,7 @@
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/horizon-install.html
 
 - name: Installing Horizon Dashboard
-  apt: name=openstack-dashboard install_recommends=no state=latest
+  apt: name=openstack-dashboard state=latest
   notify: reload-apache2
 
 

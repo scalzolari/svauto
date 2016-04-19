@@ -14,18 +14,16 @@
 
 # References:
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/nova-controller-install.html
-# http://docs.openstack.org/mitaka/install-guide-ubuntu/nova-compute-install.html
 
 - include: openstack-nova-init.yml
   when: openstack_installation == 'yes'
 
 
-- name: Installing Nova packages
+- name: Installing Nova
   apt: name={{item}} state=latest
   with_items:
     - nova-api
     - nova-cert
-    - nova-compute
     - nova-scheduler
     - nova-conductor
     - nova-spiceproxy
@@ -38,14 +36,6 @@
   notify: restart-nova
 
 
-- name: "Workarounding BUG LP #759725"
-  copy: src=kernel-postinst-statoverride
-        dest=/etc/kernel/postinst.d/statoverride
-        owner=root
-        group=root
-        mode=0755
-
-
 - name: Updating nova.conf
   template: src={{openstack_release}}/nova.conf
             dest=/etc/nova/nova.conf
@@ -55,16 +45,6 @@
             backup=yes
   when: item.os_project == "nova"
   with_items: mysql_databases
-  notify: restart-nova
-
-
-- name: Updating nova-compute.conf
-  copy: src=nova-compute.conf
-        dest=/etc/nova/nova-compute.conf
-        owner=nova
-        group=nova
-        mode=0640
-        backup=yes
   notify: restart-nova
 
 

@@ -12,8 +12,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+# Deleting default OpenStack flavors
+- name: ubuntu - nova deleting default m1.tiny
+  environment: "{{admin_openrc_env}}"
+  os_nova_flavor:
+    state=absent
+    name=m1.tiny
+  when: openstack_installation == 'yes'
+
+- name: ubuntu - nova deleting default m1.small
+  environment: "{{admin_openrc_env}}"
+  os_nova_flavor:
+    state=absent
+    name=m1.small
+  when: openstack_installation == 'yes'
+
+- name: ubuntu - nova deleting default m1.medium
+  environment: "{{admin_openrc_env}}"
+  os_nova_flavor:
+    state=absent
+    name=m1.medium
+  when: openstack_installation == 'yes'
+
+- name: ubuntu - nova deleting default m1.large
+  environment: "{{admin_openrc_env}}"
+  os_nova_flavor:
+    state=absent
+    name=m1.large
+  when: openstack_installation == 'yes'
+
+- name: ubuntu - nova deleting default m1.xlarge
+  environment: "{{admin_openrc_env}}"
+  os_nova_flavor:
+    state=absent
+    name=m1.xlarge
+  when: openstack_installation == 'yes'
+
+
 # Creating new default flavors for OpenStack
-- name: ubuntu16 - nova creating m1.micro flavor
+- name: ubuntu - nova creating m1.micro flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -23,7 +61,7 @@
     vcpus=1
     disk=2
 
-- name: ubuntu16 - nova creating m1.tiny flavor
+- name: ubuntu - nova creating m1.tiny flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -34,7 +72,7 @@
     disk=4
     ephemeral=1
 
-- name: ubuntu16 - nova creating m1.little flavor
+- name: ubuntu - nova creating m1.little flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -45,7 +83,7 @@
     disk=8
     ephemeral=2
 
-- name: ubuntu16 - nova creating m1.small flavor
+- name: ubuntu - nova creating m1.small flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -56,7 +94,7 @@
     disk=20
     ephemeral=4
 
-- name: ubuntu16 - nova creating m1.medium flavor
+- name: ubuntu - nova creating m1.medium flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -67,7 +105,7 @@
     disk=40
     ephemeral=8
 
-- name: ubuntu16 - nova creating m1.large flavor
+- name: ubuntu - nova creating m1.large flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present
@@ -78,7 +116,7 @@
     disk=80
     ephemeral=16
 
-- name: ubuntu16 - nova creating m1.xlarge flavor
+- name: ubuntu - nova creating m1.xlarge flavor
   environment: "{{admin_openrc_env}}"
   os_nova_flavor:
     state=present

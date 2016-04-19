@@ -118,6 +118,8 @@ csd_version: "1.00"
 # OpenStack Definitions
 #
 
+os_aio: "no"
+
 ubuntu_user: "administrative"
 
 ubuntu_virt: "server"

@@ -16,7 +16,7 @@
 # The following hosts definitions, deploys OpenStack:
 #
 
-- hosts: all-in-one
+- hosts: os_aio
   user: "{{ubuntu_user}}"
   become: yes
   roles:
@@ -33,18 +33,20 @@
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
-  - role: os_nova_aio
+  - role: os_nova_ctrl
+  - role: os_nova_cmpt
   - role: os_keypair
   - role: os_nova_flavors
-  - role: os_neutron_aio
+  - role: os_neutron_ctrl
+  - role: os_ext_net
   - role: os_neutron_net
   - role: os_horizon
-  - role: os_cinder
+#  - role: os_cinder
   - role: os_heat
-  - role: os_manila
+#  - role: os_manila
 #  - role: os_ceilometer
 
-- hosts: controller_nodes
+- hosts: os_controller_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
@@ -60,32 +62,34 @@
   - role: os_keystone
   - role: os_glance
   - role: os_glance_images
-#  - role: os_nova_ctrl
+  - role: os_nova_ctrl
   - role: os_keypair
   - role: os_nova_flavors
-#  - role: os_neutron_ctrl
+  - role: os_neutron_ctrl
+  - role: os_ext_net
   - role: os_horizon
-  - role: os_cinder
+#  - role: os_cinder
   - role: os_heat
+#  - role: os_manila
 #  - role: os_ceilometer
 
-- hosts: network_nodes
+- hosts: os_network_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
-#  - role: os_neutron_net_node
+  - role: os_neutron_net
 
-- hosts: compute_nodes
+- hosts: os_compute_nodes
   user: "{{ubuntu_user}}"
   become: yes
   roles:
   - role: bootstrap
   - role: hyper_kvm
-#  - role: os_nova_cmpt_node
-#  - role: os_neutron_cmpt_node
+  - role: os_nova_cmpt
+  - role: os_neutron_cmpt
 
-- hosts: vagrant-node
+- hosts: os_vagrant_aio
   user: "{{ubuntu_user}}"
   become: yes
   roles:
@@ -102,12 +106,15 @@
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
-  - role: os_nova_aio
+  - role: os_nova_ctrl
+  - role: os_nova_cmpt
   - role: os_keypair
   - role: os_nova_flavors
-  - role: os_neutron_aio
+  - role: os_neutron_ctrl
+  - role: os_ext_net
   - role: os_neutron_net
   - role: os_horizon
-  - role: os_cinder
+#  - role: os_cinder
   - role: os_heat
+#  - role: os_manila
 #  - role: os_ceilometer

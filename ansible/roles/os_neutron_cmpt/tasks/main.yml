@@ -13,19 +13,8 @@
 # limitations under the License.
 
 # References:
-# http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-controller-install.html
-# http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-controller-install-option2.html
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-compute-install.html
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-compute-install-option2.html
-
-- name: Installing Neutron Agents
-  apt: name={{item}} state=latest
-  with_items:
-    - neutron-l3-agent
-    - neutron-dhcp-agent
-    - neutron-plugin-ml2
-    - neutron-metadata-agent
-  notify: restart-neutron
 
 - name: Installing Neutron Linux Bridge Agent
   apt: name=neutron-linuxbridge-agent state=latest
@@ -55,16 +44,6 @@
   notify: restart-neutron
 
 
-- name: Updating ml2_conf.ini
-  template: src={{openstack_release}}/ml2/ml2_conf.ini
-            dest=/etc/neutron/plugins/ml2/ml2_conf.ini
-            owner=root
-            group=neutron
-            mode=0640
-            backup=yes
-  notify: restart-neutron
-
-
 - name: Updating linuxbridge_agent.ini
   template: src={{openstack_release}}/ml2/linuxbridge_agent.ini
             dest=/etc/neutron/plugins/ml2/linuxbridge_agent.ini
@@ -85,69 +64,6 @@
             backup=yes
   when: br_mode == 'OVS'
   notify: restart-neutron-ovs
-
-
-- name: Updating dhcp_agent.ini
-  template: src={{openstack_release}}/dhcp_agent.ini
-            dest=/etc/neutron/dhcp_agent.ini
-            owner=root
-            group=neutron
-            mode=0644
-            backup=yes
-  notify: restart-neutron
-
-
-- name: Updating dnsmasq-neutron.conf
-  copy: src=dnsmasq-neutron.conf
-        dest=/etc/neutron/dnsmasq-neutron.conf
-        owner=root
-        group=neutron
-        mode=0644
-        backup=yes
-  notify: restart-neutron
-
-
-- name: Updating l3_agent.ini
-  template: src={{openstack_release}}/l3_agent.ini
-            dest=/etc/neutron/l3_agent.ini
-            owner=root
-            group=neutron
-            mode=0644
-            backup=yes
-  notify: restart-neutron
-
-
-- name: Updating metadata_agent.ini
-  template: src={{openstack_release}}/metadata_agent.ini
-            dest=/etc/neutron/metadata_agent.ini
-            owner=root
-            group=neutron
-            mode=0644
-            backup=yes
-  notify: restart-neutron
-
-
-- name: Updating fwaas_driver.ini
-  template: src={{openstack_release}}/fwaas_driver.ini
-            dest=/etc/neutron/fwaas_driver.ini
-            owner=root
-            group=neutron
-            mode=0644
-            backup=yes
-  notify: restart-neutron
-
-
-- name: Creating Open vSwitch Bridge
-  openvswitch_bridge: bridge=br-ex state=present
-  when: br_mode == 'OVS'
-
-- name: Configuring Open vSwitch Bridge Port
-  openvswitch_port: bridge=br-ex port="{{neutron_external_interface}}" state=present
-  when: br_mode == 'OVS'
-
-- name: Enabling br-ex Interface
-  command: 'ifup br-ex'
-  when: br_mode == 'OVS'
 
 
 - name: Write custom sysctl.conf

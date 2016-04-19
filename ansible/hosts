@@ -23,17 +23,17 @@
 # List of servers to deploy OpenStack
 #
 
-[all-in-one]
+[os_aio]
 localhost
 
-[controller_nodes]
+[os_controller_nodes]
 #192.168.122.10
 
-[network_nodes]
+[os_network_nodes]
 #jdoe+instance+cloud
 
-[compute_nodes]
+[os_compute_nodes]
 #192.168.122.40
 
-[vagrant-node]
+[os_vagrant_aio]
 #os ansible_ssh_user=vagrant ansible_ssh_host=localhost ansible_ssh_port=2222

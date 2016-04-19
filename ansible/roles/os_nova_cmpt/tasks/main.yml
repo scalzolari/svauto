@@ -1,0 +1,61 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# References:
+# http://docs.openstack.org/mitaka/install-guide-ubuntu/nova-compute-install.html
+
+
+- name: Installing Nova Compute KVM
+  apt: name={{item}} state=latest
+  with_items:
+    - nova-compute-kvm
+  notify: restart-nova
+
+
+- name: Removing non-used sqlite database
+  file: path=/var/lib/nova/nova.sqlite state=absent
+  notify: restart-nova
+
+
+- name: "Workarounding BUG LP #759725"
+  copy: src=kernel-postinst-statoverride
+        dest=/etc/kernel/postinst.d/statoverride
+        owner=root
+        group=root
+        mode=0755
+
+
+- name: Updating nova.conf
+  template: src={{openstack_release}}/nova.conf
+            dest=/etc/nova/nova.conf
+            owner=nova
+            group=nova
+            mode=0640
+            backup=yes
+  when: item.os_project == "nova"
+  with_items: mysql_databases
+  notify: restart-nova
+
+
+- name: Updating nova-compute.conf
+  copy: src=nova-compute.conf
+        dest=/etc/nova/nova-compute.conf
+        owner=nova
+        group=nova
+        mode=0640
+        backup=yes
+  notify: restart-nova
+
+
+- meta: flush_handlers

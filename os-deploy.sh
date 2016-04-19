@@ -205,6 +205,8 @@ fi
 echo
 echo "* The detected settings like OpenStack release, Ubuntu, hostnames, etc..."
 
+sed -i -e 's/os_aio:.*/os_aio: "yes"/' ansible/group_vars/all
+
 sed -i -e 's/openstack_release:.*/openstack_release: "'$OPENSTACK_RELEASE'"/' ansible/group_vars/all
 
 sed -i -e 's/base_os:.*/base_os: "ubuntu16"/' ansible/group_vars/all

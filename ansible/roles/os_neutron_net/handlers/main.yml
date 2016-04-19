@@ -12,18 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-- name: restart-nova
+- name: restart-neutron
   service: name={{item}} state=restarted enabled=yes
   with_items:
-    - nova-api
-    - nova-cert
-    - nova-compute
-    - nova-conductor
-    - nova-scheduler
-    - nova-spiceproxy
-    - nova-consoleauth
+    - neutron-l3-agent
+    - neutron-dhcp-agent
+    - neutron-metadata-agent
+
+- name: restart-neutron-lbr
+  service: name=neutron-linuxbridge-agent state=restarted enabled=yes
+  when: br_mode == 'LBR'
+
+- name: restart-neutron-ovs
+  service: name=neutron-openvswitch-agent state=restarted enabled=yes
+  when: br_mode == 'OVS'
 
 
-- name: restart-libvirt-bin
-  service: name=libvirt-bin state=restarted enabled=yes
+- name: reload-sysctl
+  command: sysctl -p
