@@ -18,6 +18,9 @@
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-compute-install.html
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-compute-install-option2.html
 
+# http://docs.openstack.org/mitaka/networking-guide/scenario-classic-ovs.html
+# http://docs.openstack.org/mitaka/networking-guide/scenario-classic-lb.html
+
 - name: Installing Neutron Agents
   apt: name={{item}} state=latest
   with_items:
@@ -25,7 +28,7 @@
     - neutron-dhcp-agent
     - neutron-plugin-ml2
     - neutron-metadata-agent
-  notify: restart-neutron
+  notify: restart-neutron-agents
 
 - name: Installing Neutron Linux Bridge Agent
   apt: name=neutron-linuxbridge-agent state=latest
@@ -36,11 +39,6 @@
   apt: name=neutron-openvswitch-agent state=latest
   when: br_mode == 'OVS'
   notify: restart-neutron-ovs
-
-
-- name: Removing non-used sqlite database
-  file: path=/var/lib/neutron/neutron.sqlite state=absent
-  notify: restart-neutron
 
 
 - name: Updating neutron.conf

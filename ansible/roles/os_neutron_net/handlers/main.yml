@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: restart-neutron
+- name: restart-neutron-agents
   service: name={{item}} state=restarted enabled=yes
   with_items:
     - neutron-l3-agent
