@@ -45,6 +45,7 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
+  - role: post-cleanup
 
 - hosts: os_controller_nodes
   user: "{{ubuntu_user}}"
@@ -72,6 +73,7 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
+  - role: post-cleanup
 
 - hosts: os_network_nodes
   user: "{{ubuntu_user}}"
@@ -79,6 +81,7 @@
   roles:
   - role: bootstrap
   - role: os_neutron_net
+  - role: post-cleanup
 
 - hosts: os_compute_nodes
   user: "{{ubuntu_user}}"
@@ -88,6 +91,7 @@
   - role: hyper_kvm
   - role: os_nova_cmpt
   - role: os_neutron_cmpt
+  - role: post-cleanup
 
 - hosts: os_vagrant_aio
   user: "{{ubuntu_user}}"
@@ -118,3 +122,4 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
+  - role: post-cleanup
