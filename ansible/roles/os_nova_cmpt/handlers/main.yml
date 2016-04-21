@@ -13,10 +13,8 @@
 # limitations under the License.
 
 
-- name: restart-nova
-  service: name={{item}} state=restarted enabled=yes
-  with_items:
-    - nova-compute
+- name: restart-nova-compute
+  service: name=nova-compute state=restarted enabled=yes
 
 
 - name: restart-libvirt-bin

@@ -27,11 +27,6 @@
   notify: restart-neutron-ovs
 
 
-- name: Removing non-used sqlite database
-  file: path=/var/lib/neutron/neutron.sqlite state=absent
-  notify: restart-neutron
-
-
 - name: Updating neutron.conf
   template: src={{openstack_release}}/neutron.conf
             dest=/etc/neutron/neutron.conf
@@ -41,7 +36,6 @@
             backup=yes
   when: item.os_project == "neutron"
   with_items: mysql_databases
-  notify: restart-neutron
 
 
 - name: Updating linuxbridge_agent.ini

@@ -20,12 +20,12 @@
   apt: name={{item}} state=latest
   with_items:
     - nova-compute-kvm
-  notify: restart-nova
+  notify: restart-nova-compute
 
 
 - name: Removing non-used sqlite database
   file: path=/var/lib/nova/nova.sqlite state=absent
-  notify: restart-nova
+  notify: restart-nova-compute
 
 
 - name: "Workarounding BUG LP #759725"
@@ -45,7 +45,7 @@
             backup=yes
   when: item.os_project == "nova"
   with_items: mysql_databases
-  notify: restart-nova
+  notify: restart-nova-compute
 
 
 - name: Updating nova-compute.conf
@@ -55,7 +55,7 @@
         group=nova
         mode=0640
         backup=yes
-  notify: restart-nova
+  notify: restart-nova-compute
 
 
 - meta: flush_handlers
