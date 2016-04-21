@@ -26,7 +26,6 @@
   with_items:
     - neutron-l3-agent
     - neutron-dhcp-agent
-    - neutron-plugin-ml2
     - neutron-metadata-agent
   notify: restart-neutron-agents
 
@@ -50,16 +49,6 @@
             backup=yes
   when: item.os_project == "neutron"
   with_items: mysql_databases
-  notify: restart-neutron
-
-
-- name: Updating ml2_conf.ini
-  template: src={{openstack_release}}/ml2/ml2_conf.ini
-            dest=/etc/neutron/plugins/ml2/ml2_conf.ini
-            owner=root
-            group=neutron
-            mode=0640
-            backup=yes
   notify: restart-neutron
 
 
