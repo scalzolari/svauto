@@ -27,7 +27,7 @@ apt-get autoremove -y
 
 dpkg -P `dpkg -l | grep ^rc | awk $'{print $2}' | xargs`
 
-rm -r /etc/mysql /etc/openstack-dashboard /etc/apache2 /etc/keystone /etc/glance /etc/neutron /etc/nova /etc/heat /etc/cinder /var/lib/mysql /var/lib/nova /var/lib/glance /var/lib/keystone /var/lib/heat /var/lib/neutron /var/lib/cinder /var/lib/manila /var/lib/openvswitch /var/log/neutron /var/log/nova /var/log/glance /var/log/cinder /var/log/manila  /var/log/apache2 /var/lib/openstack-dashboard /usr/share/openstack-dashboard /usr/lib/python2.7/dist-packages/horizon/static/horizon/lib/jquery -f
+rm -rr /etc/mysql /etc/openstack-dashboard /etc/apache2 /etc/keystone /etc/glance /etc/neutron /etc/nova /etc/heat /etc/cinder /var/lib/mysql /var/lib/nova /var/lib/glance /var/lib/keystone /var/lib/heat /var/lib/neutron /var/lib/cinder /var/lib/manila /var/lib/openvswitch /var/log/neutron /var/log/nova /var/log/glance /var/log/cinder /var/log/manila /var/lib/libvirt/ /var/log/apache2 /var/lib/openstack-dashboard /usr/share/openstack-dashboard /usr/lib/python2.7/dist-packages/horizon/static/horizon/lib/jquery
 
 rmmod openvswitch
 
