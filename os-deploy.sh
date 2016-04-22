@@ -225,6 +225,12 @@ echo "* Your current \"$WHOAMI\" user..."
 sed -i -e 's/ubuntu_user:.*/ubuntu_user: "'$WHOAMI'"/g' ansible/group_vars/all
 
 
+echo
+echo "* Enabling \"localhost\" host on ansible/hosts..."
+
+sed -i -e 's/^#localhost/localhost/g' ansible/hosts
+
+
 # Configuring the default interface
 PRIMARY_INTERFACE=$(ip r | grep default | awk '{print $5}')
 
@@ -245,11 +251,11 @@ then
 	echo "Just preparing the environment variables, so you can run Ansible manually, like:"
 	echo
 	echo "cd ~/svauto/ansible"
-	echo "ansible-playbook -c local site-openstack.yml --extra-vars \"openstack_installation=yes\""
+	echo "ansible-playbook site-openstack.yml --extra-vars \"openstack_installation=yes\""
 	echo
 	echo "And a second run after a successful deployment:"
 	echo
-	echo "ansible-playbook -c local site-openstack.yml"
+	echo "ansible-playbook site-openstack.yml"
 	echo
 else
 	echo
