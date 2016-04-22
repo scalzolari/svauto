@@ -24,7 +24,7 @@
 #
 
 [os_aio]
-localhost ansible_connection=local
+#localhost ansible_connection=local
 
 [os_controller_nodes]
 #192.168.122.10
