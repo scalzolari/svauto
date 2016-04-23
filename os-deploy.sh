@@ -46,6 +46,12 @@ case $i in
 		shift
         	;;
 
+        --ovs-hybrid-firewall)
+
+	        OVS_HYBRID_FW="yes"
+		shift
+		;;
+
         --no-security-groups)
 
 	        NO_SEC="yes"
@@ -199,17 +205,23 @@ fi
 # http://docs.openstack.org/networking-guide/scenario_legacy_ovs.html
 if [ "$BR_MODE" = "OVS" ]
 then 
-         sed -i -e 's/br_mode:.*/br_mode: "OVS"/' ansible/group_vars/all
-         sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.LinuxOVSInterfaceDriver"/' ansible/group_vars/all
-         sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.OVSInterfaceDriver"/' ansible/group_vars/all
-         sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "openvswitch"/' ansible/group_vars/all
-         sed -i -e 's/firewall_driver:.*/firewall_driver: "openvswitch"/' ansible/group_vars/all
+	sed -i -e 's/br_mode:.*/br_mode: "OVS"/' ansible/group_vars/all
+	sed -i -e 's/linuxnet_interface_driver:.*/linuxnet_interface_driver: "nova.network.linux_net.LinuxOVSInterfaceDriver"/' ansible/group_vars/all
+	sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.OVSInterfaceDriver"/' ansible/group_vars/all
+	sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "openvswitch"/' ansible/group_vars/all
+
+	if [ "$OVS_HYBRID_FW" = "yes" ]
+	then
+		sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver"/' ansible/group_vars/all
+	else
+		sed -i -e 's/firewall_driver:.*/firewall_driver: "openvswitch"/' ansible/group_vars/all
+	fi
 fi
 
 
 # Disabling Security Groups entirely
 echo
-echo "* WARNING! Disabling Security Groups for your entire Cloud environment!"
+echo "* WARNING! Disabling Security Groups (null firewall_driver) for your entire Cloud environment!"
 
 if [ "$NO_SEC" = "yes" ]
 then
