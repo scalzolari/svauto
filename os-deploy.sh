@@ -220,12 +220,12 @@ fi
 
 
 # Disabling Security Groups entirely
-echo
-echo "* WARNING! Disabling Security Groups (null firewall_driver) for your entire Cloud environment!"
-
 if [ "$NO_SEC" = "yes" ]
 then
-         sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.firewall.NoopFirewall"/' ansible/group_vars/all
+	echo
+	echo "* WARNING! Disabling Security Groups (null firewall_driver) for your entire Cloud environment!"
+
+	sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.firewall.NoopFirewall"/' ansible/group_vars/all
 fi
 
 
