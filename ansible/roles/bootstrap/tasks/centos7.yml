@@ -79,6 +79,7 @@
     - ansible
     - numactl
     - deltarpm
+    - nmap-ncat
     - man-pages
     - firewalld
     - bind-utils
