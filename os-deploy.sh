@@ -46,9 +46,9 @@ case $i in
 		shift
         	;;
 
-        --dry-run)
+        --no-security-groups)
 
-	        DRY_RUN="yes"
+	        NO_SEC="yes"
 		shift
         	;;
 
@@ -63,6 +63,12 @@ case $i in
 	        OPENSTACK_INSTALLATION="yes"
 		shift
         	;;
+
+        --dry-run)
+
+	        DRY_RUN="yes"
+		shift
+		;;
 
 esac
 done
@@ -198,6 +204,16 @@ then
          sed -i -e 's/neutron_interface_driver:.*/neutron_interface_driver: "neutron.agent.linux.interface.OVSInterfaceDriver"/' ansible/group_vars/all
          sed -i -e 's/mechanism_drivers:.*/mechanism_drivers: "openvswitch"/' ansible/group_vars/all
          sed -i -e 's/firewall_driver:.*/firewall_driver: "openvswitch"/' ansible/group_vars/all
+fi
+
+
+# Disabling Security Groups entirely
+echo
+echo "* WARNING! Disabling Security Groups for your entire Cloud environment!"
+
+if [ "$NO_SEC" = "yes" ]
+then
+         sed -i -e 's/firewall_driver:.*/firewall_driver: "neutron.agent.firewall.NoopFirewall"/' ansible/group_vars/all
 fi
 
 
