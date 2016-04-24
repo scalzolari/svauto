@@ -74,6 +74,7 @@
     - unzip
     - iotop
     - iftop
+    - iperf3
     - parted
     - mlocate
     - ansible
