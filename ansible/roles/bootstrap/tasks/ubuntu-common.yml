@@ -95,10 +95,16 @@
   with_items:
     - vim
     - mtr
-    - diodon
+    - vlc
     - skype
+    - diodon
+    - xine-ui
+    - terminator
     - evolution
     - evolution-ews
+    - icedtea-plugin
+    - openjdk-8-jre
+    - openjdk-8-jre-headless
     - classicmenu-indicator
   when: ubuntu_install == 'desktop'
 
