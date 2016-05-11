@@ -39,15 +39,15 @@ fi
 echo
 echo "Bootstrapping SVAuto..."
 
-echo
-echo "Configuring sudores, so, members of group \"sudo\" will not require to type passwords."
-echo "You'll need to type your password now (you need to be member of group sudo already):"
-
-sudo sed -i -e 's/%sudo.*/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
+#echo
+#echo "Configuring sudores, so, members of group \"sudo\" will not require to type passwords."
+#echo "You'll need to type your password now (you need to be member of group sudo already):"
+#
+#sudo sed -i -e 's/%sudo.*/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
 
 echo
 sudo apt -y install ansible
 
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local bootstrap-xenial-server.yml --extra-vars "base_os=ubuntu16 base_os_upgrade=yes"
+ansible-playbook -c local bootstrap-xenial-server.yml --extra-vars "base_os=ubuntu16 base_os_upgrade=yes ubuntu_install=desktop"

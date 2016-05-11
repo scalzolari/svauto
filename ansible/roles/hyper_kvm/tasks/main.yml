@@ -16,7 +16,7 @@
   apt: name={{item}} state=latest
   with_items:
     - ubuntu-virt-server
-  when: ubuntu_virt == 'server'
+  when: ubuntu_install == 'server'
 
 
 - name: ubuntu - apt installing QEmu/KVM Hypervisor - Desktop
@@ -25,7 +25,7 @@
     - ubuntu-virt
     - spice-client-gtk
     - python-spice-client-gtk
-  when: ubuntu_virt == 'desktop'
+  when: ubuntu_install == 'desktop'
 
 
 # Review:

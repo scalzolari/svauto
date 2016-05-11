@@ -31,6 +31,7 @@
     - htop
     - bmon
     - nmap
+    - flip
     - gdisk
     - unzip
     - ngrep
@@ -54,7 +55,6 @@
     - sysstat
     - ansible
     - iptables
-    - mtr-tiny
     - mlocate
     - sysstat
     - tcpdump
@@ -63,7 +63,6 @@
     - tcpick
     - psmisc
     - tzdata
-    - vim-nox
     - pm-utils
     - xfsprogs
     - conntrack
@@ -80,6 +79,28 @@
     - command-not-found
     - linux-image-generic
     - ubuntu-cloud-keyring
+
+
+
+- name: ubuntu - apt installing Server tools
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:
+    - vim-nox
+    - mtr-tiny
+  when: ubuntu_install == 'server'
+
+
+- name: ubuntu - apt installing Desktop tools
+  apt: name={{item}} state=latest update_cache=yes
+  with_items:
+    - vim
+    - mtr
+    - diodon
+    - skype
+    - evolution
+    - evolution-ews
+    - classicmenu-indicator
+  when: ubuntu_install == 'desktop'
 
 
 - name: ubuntu - updating Init RAMDisk
@@ -102,5 +123,11 @@
         mode=0644
 
 
-- name: ubuntu - vim as default for editor
+- name: ubuntu - vim-nox as default for editor
   alternatives: name=editor path=/usr/bin/vim.nox
+  when: ubuntu_install == 'server'
+
+
+- name: ubuntu - vim as default for editor
+  alternatives: name=editor path=/usr/bin/vim
+  when: ubuntu_install == 'desktop'
