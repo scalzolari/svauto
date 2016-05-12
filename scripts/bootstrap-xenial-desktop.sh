@@ -50,4 +50,4 @@ sudo apt -y install ansible
 
 echo
 cd ~/svauto/ansible
-ansible-playbook -c local bootstrap-xenial-server.yml --extra-vars "base_os=ubuntu16 base_os_upgrade=yes ubuntu_install=desktop"
+ansible-playbook -c local bootstrap-xenial-desktop.yml --extra-vars "base_os=ubuntu16 base_os_upgrade=yes ubuntu_install=desktop"
