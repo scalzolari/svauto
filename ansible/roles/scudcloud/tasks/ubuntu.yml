@@ -12,14 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
+- name: ubuntu - apt enabling ScudCloud PPA
+  apt_repository: repo='ppa:rael-gc/scudcloud'
 
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: hyper_kvm
-  - role: google-chrome
-  - role: scudcloud
+
+- name: ubuntu - apt installing ScudCloud
+  apt: pkg={{item}} state=latest
+  with_items:
+    - scudcloud

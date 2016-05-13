@@ -12,14 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
-
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: hyper_kvm
-  - role: google-chrome
-  - role: scudcloud
+- include: ubuntu.yml
+  when: base_os == 'ubuntu16' or base_os == 'ubuntu14'
