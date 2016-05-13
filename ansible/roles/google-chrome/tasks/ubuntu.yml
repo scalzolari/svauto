@@ -12,14 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
+- name: ubuntu - copying Google Chrome APT Repo
+  copy: src=google-chrome.list
+        dest=/etc/apt/sources.list.d/google-chrome.list
+        owner=root
+        group=root
+        mode=0755
 
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: hyper_kvm
-  - role: google-chrome
-#  - role: snapchat
+
+- name: ubuntu - apt installing Google Chrome
+  apt: pkg={{item}} state=latest
+  with_items:
+    - google-chrome-stable

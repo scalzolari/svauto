@@ -103,6 +103,7 @@
     - evolution
     - evolution-ews
     - icedtea-plugin
+    - chromium-browser
     - openjdk-8-jre
     - openjdk-8-jre-headless
     - classicmenu-indicator
