@@ -12,7 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu | apt installing Vagrant
+- name: ubuntu - apt installing Vagrant
   apt: name={{item}} state=latest
   with_items:
     - vagrant
+
+
+- name: ubuntu - fix for Vagrant issue 7198, LP#1559420
+  replace: dest=/usr/lib/ruby/vendor_ruby/vagrant/bundler.rb regexp='Gem::Specification.all\ =\ nil' replace='Gem::Specification.reset'
+
+
+- name: ubuntu - apt installing Vagrant dependencies to build Libvirt plugin
+  apt: name={{item}} state=latest
+  with_items:
+    - libxslt-dev
+    - libxml2-dev
+    - libvirt-dev
+    - zlib1g-dev
+    - ruby-dev
+
+
+- name: ubuntu - vagrant installing Libvirt plugin
+  shell: vagrant plugin install vagrant-libvirt
