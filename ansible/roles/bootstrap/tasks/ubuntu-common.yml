@@ -68,6 +68,7 @@
     - conntrack
     - iptraf-ng
     - hugepages
+    - gddrescue
     - subnetcalc
     - traceroute
     - sysfsutils
@@ -96,9 +97,11 @@
     - vim
     - mtr
     - vlc
+    - gksu
     - skype
     - diodon
     - xine-ui
+    - gparted
     - terminator
     - evolution
     - evolution-ews
