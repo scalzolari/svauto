@@ -80,6 +80,7 @@
     - mlocate
     - ansible
     - numactl
+    - dos2unix
     - deltarpm
     - nmap-ncat
     - tcpreplay

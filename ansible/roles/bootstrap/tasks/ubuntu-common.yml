@@ -65,6 +65,7 @@
     - tzdata
     - pm-utils
     - xfsprogs
+    - dos2unix
     - conntrack
     - iptraf-ng
     - hugepages

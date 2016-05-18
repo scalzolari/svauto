@@ -105,6 +105,7 @@
     - ansible
     - pciutils 
     - deltarpm
+    - dos2unix
     - dmidecode
     - man-pages
     - tcpreplay
