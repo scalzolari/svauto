@@ -75,12 +75,14 @@
     - iotop
     - iftop
     - iperf3
+    - tcpick
     - parted
     - mlocate
     - ansible
     - numactl
     - deltarpm
     - nmap-ncat
+    - tcpreplay
     - man-pages
     - firewalld
     - bind-utils

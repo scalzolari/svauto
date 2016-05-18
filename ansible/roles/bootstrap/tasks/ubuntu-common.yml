@@ -69,6 +69,7 @@
     - iptraf-ng
     - hugepages
     - gddrescue
+    - tcpreplay
     - subnetcalc
     - traceroute
     - sysfsutils

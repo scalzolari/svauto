@@ -96,6 +96,7 @@
     - parted
     - psmisc 
     - cronie
+    - tcpick
     - sysstat 
     - rsyslog
     - tcpdump  
@@ -106,6 +107,7 @@
     - deltarpm
     - dmidecode
     - man-pages
+    - tcpreplay
     - bind-utils
     - traceroute
     - conntrack-tools
