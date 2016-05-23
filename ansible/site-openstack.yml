@@ -33,13 +33,11 @@
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
-  - role: os_nova_ctrl
-  - role: os_nova_cmpt
+  - role: os_nova
   - role: os_keypair
   - role: os_nova_flavors
-  - role: os_neutron_ctrl
+  - role: os_neutron
   - role: os_ext_net
-  - role: os_neutron_net
   - role: os_horizon
 #  - role: os_cinder
   - role: os_heat
@@ -63,10 +61,10 @@
   - role: os_keystone
   - role: os_glance
   - role: os_glance_images
-  - role: os_nova_ctrl
+  - role: os_nova
   - role: os_keypair
   - role: os_nova_flavors
-  - role: os_neutron_ctrl
+  - role: os_neutron
   - role: os_ext_net
   - role: os_horizon
 #  - role: os_cinder
@@ -80,7 +78,7 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: os_neutron_net
+  - role: os_neutron
   - role: post-cleanup
 
 - hosts: os_compute_nodes
@@ -89,8 +87,8 @@
   roles:
   - role: bootstrap
   - role: hyper_kvm
-  - role: os_nova_cmpt
-  - role: os_neutron_cmpt
+  - role: os_nova
+  - role: os_neutron
   - role: post-cleanup
 
 - hosts: os_vagrant_aio
@@ -110,13 +108,11 @@
   - role: os_glance
   - role: os_glance_images
   - role: hyper_kvm
-  - role: os_nova_ctrl
-  - role: os_nova_cmpt
+  - role: os_nova
   - role: os_keypair
   - role: os_nova_flavors
-  - role: os_neutron_ctrl
+  - role: os_neutron
   - role: os_ext_net
-  - role: os_neutron_net
   - role: os_horizon
 #  - role: os_cinder
   - role: os_heat

@@ -118,8 +118,6 @@ csd_version: "1.00"
 # OpenStack Definitions
 #
 
-os_aio: "no"
-
 ubuntu_user: "administrative"
 
 ubuntu_install: "server"
@@ -129,6 +127,13 @@ ubuntu_network_setup: "no"
 openstack_installation: "no"
 
 openstack_release: "mitaka"
+
+os_nova_ctrl: "no"
+os_nova_cmpt: "no"
+
+os_neutron_ctrl: "no"
+os_neutron_net: "no"
+os_neutron_cmpt: "no"
 
 primary_interface_name: "eth0"
 
