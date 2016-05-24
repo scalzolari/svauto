@@ -23,6 +23,7 @@
 # Build SDE + Cloud Services box:
 # ./vagrant-builder.sh --base-os=centos67 --product=svsde
 
+#VAGRANT_DEFAULT_PROVIDER=libvirt
 
 RAND_PORT=`awk -v min=1025 -v max=9999 'BEGIN{srand(); print int(min+rand()*(max-min+1))}'`
 
@@ -64,11 +65,11 @@ case "$BASE_OS" in
 		;;
 
 	centos67)
-		VBOX="box-cutter/centos67"
+		VBOX="centos/6"
 		;;
 
 	centos72)
-		VBOX="box-cutter/centos72"
+		VBOX="centos/7"
 		;;
 
 	*)
@@ -120,6 +121,9 @@ mkdir -p vagrant/$VM_NAME
 cp vagrant/Vagrantfile_template vagrant/$VM_NAME/Vagrantfile
 
 
+sed -i -e 's/vagrant_run:.*/vagrant_run: "yes"/' ansible/group_vars/all
+
+
 VBOX_SANITIZED=$(echo $VBOX | sed -e 's/\//\\\//g')
 
 
@@ -145,6 +149,7 @@ else
 
 	cd vagrant/$VM_NAME
 
-	vagrant up
+	echo
+	vagrant up --provider libvirt
 
 fi

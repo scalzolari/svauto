@@ -116,7 +116,8 @@
 
  
 - name: centos7 - dracut updating initrd of running kernel
-  command: /sbin/dracut -f
+  command: /sbin/dracut -f --regenerate-all
+  when: vagrant_run != 'yes'
 
 
 - name: centos7 - copy SSH Daemon config

@@ -17,7 +17,7 @@
 #
 
 #
-# Globl definitions
+# Global definitions
 #
 
 disable_autoconf: "no"
@@ -37,6 +37,9 @@ release: dev
 
 # Enable the Apache Virtual Host
 enable_apache_vhost: "no"
+
+# Vagrant run?
+vagrant_run: "no"
 
 
 #
