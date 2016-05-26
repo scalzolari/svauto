@@ -16,7 +16,7 @@
       "qemuargs": [
         ["-m","2048M"]
       ],
-      "disk_size": 7168,
+      "disk_size": 8192,
       "format": "raw",
       "headless": true,
       "accelerator": "kvm",
