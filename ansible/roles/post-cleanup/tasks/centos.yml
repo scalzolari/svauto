@@ -26,11 +26,12 @@
         state=absent
   with_items:
     - /etc/udev/rules.d/70-persistent-net.rules
+    - /etc/serial
   when: is_packer_building == 'yes'
 
 
 - name: centos - removing SSH Host keys
-  command: rm -f /etc/ssh/ssh_host_*
+  shell: rm -f /etc/ssh/ssh_host_*
   when: is_packer_building == 'yes'
 
 
@@ -40,4 +41,4 @@
 
 
 - name: centos - running sync
-  command: sync
+  shell: sync
