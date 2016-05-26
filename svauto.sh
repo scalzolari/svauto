@@ -586,13 +586,18 @@ then
 	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
-	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8, requires igb_uio
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 1.8  requires igb_uio - Labified
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2  requires igb_uio - Labified - Regular builds, no hack needed
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
+
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2  requires igb_uio - Labified - Includes the VMWare hack for the lab
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --vmdk --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify \
+		--setup-default-interface-script
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
 #	./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
@@ -1153,9 +1158,14 @@ then
 	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
 
-	# Linux SVPTS 7.30 on CentOS 7.2
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	# Linux SVPTS 7.30 on CentOS 7.2 - Regular builds
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --qcow2 --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify
+
+	# Linux SVPTS 7.30 on CentOS 7.2 - VMWare hack
+	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30.0202 --product-variant=vpl-1 --vmdk --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo --labify \
+		--setup-default-interface-script
 
 
 	# Linux SVPTS 7.30 on CentOS 6.7

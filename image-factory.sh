@@ -94,6 +94,12 @@ case $i in
 		shift
 		;;
 
+	--setup-default-interface-script)
+
+		SETUP_DEFAULT_INT_SH="yes"
+		shift
+		;;
+
 	--vm-xml)
 
 		VM_XML="yes"
@@ -369,6 +375,10 @@ fi
 
 if [ "$BASE_OS_UPGRADE" == "yes" ]; then
 	EXTRA_VARS="$EXTRA_VARS base_os_upgrade="yes""
+fi
+
+if [ "$SETUP_DEFAULT_INT_SH" == "yes" ]; then
+	EXTRA_VARS="$EXTRA_VARS centos7_vmware_net_hack="yes""
 fi
 
 if [ "$LABIFY" == "yes" ]; then

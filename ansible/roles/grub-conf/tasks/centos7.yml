@@ -13,11 +13,12 @@
 # limitations under the License.
 
 - name: centos7 - grub custom config
-  copy: src=centos7/grub_defaults
-        dest=/etc/default/grub
-        owner=root
-        group=root
-        mode=0644
+  template: src=centos7/grub_defaults
+            dest=/etc/default/grub
+            owner=root
+            group=root
+            mode=0644
+
 
 - name: centos7 - grub regenerating menu
   shell: /usr/sbin/grub2-mkconfig --output=/boot/grub2/grub.cfg

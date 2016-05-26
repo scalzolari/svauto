@@ -41,6 +41,9 @@ enable_apache_vhost: "no"
 # Vagrant run?
 vagrant_run: "no"
 
+# Enable a CentOS 7 hack for VMWare
+centos7_vmware_net_hack: "no"
+
 
 #
 # Sandvine Platform Definitions
