@@ -74,6 +74,7 @@
     - unzip
     - iotop
     - iftop
+    - figlet
     - iperf3
     - tcpick
     - parted

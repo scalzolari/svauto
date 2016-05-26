@@ -90,6 +90,7 @@
     - iotop 
     - iftop
     - which
+    - figlet
     - iperf3
     - bwm-ng
     - telnet 

@@ -99,9 +99,12 @@
   when: sv_auto_config == 'yes'
 
 
-- name: Copying Sandvine SVSPB login logo
-  copy: src=etc-issue-spb-logo
-        dest=/etc/issue
+- name: Copying Sandvine SVSPB login logo generator
+  copy: src=sandvine-motd-issue-banner.sh
+        dest=/tmp/sandvine-motd-issue-banner.sh
         owner=root
         group=root
-        mode=0644
+        mode=0755
+
+- name: Creating Sandvine SVSPB banner logo
+  command: /tmp/sandvine-motd-issue-banner.sh

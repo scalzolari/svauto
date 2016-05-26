@@ -42,6 +42,7 @@
     - socat
     - monit
     - ipset
+    - figlet
     - bwm-ng
     - ifstat
     - strace

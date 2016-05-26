@@ -75,12 +75,15 @@
     - svpts
 
 
-- name: centos | copy Sandvine SVPTS login logo
-  copy: src=etc-issue-pts-logo
-        dest=/etc/issue
+- name: Copying Sandvine SVPTS login logo generator
+  copy: src=sandvine-motd-issue-banner.sh
+        dest=/tmp/sandvine-motd-issue-banner.sh
         owner=root
         group=root
-        mode=0644
+        mode=0755
+
+- name: Creating Sandvine SVPTS banner logo
+  command: /tmp/sandvine-motd-issue-banner.sh
 
 
 - name: centos | yum excluding the kernel out from upgrades (DPDK issue)
