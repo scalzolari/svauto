@@ -145,3 +145,7 @@
 - name: ubuntu - vim as default for editor
   alternatives: name=editor path=/usr/bin/vim
   when: ubuntu_install == 'desktop'
+
+
+- name: ubuntu - add Sandvine's PPA Repository
+  apt_repository: repo='ppa:sandvine/packages'
