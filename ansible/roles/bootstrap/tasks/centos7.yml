@@ -71,6 +71,7 @@
     - tmux
     - lsof
     - nmap
+    - lshw
     - unzip
     - iotop
     - iftop

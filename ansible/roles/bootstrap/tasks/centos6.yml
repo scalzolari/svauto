@@ -85,6 +85,7 @@
     - lsof 
     - tmux
     - nmap
+    - lshw
     - unzip
     - acpid 
     - iotop 
