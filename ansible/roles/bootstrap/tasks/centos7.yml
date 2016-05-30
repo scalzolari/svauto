@@ -84,6 +84,7 @@
     - numactl
     - dos2unix
     - deltarpm
+    - python34
     - nmap-ncat
     - tcpreplay
     - man-pages
