@@ -290,10 +290,10 @@ else
 	if [ "$OPENSTACK_INSTALLATION" == "yes" ];
 	then
 		cd ~/svauto/ansible
-        	ansible-playbook -c local site-openstack.yml --extra-vars "openstack_installation=yes"
+        	ansible-playbook site-openstack.yml --extra-vars "openstack_installation=yes"
 	else
 
 		cd ~/svauto/ansible
-        	ansible-playbook -c local site-openstack.yml
+        	ansible-playbook site-openstack.yml
 	fi
 fi
