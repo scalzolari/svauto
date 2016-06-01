@@ -85,7 +85,7 @@ Resource to build a clean Ubuntu or CentOS images, without Ansible roles, just P
     ./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum
     
     # CentOS 6.7 - Blank server - Old Linux 2.6
-    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
+    ./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
     
     # CentOS 7.2 - Blank server - Old Linux 3.10
     ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum
@@ -99,10 +99,10 @@ Resource to build a clean Ubuntu or CentOS images, with Packer and Ansible, plus
     ./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init,grub-conf,post-cleanup
 
     # CentOS 6.7 - Blank server - Old Linux 2.6 - Bootstrapped
-    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init,grub-conf,post-cleanup
+    ./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,cloud-init,grub-conf,post-cleanup
     
     # CentOS 6.7 - Blank server - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support - Bootstrapped
-    ./image-factory.sh --release=dev --base-os=centos67 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=centos-xen,bootstrap,grub-conf,cloud-init,grub-conf,post-cleanup
+    ./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=centos-xen,bootstrap,grub-conf,cloud-init,grub-conf,post-cleanup
     
     # CentOS 7.2 - Blank server - Old Linux 3.10 - Bootstrapped
     ./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum --roles=bootstrap,grub-conf,cloud-init,post-cleanup

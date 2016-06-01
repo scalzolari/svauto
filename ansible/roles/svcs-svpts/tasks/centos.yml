@@ -17,7 +17,7 @@
         dest=/etc/localtime
         state=link
         force=yes
-  when: base_os == 'centos67'
+  when: base_os == 'centos68'
 
 
 - name: centos7 | update timezone

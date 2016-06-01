@@ -34,19 +34,19 @@ packer_build_cs_release()
 	#
 
 	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos68 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT
 
 	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos68 --base-os-upgrade --product=cs-svsde --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
-	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=prod --base-os=centos68 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos67 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=prod --base-os=centos68 --base-os-upgrade --product=cs-svspb --version=$RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT
 
 	# PTS 7.30 on CentOS 7 + Cloud Services customizations

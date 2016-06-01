@@ -15,7 +15,7 @@
 
 - name: centos | include common book
   include: centos-common.yml
-  when: base_os == 'centos72' or base_os == 'centos67'
+  when: base_os == 'centos72' or base_os == 'centos68'
 
 
 - name: centos7 | include custom book
@@ -25,12 +25,12 @@
 
 - name: centos6 | include custom book
   include: centos6.yml
-  when: base_os == 'centos67' and disable_autoconf != 'yes'
+  when: base_os == 'centos68' and disable_autoconf != 'yes'
 
 
 - name: centos | yum clean local cache
   command: yum clean all
-  when: base_os == 'centos72' or base_os == 'centos67'
+  when: base_os == 'centos72' or base_os == 'centos68'
 
 
 - name: freebsd8 | include custom book

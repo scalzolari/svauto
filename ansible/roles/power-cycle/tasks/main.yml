@@ -21,10 +21,10 @@
 # For CentOS 6:
 - name: Rebooting in 1 minute...
   shell: /sbin/shutdown -r 1 &
-  when: base_os == 'centos67'
+  when: base_os == 'centos68'
 
 
 - name: Force scdpd to stop, to make sure it will reboot
   shell: service scdpd stop
-  when: base_os == 'centos67'
+  when: base_os == 'centos68'
   ignore_errors: yes

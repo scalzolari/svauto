@@ -219,7 +219,7 @@ case "$BASE_OS" in
 
         *)
 		echo
-		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
 		exit 1
 		;;
 
@@ -259,8 +259,8 @@ case "$BASE_OS" in
                 cp packer/ubuntu16-template.yaml $PACKER_FILE
 		;;
 
-	centos67)
-		cp packer/centos67-template.yaml $PACKER_FILE
+	centos68)
+		cp packer/centos68-template.yaml $PACKER_FILE
 		;;
 
 	centos72)
@@ -269,7 +269,7 @@ case "$BASE_OS" in
 
         *)
 		echo
-		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
 		exit 1
 		;;
 
@@ -304,7 +304,7 @@ then
 
 	        *)
 			echo
-			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
 			exit 1
 			;;
 
@@ -341,7 +341,7 @@ then
 
 	        *)
 			echo
-			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+			echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
 			exit 1
 			;;
 
@@ -442,7 +442,7 @@ case "$BASE_OS" in
 
         *)
 		echo
-		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos67|centos72}"
+		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
 		exit 1
 		;;
 

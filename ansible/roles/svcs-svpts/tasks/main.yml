@@ -14,7 +14,7 @@
 
 - name: centos | include common book
   include: centos.yml
-  when: base_os == 'centos67' or base_os == 'centos72'
+  when: base_os == 'centos68' or base_os == 'centos72'
 
 
 - name: freebsd8 | include custom book

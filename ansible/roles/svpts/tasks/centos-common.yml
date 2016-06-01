@@ -65,7 +65,7 @@
             owner=root
             group=root
             mode=0644
-  when: base_os == 'centos67' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
+  when: base_os == 'centos68' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
 
 
 # Deployment
