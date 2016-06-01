@@ -213,6 +213,21 @@ fi
 
 if [ "$LIBVIRT_INSTALL_IMAGES" == "yes" ]
 then
+
+	PTS_STATE=`virsh dominfo $SVPTS | grep State | awk $'{print $2}'`
+	SDE_STATE=`virsh dominfo $SVSDE | grep State | awk $'{print $2}'`
+	SPB_STATE=`virsh dominfo $SVSPB | grep State | awk $'{print $2}'`
+
+	if [ "$PTS_STATE" == "running" ] || [ "$SDE_STATE" == "running" ] || [ "SPB_STATE" == "running" ]
+	then
+
+		echo
+		echo "Warning! The Virtual Machines are running, aborting images installation."
+
+		exit 1
+
+	fi
+
 	echo
 	echo "Deploying QCoW2 images into /var/lib/libvirt/images subdirectory..."
 
