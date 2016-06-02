@@ -145,13 +145,9 @@ then
 	echo
 	echo "Cleaning it up..."
 
-	[ -f build-date.txt ] && rm -f build-date.txt
-
 	git checkout ansible/hosts ansible/group_vars/all
 
-	rm -rf packer/build*
-
-	rm -f tmp/cs-rel/* tmp/cs/* tmp/sv/*
+	rm -rf build-date.txt packer/build* tmp/cs-rel/* tmp/cs/* tmp/sv/*
 
 	echo
 
@@ -235,15 +231,29 @@ fi
 if [ ! "$LABIFY" == "yes" ]
 then
 
-	if [ ! -f ~/demo-openrc.sh ]
+
+	if [ -z $OS_PROJECT ]
 	then
 		echo
-		echo "OpenStack Credentials for "demo" account not found, aborting!"
+		echo "You did not specified the OpenStack Project name, by passing:"
+		echo
+		echo "--os-project=\"demo\" to ~/svauto.sh"
+
+		exit 1
+	fi
+
+
+	if [ ! -f ~/$OS_PROJECT-openrc.sh ]
+	then
+		echo
+		echo "OpenStack Credentials for "$OS_PROJECT" account not found, aborting!"
+
 		exit 1
 	else
 		echo
-		echo "Loading OpenStack credentials for "demo" account..."
-		source ~/demo-openrc.sh
+		echo "Loading OpenStack credentials for "$OS_PROJECT" account..."
+
+		source ~/$OS_PROJECT-openrc.sh
 	fi
 
 
@@ -253,24 +263,23 @@ then
 		echo "You did not specified the destination Stack to deploy Sandvine's RPM Packages."
 		echo "However, the following Stack(s) was detected under your account:"
 		echo
+
 		heat stack-list
+
 		echo
-		echo "You must run this script passing the \"Stack Name\" as an argument, like this:"
+		echo "Run this script with the following arguments:"
 		echo
-		echo "Assuming you downloaded it under ~/svauto:"
+		echo "cd ~/svauto"
+		echo "./svauto.sh --os-project=\"demo\" --stack=demo"
 		echo
-		echo "cd ~/svauto ; ./svauto.sh --stack=demo"
 		echo
-		echo
-		echo "If you don't have a Sandvine compatible Stack up and running, you can start one"
-		echo "right now by running:"
+		echo "If you don't have a Sandvine compatible Stack up and running."
+		echo "To launch one, run:"
 		echo
 		echo "heat stack-create demo -f ~/svauto/misc/os-heat-templates/sandvine-stack-0.1-centos.yaml"
 		echo
-		echo "And re-run the \`cd ~/svauto ; ./svauto.sh\` script again, passing \"--stack=demo\""
-		echo "as an argument to it."
-		echo
 		echo "Aborting!"
+
 		exit 1
 	fi
 
