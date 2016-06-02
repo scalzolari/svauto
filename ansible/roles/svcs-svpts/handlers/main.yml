@@ -13,5 +13,5 @@
 # limitations under the License.
 
 - name: reload sandvine
-  shell: svreload
+  shell: cd /usr/local/sandvine/etc ; svreload
   when: deployment_mode != 'yes'
