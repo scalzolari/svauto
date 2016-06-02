@@ -116,7 +116,7 @@ Well done!
 
     cd svauto
 
-    ./os-deploy.sh
+    ./svauto.sh --operation-openstack
 
 ## For remote deployments:
 
@@ -140,7 +140,7 @@ Then, run `Ansible`:
 
     ansible-playbook site-openstack.yml
 
-**NOTE:** You can take a look at the script `os-deploy.sh` to see what needs to be changed before running `Ansible`.
+**NOTE:** You can take a look at the script `svauto.sh --operation-openstack` to see what needs to be changed before running `Ansible`.
 
 # Extra info
 

@@ -115,6 +115,12 @@ case $i in
 		shift
 		;;
 
+	--operation-openstack)
+
+		OPERATION_OPENSTACK="yes"
+		shift
+		;;
+
 	--libvirt-files)
 
 		LIBVIRT_FILES="yes"
@@ -140,6 +146,48 @@ case $i in
 		YUM_REPO_BUILDER="yes"
 		shift
 		;;
+
+        --base-os=*)
+
+                BASE_OS="${i#*=}"
+                shift
+                ;;
+
+	--base-os-upgrade)
+
+		BASE_OS_UPGRADE="yes"
+		shift
+		;;
+
+        --use-dummies)
+
+	        USE_DUMMIES="yes"
+		shift
+        	;;
+
+        --br-mode=*)
+
+	        BR_MODE="${i#*=}"
+        	shift
+		;;
+
+        --ovs-hybrid-firewall)
+
+	        OVS_HYBRID_FW="yes"
+		shift
+		;;
+
+        --no-security-groups)
+
+	        NO_SEC="yes"
+		shift
+        	;;
+
+        --openstack-release=*)
+
+	        OPENSTACK_RELEASE="${i#*=}"
+		shift
+        	;;
 
 	--clean-all)
 
@@ -168,6 +216,20 @@ then
 	rm -rf build-date.txt packer/build* tmp/cs-rel/* tmp/cs/* tmp/sv/*
 
 	echo
+
+	exit 0
+
+fi
+
+
+if [ "$OPERATION_OPENSTACK" == "yes" ]
+then
+
+	echo
+	echo "Installing OpenStack with SVAuto:"
+	echo
+
+	os_deploy
 
 	exit 0
 

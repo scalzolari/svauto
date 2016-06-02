@@ -1,5 +1,7 @@
 #! /bin/bash
 
+source lib/os-deploy.sh
+
 source lib/move2webroot.sh
 
 source lib/yum_repo_builder.sh
