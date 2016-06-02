@@ -17,7 +17,7 @@
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/neutron-controller-install-option2.html
 
 - include: openstack-neutron-init.yml
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: Installing Neutron Server

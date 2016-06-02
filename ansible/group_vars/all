@@ -44,6 +44,9 @@ vagrant_run: "no"
 # Enable a CentOS 7 hack for VMWare
 centos7_vmware_net_hack: "no"
 
+# Deployment mode
+deployment_mode: "yes"
+
 
 #
 # Sandvine Platform Definitions
@@ -84,9 +87,6 @@ cs_auto_config: "yes"
 
 # Is it labified?
 labifyit: "no"
-
-# Is this running under Packer build?
-is_packer_building: "no"
 
 # Is Experimental Repo:
 is_experimental: "no"
@@ -129,8 +129,6 @@ ubuntu_user: "administrative"
 ubuntu_install: "server"
 
 ubuntu_network_setup: "no"
-
-openstack_installation: "no"
 
 openstack_release: "mitaka"
 

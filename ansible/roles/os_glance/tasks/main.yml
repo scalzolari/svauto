@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - include: openstack-glance-init.yml
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 # Reference:
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/glance-install.html

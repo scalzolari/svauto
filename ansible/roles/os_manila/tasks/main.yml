@@ -16,7 +16,7 @@
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/manila-controller-install.html
 
 - include: openstack-manila-init.yml
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: Installing Manila

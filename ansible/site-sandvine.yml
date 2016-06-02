@@ -45,5 +45,5 @@
   become: yes
   roles:
   - role: bootstrap
-  - role: svcsd
+  - role: svcs
   - role: power-cycle

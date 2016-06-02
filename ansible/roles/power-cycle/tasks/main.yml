@@ -13,18 +13,18 @@
 # limitations under the License.
 
 # For CentOS 7
-- name: Rebooting in 1 minute...
+- name: centos7 - rebooting in 1 minute...
   shell: /sbin/shutdown -r 1 --no-wall
-  when: base_os == 'centos72'
+  when: base_os == 'centos72' and deployment_mode == 'yes'
 
 
 # For CentOS 6:
-- name: Rebooting in 1 minute...
+- name: centos6 - rebooting in 1 minute...
   shell: /sbin/shutdown -r 1 &
-  when: base_os == 'centos68'
+  when: base_os == 'centos68' and deployment_mode == 'yes'
 
 
-- name: Force scdpd to stop, to make sure it will reboot
+- name: centos6 - force scdpd to stop, to make sure it will reboot
   shell: service scdpd stop
-  when: base_os == 'centos68'
+  when: base_os == 'centos68' and deployment_mode == 'yes'
   ignore_errors: yes

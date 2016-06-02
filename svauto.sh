@@ -97,6 +97,24 @@ case $i in
 		shift
 		;;
 
+	--deployment-mode)
+
+		DEPLOYMENT_MODE="yes"
+		shift
+		;;
+
+	--operation-sandvine)
+
+		OPERATION_SANDVINE="yes"
+		shift
+		;;
+
+	--operation-cloud-services)
+
+		OPERATION_CLOUD_SERVICES="yes"
+		shift
+		;;
+
 	--libvirt-files)
 
 		LIBVIRT_FILES="yes"
@@ -452,25 +470,43 @@ fi
 
 if [ "$DRY_RUN" == "yes" ]
 then
+
 	echo
 	echo "Not running Ansible! Just preparing the environment variables and site-*.yml..."
-else
-	if [ ! "$LABIFY" == "yes" ]
-	then
-		echo
-		echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
 
-		echo
-		cd ansible
-		ansible-playbook site-cloudservices.yml
-	else
+else
+
+	if [ "$DEPLOYMENT_MODE" == "yes" ]
+	then
+		EXTRA_VARS="--extra-vars \"deployment_mode=yes\""
+	fi
+
+
+	if [ "$OPERATION_SANDVINE" == "yes" ]
+	then
+
 		echo
 		echo "Configuring Sandvine Platform with Ansible..."
 
 		echo
 		cd ansible
-		ansible-playbook site-preinstalled.yml
+		ansible-playbook site-sandvine.yml $EXTRA_VARS
+
 	fi
+
+
+	if [ "$OPERATION_CLOUD_SERVICES" == "yes" ]
+	then
+
+		echo
+		echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
+
+		echo
+		cd ansible
+		ansible-playbook site-cloudservices.yml $EXTRA_VARS
+
+	fi
+
 fi
 
 

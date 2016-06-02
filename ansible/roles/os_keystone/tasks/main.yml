@@ -91,7 +91,7 @@
 
 
 - include: openstack-keystone-init.yml
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: Updating keystone-paste.ini

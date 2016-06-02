@@ -64,9 +64,9 @@ case $i in
 		shift
         	;;
 
-        --openstack-installation)
+        --deployment-mode)
 
-	        OPENSTACK_INSTALLATION="yes"
+	        DEPLOYMENT_MODE="yes"
 		shift
         	;;
 
@@ -88,10 +88,10 @@ then
 	echo "You need to correctly specify the Bridge Mode for your OpenStack."
 	echo
 	echo "For Open vSwitch based deployments:"
-	echo "./os-deploy.sh --br-mode=OVS --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation"
+	echo "./os-deploy.sh --br-mode=OVS --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --deployment-mode"
 	echo
 	echo "For Linux Bridges based deployments:"
-	echo "./os-deploy.sh --br-mode=LBR --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --openstack-installation"
+	echo "./os-deploy.sh --br-mode=LBR --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --deployment-mode"
 
 	exit 1
 fi
@@ -277,7 +277,7 @@ then
 	echo "Just preparing the environment variables, so you can run Ansible manually, like:"
 	echo
 	echo "cd ~/svauto/ansible"
-	echo "ansible-playbook site-openstack.yml --extra-vars \"openstack_installation=yes\""
+	echo "ansible-playbook site-openstack.yml --extra-vars \"deployment_mode=yes\""
 	echo
 	echo "And a second run after a successful deployment:"
 	echo
@@ -287,10 +287,10 @@ else
 	echo
 	echo "Running Ansible, deploying OpenStack:"
 
-	if [ "$OPENSTACK_INSTALLATION" == "yes" ];
+	if [ "$DEPLOYMENT_MODE" == "yes" ];
 	then
 		cd ~/svauto/ansible
-        	ansible-playbook site-openstack.yml --extra-vars "openstack_installation=yes"
+		ansible-playbook site-openstack.yml --extra-vars "deployment_mode=yes"
 	else
 
 		cd ~/svauto/ansible

@@ -16,7 +16,7 @@
 # http://docs.openstack.org/mitaka/install-guide-ubuntu/cinder-controller-install.html
 
 - include: openstack-cinder-init.yml
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: Installing Cinder Server

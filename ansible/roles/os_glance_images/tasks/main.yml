@@ -20,7 +20,7 @@
 
 - name: Wait a bit until Glance starts up properly...
   pause: seconds=5
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: Adding a few Operating System images into Glance
@@ -44,7 +44,7 @@
   # Cirrus Test Image
   - glance image-create --location http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-i386-disk.img --name "CirrOS 0.3.4 - Minimalist - 32-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
   - glance image-create --location http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img --name "CirrOS 0.3.4 - Minimalist - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
-  when: openstack_installation == 'yes'
+  when: deployment_mode == 'yes'
 
 
 #- name: Updating O.S. images properties
@@ -61,4 +61,4 @@
 #  - glance image-update --property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi "Ubuntu 12.04.5 LTS - Precise Pangolin - 64-bit - Cloud Based Image"
 #  - glance image-update --property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi "Ubuntu 14.04.3 LTS - Trusty Tahr - 32-bit - Cloud Based Image"
 #  - glance image-update --property hw_scsi_model=virtio-scsi --property hw_disk_bus=scsi "Ubuntu 14.04.3 LTS - Trusty Tahr - 64-bit - Cloud Based Image"
-#  when: openstack_installation == 'yes'
+#  when: deployment_mode == 'yes'

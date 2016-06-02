@@ -14,7 +14,7 @@
 
 - name: centos - yum removing old kernels, keep two around
   shell: package-cleanup --oldkernels --count=2 -y
-  when: is_packer_building != 'yes'
+  when: deployment_mode != 'yes'
 
 
 - name: centos - yum cleaning up cache
@@ -27,17 +27,17 @@
   with_items:
     - /etc/udev/rules.d/70-persistent-net.rules
     - /etc/serial
-  when: is_packer_building == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: centos - removing SSH Host keys
   shell: rm -f /etc/ssh/ssh_host_*
-  when: is_packer_building == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: centos - write zeroes
   shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY
-  when: is_packer_building == 'yes'
+  when: deployment_mode == 'yes'
 
 
 - name: centos - running sync
