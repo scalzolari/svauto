@@ -45,7 +45,7 @@ vagrant_run: "no"
 centos7_vmware_net_hack: "no"
 
 # Deployment mode
-deployment_mode: "yes"
+deployment_mode: "no"
 
 
 #
