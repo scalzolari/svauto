@@ -1,0 +1,50 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: ubuntu - registering how many CPUs supports 1G HugePages
+  shell: cat /proc/cpuinfo | grep pdpe1gb | wc -l
+  register: processor_count_1g_hugepages
+  tags: processor_count_1g_hugepages
+
+
+- name: ubuntu - apt installing Open vSwitch with DPDK
+  apt: name={{item}} state=latest
+  with_items:
+    - openvswitch-switch-dpdk
+    - python-openvswitch
+  notify: restart-openvswitch
+
+
+- name: ubuntu - copy openvswitch defaults
+  template: src=etc_default_openvswitch-switch.j2
+            dest=/etc/default/openvswitch-switch
+            owner=root
+            group=root
+            mode=0644
+  notify: restart-openvswitch
+
+
+- name: ubuntu - ovs-vswitchd as default for OVS vSwitch
+  alternatives: name=ovs-vswitchd path=/usr/lib/openvswitch-switch/ovs-vswitchd
+  notify: restart-openvswitch
+  when: ovs_dpdk == 'no'
+
+
+- name: ubuntu - ovs-vswitchd-dpdk as default for OVS vSwitch
+  alternatives: name=ovs-vswitchd path=/usr/lib/openvswitch-switch-dpdk/ovs-vswitchd-dpdk
+  notify: restart-openvswitch
+  when: ovs_dpdk == 'yes'
+
+
+- meta: flush_handlers

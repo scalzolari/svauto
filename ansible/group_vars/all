@@ -44,9 +44,11 @@ vagrant_run: "no"
 # Enable a CentOS 7 hack for VMWare
 centos7_vmware_net_hack: "no"
 
-# Deployment mode
+# Deployment mode:
 deployment_mode: "no"
 
+# Open vSwitch with DPDK?
+ovs_dpdk: "no"
 
 #
 # Sandvine Platform Definitions
@@ -124,8 +126,8 @@ csd_version: "1.00"
 # DPDK Setup
 #
 
-dpdk_nr_1g_pages: "32"
-dpdk_nr_2m_pages: "512"
+dpdk_nr_1g_pages: "1"
+dpdk_nr_2m_pages: "64"
 
 dpdk_bus: "pci"
 
