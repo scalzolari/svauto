@@ -415,6 +415,8 @@ echo "Preparing the Ansible Playbooks to deploy Sandvine's RPM Packages..."
 if [ ! "$LABIFY" == "yes" ]
 then
 
+	git checkout ansible/hosts
+
 	if [ "$FREEBSD_PTS" == "yes" ]
 	then
 		sed -i -e 's/^#FREEBSD_PTS_IP/'$PTS_FLOAT'/g' ansible/hosts
@@ -492,6 +494,7 @@ then
 
 	echo
 	echo "Configuring group_vars/all..."
+
 	sed -i -e 's/int_subnet:.*/int_subnet: '$INT_SUBNET'/g' ansible/group_vars/all
 
 	sed -i -e 's/pts_ctrl_ip:.*/pts_ctrl_ip: '$PTS_CTRL_IP'/g' ansible/group_vars/all
@@ -509,8 +512,12 @@ then
 	sed -i -e 's/ga_srvc_ip:.*/ga_srvc_ip: '$SDE_SRVC_IP'/g' ansible/group_vars/all
 
 
+	git checkout ansible/hosts
+
+
 	echo
 	echo "Configuring hosts..."
+
 	if [ "$FREEBSD_PTS" == "yes" ]
 	then
 		echo
