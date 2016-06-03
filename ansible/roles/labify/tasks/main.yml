@@ -13,11 +13,11 @@
 # limitations under the License.
 
 - include: main-centos6.yml
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'
 
 
 - include: main-centos7.yml
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 
 # Add flag file so labify-linux knows this TPC was imaged with kickstart

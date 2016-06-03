@@ -9,7 +9,7 @@
       ],
       "iso_checksum": "0ca12fe5f28c2ceed4f4084b41ff8a0b",
       "iso_checksum_type": "md5",
-      "output_directory": "packer/centos68-tmpl",
+      "output_directory": "packer/centos6-tmpl",
       "vm_name": "centos-6.8-x86_64-minimal.raw",
       "ssh_wait_timeout": "30s",
       "shutdown_command": "shutdown -P now",

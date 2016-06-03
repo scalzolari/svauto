@@ -25,9 +25,9 @@ disable_autoconf: "no"
 # Base O.S.:
 # Ubuntu: ubuntu14, ubuntu16
 # Debian: jessie, stretch
-# CentOS: centos68, centos72
+# CentOS: centos6, centos7
 # FreeBSD: freebsd8
-base_os: centos68
+base_os: centos6
 
 # Upgrade Base OS:
 base_os_upgrade: "no"

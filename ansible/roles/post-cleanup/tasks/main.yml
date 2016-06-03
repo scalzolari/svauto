@@ -19,4 +19,4 @@
 
 - name: centos - include config
   include: centos.yml
-  when: base_os == 'centos72' or base_os == 'centos68'
+  when: base_os == 'centos7' or base_os == 'centos6'

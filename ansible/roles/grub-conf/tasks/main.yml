@@ -25,9 +25,9 @@
 
 - name: centos7 - include config
   include: centos7.yml
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 
 - name: centos6 - include config
   include: centos6.yml
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'

@@ -16,12 +16,12 @@
 
 # First version of vagrant-builder.sh, still very basic but, fully functional!
 
-# Golang and NodeJS on CentOS 6.7 and 7.2:
-# ./vagrant-builder.sh --base-os=centos68 --product=svcs-build
-# ./vagrant-builder.sh --base-os=centos72 --product=svcs-build
+# Golang and NodeJS on CentOS 6 and 7:
+# ./vagrant-builder.sh --base-os=centos6 --product=svcs-build
+# ./vagrant-builder.sh --base-os=centos7 --product=svcs-build
 
 # Build SDE + Cloud Services box:
-# ./vagrant-builder.sh --base-os=centos68 --product=svsde
+# ./vagrant-builder.sh --base-os=centos6 --product=svsde
 
 #VAGRANT_DEFAULT_PROVIDER=libvirt
 
@@ -64,17 +64,17 @@ case "$BASE_OS" in
 		VBOX="ubuntu/xenial64"
 		;;
 
-	centos68)
+	centos6)
 		VBOX="centos/6"
 		;;
 
-	centos72)
+	centos7)
 		VBOX="centos/7"
 		;;
 
 	*)
                 echo
-                echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos68|centos72}"
+                echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos6|centos7}"
                 exit 1
                 ;;
 

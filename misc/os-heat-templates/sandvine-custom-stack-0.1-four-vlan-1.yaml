@@ -6,9 +6,9 @@ description: >
 
   We have 4 Instances:
 
-  * 2 PTS - CentOS 7.2
-  * 1 SDE - CentOS 6.7
-  * 1 SPB - CentOS 6.7
+  * 2 PTS - CentOS 7
+  * 1 SDE - CentOS 6
+  * 1 SPB - CentOS 6
 
 
   We want to wire them as:

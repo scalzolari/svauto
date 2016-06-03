@@ -7,7 +7,7 @@
 #ec2-54-16X-Y3-1Z1.compute-1.amazonaws.com
 
 [svpts-servers]
-#PTS_IP base_os=centos72
+#PTS_IP base_os=centos7
 #FREEBSD_PTS_IP ansible_python_interpreter=/usr/local/bin/python2.7
 #alex+instance+nubo
 

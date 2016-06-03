@@ -47,7 +47,7 @@
             owner=root
             group=root
             mode=0644
-  when: base_os == 'centos72' and static_repo == 'true' and versioned_repo == 'true' and release == 'prod'
+  when: base_os == 'centos7' and static_repo == 'true' and versioned_repo == 'true' and release == 'prod'
 
 
 - name: centos7 - copy Sandvine SVPTS Repository - Static - Versioned
@@ -56,7 +56,7 @@
             owner=root
             group=root
             mode=0644
-  when: base_os == 'centos72' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
+  when: base_os == 'centos7' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
 
 
 - name: centos6 - copy Sandvine SVPTS Repository - Static - Versioned
@@ -65,7 +65,7 @@
             owner=root
             group=root
             mode=0644
-  when: base_os == 'centos68' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
+  when: base_os == 'centos6' and static_repo == 'true' and versioned_repo == 'true' and release == 'dev'
 
 
 - name: centos - creating /d2 subdirectory

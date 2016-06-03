@@ -15,7 +15,7 @@
 # CentOS Bootstrap tasks
 - name: centos - include common book
   include: centos-common.yml
-  when: base_os == 'centos72' or base_os == 'centos68'
+  when: base_os == 'centos7' or base_os == 'centos6'
 
 
 # Ubuntu Bootstrap tasks

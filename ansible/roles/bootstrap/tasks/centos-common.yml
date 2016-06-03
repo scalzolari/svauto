@@ -56,11 +56,11 @@
 
 - name: centos7 - include custom book
   include: centos7.yml
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 - name: centos6 - include custom book
   include: centos6.yml
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'
 
 
 - name: centos - copy root's Bash RC 

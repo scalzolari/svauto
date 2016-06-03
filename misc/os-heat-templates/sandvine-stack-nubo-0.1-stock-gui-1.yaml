@@ -6,9 +6,9 @@ description: >
 
   We have 4 Instances:
 
-  * PTS - CentOS 7.2
-  * SDE - CentOS 6.7
-  * SPB - CentOS 6.7
+  * PTS - CentOS 7
+  * SDE - CentOS 6
+  * SPB - CentOS 6
   * GUI - Windows or Android
 
   We want to wire them as:

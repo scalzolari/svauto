@@ -17,12 +17,12 @@
         dest=/etc/localtime
         state=link
         force=yes
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'
 
 
 - name: centos7 | update timezone
   command: /usr/bin/timedatectl set-timezone UTC
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 
 - name: centos | yum installing Cloud Services packages

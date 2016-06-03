@@ -18,7 +18,7 @@
             owner=sv_admin
             group=sv_admin
             mode=0644
-  when: base_os == 'centos72' or base_os == 'centos68'
+  when: base_os == 'centos7' or base_os == 'centos6'
   notify: reload sandvine
 
 

@@ -75,19 +75,19 @@ done
 
 case "$BASE_OS" in
 
-	centos68)
+	centos6)
 		BASE_OS="RHEL6-x64"
 		OS_DIR="6"
 		;;
 
-	centos72)
+	centos7)
 		BASE_OS="RHEL7-x64"
 		OS_DIR="7"
 		;;
 
 	*)
                 echo
-                echo "Usage: $0 --base-os={centos68|centos72}"
+                echo "Usage: $0 --base-os={centos6|centos7}"
                 exit 1
                 ;;
 

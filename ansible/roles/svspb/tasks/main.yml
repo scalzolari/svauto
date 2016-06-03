@@ -53,12 +53,12 @@
 # For CentOS 7:
 - name: Installing PostgreSQL 9.3 RPM Repository package for CentOS 7
   yum: pkg=http://yum.postgresql.org/9.3/redhat/rhel-7-x86_64/pgdg-centos93-9.3-1.noarch.rpm state=present
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 # For CentOS 6:
 - name: Installing PostgreSQL 9.3 RPM Repository package for CentOS 6
   yum: pkg=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-redhat93-9.3-1.noarch.rpm state=present
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'
 
 
 - name: Installing required packages and the SVSPB

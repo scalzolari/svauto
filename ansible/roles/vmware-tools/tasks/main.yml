@@ -13,11 +13,11 @@
 # limitations under the License.
 
 - include: centos6.yml
-  when: base_os == 'centos68'
+  when: base_os == 'centos6'
 
 
 - include: centos7.yml
-  when: base_os == 'centos72'
+  when: base_os == 'centos7'
 
 
 - include: ubuntu.yml

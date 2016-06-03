@@ -13,40 +13,40 @@ packer_build_cs()
 	#
 
 	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front)
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# SPB 6.60 on CentOS 6 + Cloud Services
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services - Labified
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2, requires igb_uio
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2  requires igb_uio - Labified - Regular builds, no hack needed
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --qcow2 --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, old DPDK 2.2  requires igb_uio - Labified - Includes the VMWare hack for the lab
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --vmdk --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --vmdk --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --labify \
 		--setup-default-interface-script
 
 	# SDE 7.30 on CentOS 6 + Cloud Services SDE only - No Cloud Services daemon here!
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.30 --product-variant=sde-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# Cloud Services Daemon 7.40 (back / front) on CentOS 6 - No SDE here!
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svcsd --version=7.40 --product-variant=csd-cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svcs,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
@@ -55,53 +55,53 @@ packer_build_cs()
 	#
 
 	# SDE 7.50 on CentOS 7
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SDE 7.50 on CentOS 7
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.50 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.45 on CentOS 6
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
        	# SDE 7.40 on CentOS 6
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.40 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
 	# SPB 7.00 on CentOS 6
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=7.00 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --versioned-repo $DRY_RUN_OPT
 
 	#
 	# BUILD ENVIRONMENT
 	#
 
-	# Cloud Services Build Server (back / front) on CentOS 6.7 (new Golang 1.5)
-	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (back / front) on CentOS 6 (new Golang 1.5)
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=centos --version=6 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# Cloud Services Build Server (back / front) on CentOS 7.2 (old Golang 1.4)
-	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (back / front) on CentOS 7 (old Golang 1.4)
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=centos --version=7 --product-variant=build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
-	# Cloud Services Build Server (back) on CentOS 6.7 (new Golang 1.5)
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (back) on CentOS 6 (new Golang 1.5)
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=centos --version=6 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# Cloud Services Build Server (front) on CentOS 6.7 (NodeJS)
-#	./image-factory.sh --release=dev --base-os=centos68 --base-os-upgrade --product=centos --version=6.7 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (front) on CentOS 6 (NodeJS)
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=centos --version=6 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 
-	# Cloud Services Build Server (back) on CentOS 7.2 (old Golang 1.4)
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (back) on CentOS 7 (old Golang 1.4)
+#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=centos --version=7 --product-variant=go-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,golang-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
-	# Cloud Services Build Server (front) on CentOS 7.2 (NodeJS)
-#	./image-factory.sh --release=dev --base-os=centos72 --base-os-upgrade --product=centos --version=7.2 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	# Cloud Services Build Server (front) on CentOS 7 (NodeJS)
+#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=centos --version=7 --product-variant=nodejs-build-srv-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #	        --roles=centos-xen,cloud-init,bootstrap,grub-conf,nodejs-env,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 

@@ -15,16 +15,16 @@
 # For CentOS 7
 - name: centos7 - rebooting in 1 minute...
   shell: /sbin/shutdown -r 1 --no-wall
-  when: base_os == 'centos72' and deployment_mode == 'yes'
+  when: base_os == 'centos7' and deployment_mode == 'yes'
 
 
 # For CentOS 6:
 - name: centos6 - rebooting in 1 minute...
   shell: /sbin/shutdown -r 1 &
-  when: base_os == 'centos68' and deployment_mode == 'yes'
+  when: base_os == 'centos6' and deployment_mode == 'yes'
 
 
 - name: centos6 - force scdpd to stop, to make sure it will reboot
   shell: service scdpd stop
-  when: base_os == 'centos68' and deployment_mode == 'yes'
+  when: base_os == 'centos6' and deployment_mode == 'yes'
   ignore_errors: yes
