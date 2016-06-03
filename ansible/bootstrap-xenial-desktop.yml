@@ -20,6 +20,7 @@
   become: yes
   roles:
   - role: bootstrap
+  - role: grub-conf
   - role: hyper_kvm
   - role: google-chrome
   - role: scudcloud
