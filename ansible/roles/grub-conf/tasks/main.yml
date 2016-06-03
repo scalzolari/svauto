@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+- name: ubuntu - how many CPUs supports 1G HugePages
+  shell: cat /proc/cpuinfo | grep pdpe1gb | wc -l
+  register: processor_count_1g_hugepages
+  tags: processor_count_1g_hugepages
+
+
 - name: ubuntu - include config
   include: ubuntu-common.yml
   when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
