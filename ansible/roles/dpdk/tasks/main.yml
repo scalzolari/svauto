@@ -30,6 +30,7 @@
             owner=root
             group=root
             mode=0644
+            backup=yes
 
 
 - name: ubuntu - copy interfaces
@@ -38,3 +39,4 @@
             owner=root
             group=root
             mode=0644
+            backup=yes
