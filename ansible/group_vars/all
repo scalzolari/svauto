@@ -121,6 +121,28 @@ csd_version: "1.00"
 
 
 #
+# DPDK Setup
+#
+
+dpdk_nr_1g_pages: "32"
+dpdk_nr_2m_pages: "512"
+
+dpdk_bus: "pci"
+
+dpdk_id_1: "0000:06:00.0"
+dpdk_driver_1: "uio_pci_generic"
+
+dpdk_id_2: "0000:06:00.1"
+dpdk_driver_2: "uio_pci_generic"
+
+dpdk_id_3: "0000:09:00.0"
+dpdk_driver_3: "vfio-pci"
+
+dpdk_id_4: "0000:09:00.1"
+dpdk_driver_4: "vfio-pci"
+
+
+#
 # OpenStack Definitions
 #
 
