@@ -6,7 +6,7 @@ Ansible playbooks for deploying `OpenStack`.  http://openstack.org
 
 # Overview
 
-You'll need an `Ubuntu Trusty` up and running, fully upgraded, before deploying `OpenStack` on top of it.
+You'll need an `Ubuntu Xenial` up and running, fully upgraded, before deploying `OpenStack` on top of it.
 
 Our `Ansible` playbooks provides two ways to deploy `OpenStack`, first and quick mode, is by running it on your local computer, the second mode is a bit more advanced, where you'll be deploying `OpenStack` on remote computers.
 
@@ -22,7 +22,7 @@ In the next version of our `Ansible` playbooks, `Open vSwitch` will be supported
 
 ## Before start, keep in mind that:
 
-A- A fresh installation and fully upgraded `Ubuntu Trusty`, with Linux 3.19, is required.
+A- A fresh installation and fully upgraded `Ubuntu Xenial` is required.
 
 B- Make sure you can use `sudo` without password.
 
@@ -32,7 +32,7 @@ D- Your `IP + FQDN + hostname + aliases` should be configured in your `/etc/host
 
 # Quick Procedure
 
-## 1- Install Ubuntu 14.04.3 (Server or Desktop), details:
+## 1- Install Ubuntu 16.04 (Server or Desktop), details:
 
 * Hostname: "mitaka-1"
 * User: "administrative"
