@@ -51,15 +51,51 @@ BUILD_RAND=$(openssl rand -hex 4)
 PLAYBOOK_FILE="playbook-"$BUILD_RAND"-"$ALL_ROLES".yml"
 
 
+# O.S. "Detector"
+if [ -f /etc/lsb-release ]; then
+	. /etc/lsb-release
+	OS=$DISTRIB_ID
+	VER=$DISTRIB_RELEASE
+elif [ -f /etc/debian_version ]; then
+	OS=Debian
+	VER=$(cat /etc/debian_version)
+elif [ -f /etc/redhat-release ]; then
+	OS=RedHat
+else
+	OS=""
+fi
+
+
 echo
 echo "Welcome to SVAuto, the Sandvine Automation!"
 
 
 echo
-echo "Installing SVAuto basic dependencies:"
+echo "Installing SVAuto basic dependencies (Git & Ansible):"
 
-echo
-sudo apt -y install git ansible
+case $OS in
+
+	Ubuntu|Debian)
+
+		echo
+		sudo apt -y install git ansible
+		;;
+
+	RedHat)
+
+		echo
+		sudo yum --enablerepo=epel-testing -y install git ansible
+		;;
+
+	*)
+
+                echo
+                echo "Operation System not detected, aborting!"
+                exit 1
+                ;;
+
+esac
+
 
 echo
 
@@ -89,7 +125,7 @@ fi
 
 
 echo
-echo "Loading SVAuto includes:"
+echo "Loading SVAuto includes..."
 cd ~/svauto
 source lib/include-tools.inc
 
@@ -102,7 +138,7 @@ echo "Extra Vars: "$ALL_EXTRA_VARS"."
 
 
 echo
-echo "Building Ansible top-level Playbook:"
+echo "Building Ansible top-level Playbook..."
 
 echo
 ansible_playbook_builder --base-os="$BASE_OS" --ansible-hosts="localhost" --roles="$ALL_ROLES" > ansible/tmp/$PLAYBOOK_FILE
