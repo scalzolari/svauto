@@ -51,19 +51,8 @@ BUILD_RAND=$(openssl rand -hex 4)
 PLAYBOOK_FILE="playbook-"$BUILD_RAND"-"$ALL_ROLES".yml"
 
 
-# O.S. "Detector"
-if [ -f /etc/lsb-release ]; then
-	. /etc/lsb-release
-	OS=$DISTRIB_ID
-	VER=$DISTRIB_RELEASE
-elif [ -f /etc/debian_version ]; then
-	OS=Debian
-	VER=$(cat /etc/debian_version)
-elif [ -f /etc/redhat-release ]; then
-	OS=RedHat
-else
-	OS=""
-fi
+# O.S. Detector
+OS=`python -c 'import platform ; print platform.dist()[0]'`
 
 
 echo
@@ -73,6 +62,8 @@ echo "Welcome to SVAuto, the Sandvine Automation!"
 echo
 echo "Installing SVAuto basic dependencies (Git & Ansible):"
 
+shopt -s nocasematch
+
 case $OS in
 
 	Ubuntu|Debian)
@@ -81,7 +72,7 @@ case $OS in
 		sudo apt -y install git ansible
 		;;
 
-	RedHat)
+	RedHat|CentOS)
 
 		echo
 		sudo yum --enablerepo=epel-testing -y install git ansible
