@@ -57,6 +57,7 @@ ansible_playbook_builder()
 
 	        centos*)
 	                echo "  user: root"
+	                echo "  become: yes"
 	                ;;
 
 	        *)
