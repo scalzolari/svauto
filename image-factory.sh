@@ -15,6 +15,9 @@
 # limitations under the License.
 
 
+source lib/include-tools.inc
+
+
 for i in "$@"
 do
 case $i in
@@ -426,40 +429,8 @@ sed -i -e 's/"inventory_groups": ""/"inventory_groups": "'"$PRODUCT"'-servers"/g
 sed -i -e 's/"--extra-vars \\"\\""/"--extra-vars  \\"'"$EXTRA_VARS"'\\""/g' $PACKER_FILE
 
 
-# Creating Ansible Inventory file dinamically
-echo "- hosts: $PRODUCT-servers"	> $PLAYBOOK_FILE
-
-case "$BASE_OS" in
-
-        ubuntu*)
-		echo "  user: sandvine"			>> $PLAYBOOK_FILE
-		echo "  become: yes"			>> $PLAYBOOK_FILE
-		;;
-
-	centos*)
-		echo "  user: root"			>> $PLAYBOOK_FILE
-		;;
-
-        *)
-		echo
-		echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos6|centos7}"
-		exit 1
-		;;
-
-esac
-
-echo "  roles:"				>> $PLAYBOOK_FILE
-
-for X in $ROLES; do
-	echo "  - role: "$X""		>> $PLAYBOOK_FILE
-done
-
-if [ "$LABIFY" == "yes" ]
-then
-	echo
-	echo "WARNING!!! Labifying the image on its playbook..."
-	echo "  - role: labify" >> $PLAYBOOK_FILE
-fi
+# Creating Ansible top-level Playbook file
+ansible_playbook_builder --base-os=$BASE_OS --ansible-hosts=$PRODUCT-servers --roles=$ALL_ROLES > $PLAYBOOK_FILE
 
 
 echo
