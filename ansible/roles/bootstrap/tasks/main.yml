@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#- debug: var=base_os
+
+#- debug: var=base_os_upgrade
+
 # CentOS Bootstrap tasks
 - name: centos - include common book
   include: centos-common.yml
   when: base_os == 'centos7' or base_os == 'centos6'
-
 
 # Ubuntu Bootstrap tasks
 - name: ubuntu16 - include custom book
