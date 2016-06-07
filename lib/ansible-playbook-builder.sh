@@ -75,8 +75,6 @@ ansible_playbook_builder()
 
 	if [ "$LABIFY" == "yes" ]
 	then
-	        echo
-	        echo "WARNING!!! Labifying the image on its playbook..."
 	        echo "  - role: labify"
 	fi
 
