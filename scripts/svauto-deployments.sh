@@ -75,7 +75,7 @@ case $OS in
 	RedHat|CentOS)
 
 		echo
-		sudo yum --enablerepo=epel-testing -y install git ansible
+		sudo yum --enablerepo=epel-testing -y install git ansible libselinux-python
 		;;
 
 	*)
