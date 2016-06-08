@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: main-centos6.yml
+- include: centos6.yml
   when: base_os == 'centos6'
 
 
-- include: main-centos7.yml
+- include: centos7.yml
   when: base_os == 'centos7'
 
 

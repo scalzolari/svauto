@@ -50,6 +50,11 @@
         group=root
         mode=0644
 
+- name: centos6 - starting up eth0
+  shell: ifup eth0
+  when: lab_stack == 'yes'
+  ignore_errors: yes
+
 - name: centos6 - copy eth1 config file
   copy: src=centos6/ifcfg-eth1
         dest=/etc/sysconfig/network-scripts/ifcfg-eth1

@@ -20,6 +20,8 @@
 # Global definitions
 #
 
+regular_system_user: "sandvine"
+
 disable_autoconf: "no"
 
 # Base O.S.:
@@ -49,6 +51,10 @@ deployment_mode: "no"
 
 # Open vSwitch with DPDK?
 ovs_dpdk: "no"
+
+# Stack running at the lab?
+lab_stack: "no"
+
 
 #
 # Sandvine Platform Definitions

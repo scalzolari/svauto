@@ -37,6 +37,11 @@
         group=root
         mode=0644
 
+- name: centos7 - starting up eth0
+  shell: ifup eth0
+  when: lab_stack == 'yes'
+  ignore_errors: yes
+
 - name: centos7 - copy eth1 config file
   copy: src=centos7/ifcfg-eth1
         dest=/etc/sysconfig/network-scripts/ifcfg-eth1
@@ -107,7 +112,7 @@
 
 - name: centos7 - service firewalld enabled
   service: name=firewalld state=started enabled=yes
-  when: disable_autoconf != 'yes'
+  when: disable_autoconf != 'yes' and lab_stack != 'yes'
 
 
 - name: centos7 - yum uninstalling Network Manager

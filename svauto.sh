@@ -18,6 +18,8 @@
 TODAY=$(date +"%Y%m%d")
 
 
+source svauto.conf
+
 source lib/include-tools.inc
 
 
@@ -457,45 +459,60 @@ if [ "$LABIFY" == "yes" ]
 then
 
 	echo
-	echo "Labfying the playbook, so it can work against lab's instances..."
+	echo "Labifying the playbook, so it can work against lab's Instances..."
 
 	echo
 	echo "You'll need to copy and paste each hostname here, after running profilemgr..."
+
 	echo
 	echo -n "Type the PTS hostname: "
 	read PTS_HOSTNAME
 	echo -n "Type the PTS Service IP: "
 	read PTS_SRVC_IP
+
 	echo
 	echo -n "Type the SDE hostname: "
 	read SDE_HOSTNAME
 	echo -n "Type the SDE Service IP: "
 	read SDE_SRVC_IP
+
 	echo
 	echo -n "Type the SPB hostname: "
 	read SPB_HOSTNAME
 	echo -n "Type the SPB Service IP: "
 	read SPB_SRVC_IP
-	echo -n "Type the Subscriber IPv4 Subnet/Mask (for subnets.txt on the PTS): "
-	read INT_SUBNET
+
+#	echo
+#	echo -n "Type the Subscriber IPv4 Subnet/Mask (for subnets.txt on the PTS): "
+#	read INT_SUBNET
 
 
-	LAB_DOMAIN="phaedrus.sandvine.com"
+	echo
+	echo -n "Type the username with password-less SSH access to the lab's Instances: "
+	read REGULAR_SYSTEM_USER
 
-	PTS_FQDN=$PTS_HOSTNAME.$LAB_DOMAIN
-	SDE_FQDN=$SDE_HOSTNAME.$LAB_DOMAIN
-	SPB_FQDN=$SPB_HOSTNAME.$LAB_DOMAIN
 
-	PTS_CTRL_IP=`host $PTS_FQDN | awk $'{print $4}'`
-	SDE_CTRL_IP=`host $SDE_FQDN | awk $'{print $4}'`
-	SPB_CTRL_IP=`host $SPB_FQDN | awk $'{print $4}'`
-#	CSD_CTRL_IP=`host $PTS_FQDN | awk $'{print $4}'`
+	PTS_FQDN_TMP=$PTS_HOSTNAME.$DNS_DOMAIN
+	SDE_FQDN_TMP=$SDE_HOSTNAME.$DNS_DOMAIN
+	SPB_FQDN_TMP=$SPB_HOSTNAME.$DNS_DOMAIN
+
+	PTS_FQDN=`echo $PTS_FQDN_TMP | awk '{print tolower($0)}'`
+	SDE_FQDN=`echo $SDE_FQDN_TMP | awk '{print tolower($0)}'`
+	SPB_FQDN=`echo $SPB_FQDN_TMP | awk '{print tolower($0)}'`
+
+	PTS_CTRL_IP=`host $PTS_FQDN_TMP | awk $'{print $4}'`
+	SDE_CTRL_IP=`host $SDE_FQDN_TMP | awk $'{print $4}'`
+	SPB_CTRL_IP=`host $SPB_FQDN_TMP | awk $'{print $4}'`
+#	CSD_CTRL_IP=`host $PTS_FQDN_TMP | awk $'{print $4}'`
+
+
+	git checkout ansible/group_vars/all
 
 
 	echo
 	echo "Configuring group_vars/all..."
 
-	sed -i -e 's/int_subnet:.*/int_subnet: '$INT_SUBNET'/g' ansible/group_vars/all
+	#sed -i -e 's/int_subnet:.*/int_subnet: '$INT_SUBNET'/g' ansible/group_vars/all
 
 	sed -i -e 's/pts_ctrl_ip:.*/pts_ctrl_ip: '$PTS_CTRL_IP'/g' ansible/group_vars/all
 	sed -i -e 's/pts_srvc_ip:.*/pts_srvc_ip: '$PTS_SRVC_IP'/g' ansible/group_vars/all
@@ -512,6 +529,11 @@ then
 	sed -i -e 's/ga_srvc_ip:.*/ga_srvc_ip: '$SDE_SRVC_IP'/g' ansible/group_vars/all
 
 
+	sed -i -e 's/regular_system_user:.*/regular_system_user: '$REGULAR_SYSTEM_USER'/g' ansible/group_vars/all
+
+	sed -i -e 's/lab_stack:.*/lab_stack: "yes"/g' ansible/group_vars/all
+
+
 	git checkout ansible/hosts
 
 
@@ -525,13 +547,13 @@ then
 
 		sed -i -e 's/base_os:.*/base_os: freebsd8/g' ansible/group_vars/all
 		sed -i -e 's/deploy_pts_freebsd_pkgs:.*/deploy_pts_freebsd_pkgs: yes/g' ansible/group_vars/all
-		sed -i -e 's/^#FREEBSD_PTS_IP/'$PTS_CTRL_IP'/g' ansible/hosts
+		sed -i -e 's/^#FREEBSD_PTS_IP/'$PTS_FQDN'/g' ansible/hosts
 	else
-		sed -i -e 's/^#PTS_IP/'$PTS_CTRL_IP'/g' ansible/hosts
+		sed -i -e 's/^#PTS_IP/'$PTS_FQDN'/g' ansible/hosts
 	fi
-	sed -i -e 's/^#SDE_IP/'$SDE_CTRL_IP'/g' ansible/hosts
-	sed -i -e 's/^#SPB_IP/'$SPB_CTRL_IP'/g' ansible/hosts
-#	sed -i -e 's/^#CSD_IP/'$CSD_CTRL_IP'/g' ansible/hosts
+	sed -i -e 's/^#SDE_IP/'$SDE_FQDN'/g' ansible/hosts
+	sed -i -e 's/^#SPB_IP/'$SPB_FQDN'/g' ansible/hosts
+#	sed -i -e 's/^#CSD_IP/'$CSD_FQDN'/g' ansible/hosts
 
 
 fi
@@ -541,7 +563,7 @@ if [ "$DRY_RUN" == "yes" ]
 then
 
 	echo
-	echo "Not running Ansible! Just preparing the environment variables and site-*.yml..."
+	echo "Not running Ansible! Just preparing the environment variables..."
 
 else
 

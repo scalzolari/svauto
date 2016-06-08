@@ -17,7 +17,7 @@
 #
 
 - hosts: svspb-servers
-  user: sandvine
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -25,7 +25,7 @@
   - role: power-cycle
 
 - hosts: svsde-servers
-  user: sandvine
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -33,7 +33,7 @@
   - role: power-cycle
 
 - hosts: svpts-servers
-  user: sandvine
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -41,7 +41,7 @@
   - role: power-cycle
 
 - hosts: svcs-servers
-  user: sandvine
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
