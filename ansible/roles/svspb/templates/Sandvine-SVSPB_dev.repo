@@ -10,7 +10,7 @@ baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svspb
 # PROD URL:
 #baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svspb
 # Packages are from (old URL format):
-# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/SPB/svspb-6.60.0242
+# - ftp://{{ packages_server }}/images/Linux/CENTOS6-x64/SPB/svspb-6.60.0242
 enabled=1
 protect=0
 gpgcheck=0

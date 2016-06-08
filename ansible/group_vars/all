@@ -60,9 +60,12 @@ lab_stack: "no"
 # Sandvine Platform Definitions
 #
 
-# Username and password for authenticated YUM Repos.
+# Username and password for authenticated YUM Repos:
 ftp_username: customer.sandvine.com
 ftp_password: lerolero
+
+# Yum or APT Reposiory server:
+packages_server: "archive.mydomain.com"
 
 # Goes to PTS subnets.txt
 int_subnet: "10.192.0.0/16"

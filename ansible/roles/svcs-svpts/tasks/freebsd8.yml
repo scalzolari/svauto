@@ -15,14 +15,14 @@
 - name: freebsd8 | pkg_adding Sandvine and Cloud Services packages
   shell: pkg_add {{ item }}
   with_items:
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/DIAMETER/svdiameter-BSD-5.60.0501.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/DIAMETER/svonline_charging-BSD-5.00.0402.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/DIAMETER/svpolicy_enforcement-BSD-5.00.0402.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/PTS_POLICY_COMMON/svpts_policy_common-BSD-3.00.2035.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/HTTP_AUDIT/svhttp_audit-BSD-5.00.0402.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/QUOTA_MANAGER/svquota_manager-BSD-5.00.0402.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/RECORD_GENERATOR/svrecord_generator-BSD-5.00.0402.tbz
-     - ftp://fbsd-ftp.phaedrus.sandvine.com/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0402.tbz
-     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-16.02.0001.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/DIAMETER/svdiameter-BSD-5.60.0501.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/DIAMETER/svonline_charging-BSD-5.00.0402.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/DIAMETER/svpolicy_enforcement-BSD-5.00.0402.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/PTS_POLICY_COMMON/svpts_policy_common-BSD-3.00.2035.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/HTTP_AUDIT/svhttp_audit-BSD-5.00.0402.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/QUOTA_MANAGER/svquota_manager-BSD-5.00.0402.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/RECORD_GENERATOR/svrecord_generator-BSD-5.00.0402.tbz
+     - ftp://{{ packages_server }}/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0402.tbz
+     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-16.06.0001.tbz
   when: deploy_pts_freebsd_pkgs == 'yes'
   ignore_errors: yes

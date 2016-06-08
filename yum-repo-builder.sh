@@ -19,7 +19,7 @@
 # the required values as arguments, for example:
 
 
-PUBLIC_ROOT_DIR="yum_repos"
+source svauto.conf
 
 
 for i in "$@"
@@ -154,12 +154,12 @@ case "$RELEASE" in
 
         prod)
 
-                UPSTREAM_HOST="ftp.support.sandvine.com"
+                UPSTREAM_HOST="$PUBLIC_PACKAGES_SERVER"
                 ;;
 
         dev)
 
-                UPSTREAM_HOST="fbsd-ftp.phaedrus.sandvine.com"
+                UPSTREAM_HOST="$PRIVATE_PACKAGES_SERVER"
                 ;;
 
         *)

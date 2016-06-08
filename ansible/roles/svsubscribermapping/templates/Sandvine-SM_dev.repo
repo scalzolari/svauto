@@ -10,7 +10,7 @@ baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svsub
 # PROD URL:
 #baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svsubscribermapping
 # Packages are from (old URL format):
-# - ftp://fbsd-ftp.sandvine.com/images/Linux/CENTOS6-x64/SUBSCRIBER_MAPPING/svsubscribermapping-LNX-7.20.0204
+# - ftp://{{ packages_server }}/images/Linux/CENTOS6-x64/SUBSCRIBER_MAPPING/svsubscribermapping-LNX-7.20.0204
 enabled=1
 protect=0
 gpgcheck=0
