@@ -1,6 +1,6 @@
 #! /bin/bash
 
-yum_repo_builder()
+build_yum_repo()
 {
 
 	#

@@ -143,9 +143,9 @@ case $i in
 		shift
 		;;
 
-	--yum-repo-builder)
+	--build-yum-repo)
 
-		YUM_REPO_BUILDER="yes"
+		BUILD_YUM_REPO="yes"
 		shift
 		;;
 
@@ -252,10 +252,10 @@ then
 fi
 
 
-if [ "$YUM_REPO_BUILDER" == "yes" ]
+if [ "$BUILD_YUM_REPO" == "yes" ]
 then
 
-	yum_repo_builder
+	build_yum_repo
 
 	exit 0
 
