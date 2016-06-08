@@ -111,7 +111,7 @@
 
 
 - name: centos7 - service firewalld enabled
-  service: name=firewalld state=started enabled=yes
+  service: name=firewalld enabled=yes
   when: disable_autoconf != 'yes' and lab_stack != 'yes'
 
 
