@@ -185,7 +185,7 @@ os_deploy()
 	echo
 	echo "* Your current \"$WHOAMI\" user..."
 	
-	sed -i -e 's/ubuntu_user:.*/ubuntu_user: "'$WHOAMI'"/g' ansible/group_vars/all
+	sed -i -e 's/regular_system_user:.*/regular_system_user: "'$WHOAMI'"/g' ansible/group_vars/all
 	
 	
 	echo

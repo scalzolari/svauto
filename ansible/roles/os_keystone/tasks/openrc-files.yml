@@ -17,14 +17,14 @@
 
 - name: Creating admin-openrc.sh file
   template: src={{openstack_release}}/admin-openrc.sh
-            dest=/home/{{ubuntu_user}}/admin-openrc.sh
-            owner={{ubuntu_user}}
-            group={{ubuntu_user}}
+            dest=/home/{{regular_system_user}}/admin-openrc.sh
+            owner={{regular_system_user}}
+            group={{regular_system_user}}
             mode=0640
 
 - name: Creating demo-openrc.sh file
   template: src={{openstack_release}}/demo-openrc.sh
-            dest=/home/{{ubuntu_user}}/demo-openrc.sh
-            owner={{ubuntu_user}}
-            group={{ubuntu_user}}
+            dest=/home/{{regular_system_user}}/demo-openrc.sh
+            owner={{regular_system_user}}
+            group={{regular_system_user}}
             mode=0640

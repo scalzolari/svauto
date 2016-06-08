@@ -17,7 +17,7 @@
 #
 
 - hosts: os_aio
-  user: "{{ubuntu_user}}"
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -46,7 +46,7 @@
 #  - role: post-cleanup
 
 - hosts: os_controller_nodes
-  user: "{{ubuntu_user}}"
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -74,7 +74,7 @@
 #  - role: post-cleanup
 
 - hosts: os_network_nodes
-  user: "{{ubuntu_user}}"
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -82,7 +82,7 @@
 #  - role: post-cleanup
 
 - hosts: os_compute_nodes
-  user: "{{ubuntu_user}}"
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
@@ -92,7 +92,7 @@
 #  - role: post-cleanup
 
 - hosts: os_vagrant_aio
-  user: "{{ubuntu_user}}"
+  user: "{{regular_system_user}}"
   become: yes
   roles:
   - role: bootstrap
