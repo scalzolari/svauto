@@ -21,6 +21,7 @@
   apt: name={{item}} state=latest update_cache=yes
   with_items:
     - pv
+    - mc
     - gpm
     - zip
     - git
@@ -102,19 +103,23 @@
     - mtr
     - vlc
     - gksu
+    - meld
     - skype
     - diodon
+    - kdiff3
     - xine-ui
     - gparted
+    - rdesktop
     - filezilla
     - terminator
     - evolution
     - evolution-ews
-    - icedtea-plugin
+    - wireshark-qt
+    - default-jre
+    - default-java-plugin
     - chromium-browser
-    - openjdk-8-jre
-    - openjdk-8-jre-headless
     - classicmenu-indicator
+    - ubuntu-restricted-extras
   when: ubuntu_install == 'desktop'
 
 
