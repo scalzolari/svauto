@@ -37,7 +37,7 @@
   - glance image-create --location http://uec-images.ubuntu.com/releases/12.04.4/12.04.5/ubuntu-12.04-server-cloudimg-i386-disk1.img --name "Ubuntu 12.04.5 LTS - Precise Pangolin - 32-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
   - glance image-create --location http://uec-images.ubuntu.com/releases/12.04.4/12.04.5/ubuntu-12.04-server-cloudimg-amd64-disk1.img --name "Ubuntu 12.04.5 LTS - Precise Pangolin - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
   # Debian Jessie
-  - glance image-create --location http://cdimage.debian.org/cdimage/openstack/8.4.0/debian-8.4.0-openstack-amd64.qcow2 --name "Debian 8.4.0 - Jessie - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
+  - glance image-create --location http://cdimage.debian.org/cdimage/openstack/8.5.0/debian-8.5.0-openstack-amd64.qcow2 --name "Debian 8.5.0 - Jessie - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
   # CentOS 6 and 7
   - glance image-create --location http://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2c --name "CentOS 7 - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
   - glance image-create --location http://cloud.centos.org/centos/6/images/CentOS-6-x86_64-GenericCloud.qcow2c --name "CentOS 6 - 64-bit - Cloud Based Image" --is-public true --container-format bare --disk-format qcow2
