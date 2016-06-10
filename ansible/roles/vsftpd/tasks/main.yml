@@ -12,22 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
-
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: apache2
-  - role: hyper_kvm
-  - role: hyper_lxd
-  - role: hyper_virtualbox
-  - role: docker
-  - role: vagrant
-  - role: amazon_ec2_tools
-  - role: redhat_tools_ubuntu
-  - role: os_clients
-  - role: packer
-  - role: vsftpd
+- name: ubuntu - include config
+  include: ubuntu-common.yml
+  when: base_os == 'ubuntu14' or base_os == 'ubuntu16'

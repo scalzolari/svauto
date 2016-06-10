@@ -23,6 +23,6 @@
      - ftp://{{ packages_server }}/images/amd64-SVOS9/QUOTA_MANAGER/svquota_manager-BSD-5.00.0402.tbz
      - ftp://{{ packages_server }}/images/amd64-SVOS9/RECORD_GENERATOR/svrecord_generator-BSD-5.00.0402.tbz
      - ftp://{{ packages_server }}/images/amd64-SVOS9/USAGE_MANAGEMENT/svusage_management-BSD-5.00.0402.tbz
-     - ftp://10.128.243.172/cloudservices/freebsd/8/os/noarch/Packages/cloud-services-16.06.0001.tbz
+     - ftp://{{ packages_server }}/freebsd/8/os/noarch/Packages/cloud-services-16.06.0001.tbz
   when: deploy_pts_freebsd_pkgs == 'yes'
   ignore_errors: yes

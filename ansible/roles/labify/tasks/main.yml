@@ -20,8 +20,7 @@
   when: base_os == 'centos7'
 
 
-# Add flag file so labify-linux knows this TPC was imaged with kickstart
-- name: Create a file for labify-linux to know this TPC was imaged with kickstart
+- name: This image was kickstarted
   command: touch /etc/LINUXKSIMAGE
 
 

@@ -5,7 +5,7 @@
 [sandvine]
 name=Sandvine-$releasever - Main Experimental
 # DEV URL:
-baseurl=ftp://10.128.243.172/cloudservices/centos-main-experimental/$releasever/os/$basearch
+baseurl=ftp://{{ packages_server }}/centos/{{ release_code_name }}/$releasever/os-experimental/$basearch
 # PROD URL:
 #baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos-main/$releasever/os/$basearch
 enabled=1

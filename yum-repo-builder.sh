@@ -51,6 +51,12 @@ case $i in
 		shift
 		;;
 
+	--release-code-name=*)
+
+		RELEASE_CODE_NAME="${i#*=}"
+		shift
+		;;
+
 	--latest)
 
 		LATEST="yes"
@@ -170,12 +176,21 @@ case "$RELEASE" in
 
 esac
 
+if [ -z "$RELEASE_CODE_NAME" ]
+then
+	echo
+	echo "Usage: $0 --release-code-name=something"
+	exit 1
+fi
 
-MAJOR_VERSION=`echo $VERSION |sed 's/.\{8\}$//'`
+
+MAJOR_VERSION=`echo $VERSION | cut -d \. -f 1`
+MINOR_VERSION=`echo $VERSION | cut -d \. -f 2`
+BUILD_VERSION=`echo $VERSION | cut -d \. -f 3`
 
 
-# SPB repo subdir < 6 doesn't have "-LNX-" on its name.
-if [ "$PRODUCT" == "svspb" ] || [ "$PRODUCT" == "svreports" ] && [ "$MAJOR_VERSION" -le "6" ]
+# SPB repo subdir < 6.65 doesn't have "-LNX-" on its name.
+if [ "$PRODUCT" == "svspb" ] || [ "$PRODUCT" == "svreports" ] && [ "$MAJOR_VERSION" -le "6" ] && [ "$MINOR_VERSION" -le 60 ]
 then
 	FULL_NAME="$PRODUCT-$VERSION"
 else
@@ -189,9 +204,9 @@ SHORT_VERSION=`echo $VERSION |sed 's/.\{5\}$//'`
 
 VER_DOT=`echo $VERSION | sed 's/\-/\./'`
 
-REPOS_PATH="$PUBLIC_ROOT_DIR/centos/$OS_DIR/svrepos/x86_64"
+REPOS_PATH="$DOCUMENT_ROOT/centos/$RELEASE_CODE_NAME/$OS_DIR/svrepos/x86_64"
 
-FULL_PATH="$PUBLIC_ROOT_DIR/centos/$OS_DIR/svrepos/x86_64/$SHORT_NAME"
+FULL_PATH="$DOCUMENT_ROOT/centos/$RELEASE_CODE_NAME/$OS_DIR/svrepos/x86_64/$SHORT_NAME"
 
 
 mkdir -p $FULL_PATH/Packages

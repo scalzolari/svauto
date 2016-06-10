@@ -12,22 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
+- name: ubuntu - apt installing vsftpd
+  apt: pkg={{item}} state=latest
+  with_items:
+    - vsftpd
 
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: apache2
-  - role: hyper_kvm
-  - role: hyper_lxd
-  - role: hyper_virtualbox
-  - role: docker
-  - role: vagrant
-  - role: amazon_ec2_tools
-  - role: redhat_tools_ubuntu
-  - role: os_clients
-  - role: packer
-  - role: vsftpd
+
+- name: ubuntu - copy Cloud Init config file
+  copy: src=vsftpd.conf
+        dest=/etc/vsftpd.conf
+        owner=root
+        group=root
+        mode=0644
+        backup=yes
+  notify: reload-vsftpd
+
+
+- name: ubuntu - user home directory for ftp user
+  user: name=ftp home=/home/{{regular_system_user}}/svauto/public_dir createhome=no
+  notify: reload-vsftpd
+
+
+- meta: flush_handlers

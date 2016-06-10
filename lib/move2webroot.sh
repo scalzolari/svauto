@@ -1,5 +1,19 @@
 #! /bin/bash
 
+# Copyright 2016, Sandvine Incorporated.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 move2webroot()
 {
 
@@ -9,24 +23,10 @@ move2webroot()
                 echo "Not creating to web root directory structure! Skipping this step..."
         else
 
-		# Create a file that contains the build date
-		if  [ ! -f build-date.txt ]; then
-			echo $TODAY > build-date.txt
-			BUILD_DATE=`cat build-date.txt`
-		else
-			echo
-			echo "Warning! Build Date file found, a clean all is recommended..."
-			BUILD_DATE=`cat build-date.txt`
-		fi
-
-
 		# Web Public directory details
 
-		# Apache or NGinx DocumentRoot of a Virtual Host:
-		DOCUMENT_ROOT="public_dir"
-
 		# Sandvine Stock images directory:
-		WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock
+		WEB_ROOT_STOCK_MAIN=$DOCUMENT_ROOT/images/platform/stock/$RELEASE_CODE_NAME
 
 		WEB_ROOT_STOCK=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE
 		WEB_ROOT_STOCK_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/lab
@@ -34,7 +34,7 @@ move2webroot()
 #		WEB_ROOT_STOCK_RELEASE_LAB=$WEB_ROOT_STOCK_MAIN/$BUILD_DATE/to-be-released/lab
 
 		# Sandvine Stock mages + Cloud Services directory:
-		WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services
+		WEB_ROOT_CS_MAIN=$DOCUMENT_ROOT/images/platform/cloud-services/$RELEASE_CODE_NAME
 
 		WEB_ROOT_CS=$WEB_ROOT_CS_MAIN/$BUILD_DATE
 		WEB_ROOT_CS_LAB=$WEB_ROOT_CS_MAIN/$BUILD_DATE/lab

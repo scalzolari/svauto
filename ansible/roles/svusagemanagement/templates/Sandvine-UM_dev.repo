@@ -6,7 +6,7 @@
 name=Sandvine Usage Management policy definition elements package
 # New, sane URL, for SM Yum Repo:
 # DEV URL:
-baseurl=ftp://10.128.243.172/cloudservices/centos/$releasever/os/$basearch/svusagemanagement
+baseurl=ftp://{{ packages_server }}/centos/{{ release_code_name }}/$releasever/svrepos/$basearch/svusagemanagement
 # PROD URL:
 #baseurl=ftp://{{ftp_username}}:{{ftp_password}}@ftp.support.sandvine.com/release/CloudServices/centos/$releasever/os/$basearch/svusagemanagement
 # Packages are from (old URL format):

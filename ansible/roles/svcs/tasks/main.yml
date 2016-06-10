@@ -20,14 +20,6 @@
             mode=0644
   when: release == 'prod'
 
-- name: Creating Cloud Services Main Repository - Development
-  template: src=common/Sandvine-CS-Main_dev.repo
-            dest=/etc/yum.repos.d/Sandvine-CS-Main.repo
-            owner=root
-            group=root
-            mode=0644
-  when: release == 'dev'
-
 
 - name: Installing required packages and the CSD
   yum: pkg={{item}} state=latest
