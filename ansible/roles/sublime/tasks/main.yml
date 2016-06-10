@@ -12,16 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#
-# The following hosts definitions, bootstrap SVAuto dependencies:
-#
+- name: ubuntu - add WebUpd8's Sublime PPA Repository
+  apt_repository: repo='ppa:webupd8team/sublime-text-3'
 
-- hosts: localhost
-  become: yes
-  roles:
-  - role: bootstrap
-  - role: grub-conf
-  - role: hyper_kvm
-  - role: google-chrome
-  - role: scudcloud
-  - role: sublime
+
+- name: ubuntu | apt installing Sublime Text Editor
+  apt: name={{item}} state=latest
+  with_items:
+    - sublime-text-installer
