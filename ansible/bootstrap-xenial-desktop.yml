@@ -25,3 +25,4 @@
   - role: google-chrome
   - role: scudcloud
   - role: sublime
+  - role: ccollab-client
