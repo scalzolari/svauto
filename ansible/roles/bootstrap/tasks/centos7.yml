@@ -137,6 +137,22 @@
         backup=yes
 
 
+- name: centos - copy e1000 udev rules
+  copy: src=centos7/68-e1000-net.rules.j2
+        dest=/etc/udev/rules.d/68-e1000-net.rules
+        owner=root
+        group=root
+        mode=0644
+
+
+- name: centos - copy vmxnet3 udev rules
+  copy: src=centos7/69-vmxnet3-net.rules.j2
+        dest=/etc/udev/rules.d/69-vmxnet3-net.rules
+        owner=root
+        group=root
+        mode=0644
+
+
 - name: centos7 - copy Setup Default Interface Script
   copy: src=centos7/setupDefaultInterface
         dest=/usr/local/sbin/setupDefaultInterface
