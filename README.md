@@ -39,15 +39,35 @@ Download SVAuto into your home directory (Designed for Ubuntu LTS):
     cd ~
     bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/install-svauto.sh)
 
+## Bootstrapping boxes with "curl pipe bash"
+
+Bootstrap Ubuntu 16.04 Server and configure Grub, while upgrading it:
+
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=ubuntu16 --roles=bootstrap,grub-conf --extra-vars="base_os_upgrade=yes"
+
+Bootstrap Ubuntu 16.04 Desktop, while upgrading and installing Google Chrome:
+
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=ubuntu16 --roles=bootstrap,grub-conf,hyper_kvm,google-chrome,scudcloud,sublime,ccollab-client --extra-vars="base_os_upgrade=yes"
+
+Bootstrap Ubuntu 16.04 Desktop, while configuring Grub, upgrading it and installing Google Chrome:
+
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=ubuntu16 --roles=bootstrap,grub-conf,google-chrome --extra-vars="base_os_upgrade=yes"
+
+Bootstrap CentOS 6, while configuring Grub
+
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=centos6 --roles=bootstrap,grub-conf --extra-vars="base_os_upgrade=yes"
+
+Bootstrap CentOS 7, while configuring Grub
+
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=centos7 --roles=bootstrap,grub-conf --extra-vars="base_os_upgrade=yes"
+
 ## Installing SVAuto dependencies
 
 You'll need to install all the dependencies for running SVAuto.
 
+To install everything, run on your Ubuntu 16.04 Server or Desktop, the following command:
 
-To install everything, run:
-
-    cd ~/svauto
-    ./svauto.sh --install-dependencies
+    curl -L https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/svauto-deployments.sh | bash -s -- --base-os=ubuntu16 --roles=bootstrap,apache2,hyper_kvm,hyper_lxd,hyper_virtualbox,docker,vagrant,amazon_ec2_tools,redhat_tools_ubuntu,os_clients,packer,vsftpd --extra-vars="base_os_upgrade=yes"
 
 ## SVAuto script usage example
 
