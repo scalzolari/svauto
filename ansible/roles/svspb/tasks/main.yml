@@ -94,11 +94,6 @@
   command: yum clean all
 
 
-- name: Sandvine Auto Configuration book for SVSPB
-  include: sv-auto-config.yml
-  when: sv_auto_config == 'yes'
-
-
 - name: Copying Sandvine SVSPB login logo generator
   copy: src=sandvine-motd-issue-banner.sh
         dest=/tmp/sandvine-motd-issue-banner.sh

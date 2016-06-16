@@ -12,20 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating new "rc.conf" file
-  template: src=common/rc.conf
-            dest=/usr/local/sandvine/etc/rc.conf
-            owner=sv_admin
-            group=sv_admin
+- name: Configuring Cloud Services Daemon
+  template: src=svcs/csd.conf
+            dest=/etc/csd.conf
+            owner=root
+            group=root
             mode=0644
-  notify: reload sandvine
+            backup=yes
 
 
-- name: Creating new "policy.conf" file
-  copy: src=common/policy.conf
-        dest=/usr/local/sandvine/etc/policy.conf
-        owner=root
-        group=sv_service
-        mode=0644
-        backup=yes
-  notify: reload sandvine
+- name: Configuring Redis
+  template: src=svcs/redis.conf
+            dest=/etc/redis.conf
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+
+
+- name: Configuring InfluxDB
+  template: src=svcs/config.toml
+            dest=/opt/influxdb/shared/config.toml
+            owner=influxdb
+            group=influxdb
+            mode=0644
+            backup=yes

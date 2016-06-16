@@ -392,18 +392,19 @@ fi
 case "$PRODUCT" in
 
         *svsde)
-		EXTRA_VARS=""$EXTRA_VARS" sde_version="$VERSION""
+		EXTRA_VARS=""$EXTRA_VARS" sde_version="$VERSION" setup_server="svsde""
 		;;
 
         *svpts)
-		EXTRA_VARS=""$EXTRA_VARS" pts_version="$VERSION""
+		EXTRA_VARS=""$EXTRA_VARS" pts_version="$VERSION" setup_server="svpts""
 		;;
 
         *svspb)
-		EXTRA_VARS=""$EXTRA_VARS" spb_version="$VERSION""
+		EXTRA_VARS=""$EXTRA_VARS" spb_version="$VERSION" setup_server="svspb""
 		;;
 
-	svcsd)
+	svcs)
+		EXTRA_VARS=""$EXTRA_VARS" setup_server="svsde""
 		;;
 
 	centos)

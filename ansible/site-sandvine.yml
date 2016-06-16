@@ -22,6 +22,7 @@
   roles:
   - role: bootstrap
   - role: svspb
+  - role: sandvine-auto-config
   - role: power-cycle
 
 - hosts: svsde-servers
@@ -30,6 +31,7 @@
   roles:
   - role: bootstrap
   - role: svsde
+  - role: sandvine-auto-config
   - role: power-cycle
 
 - hosts: svpts-servers
@@ -38,6 +40,7 @@
   roles:
   - role: bootstrap
   - role: svpts
+  - role: sandvine-auto-config
   - role: power-cycle
 
 - hosts: svcs-servers
@@ -46,4 +49,5 @@
   roles:
   - role: bootstrap
   - role: svcs
+  - role: cloudservices-auto-config
   - role: power-cycle

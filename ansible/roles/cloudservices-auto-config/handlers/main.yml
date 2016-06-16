@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: reload sandvine
+- name: reload-sandvine
   shell: cd /usr/local/sandvine/etc ; svreload
   when: deployment_mode != 'yes'

@@ -1,0 +1,61 @@
+# Copyright 2016, Sandvine Incorporated
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: svpts - configuring "rc.conf" file
+  template: src=svpts/rc.conf
+            dest=/usr/local/sandvine/etc/rc.conf
+            owner=sv_admin
+            group=sv_admin
+            mode=0644
+            backup=yes
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "policy.conf" file
+  template: src=svpts/policy.conf
+            dest=/usr/local/sandvine/etc/policy.conf
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "subnets.txt" file
+  template: src=svpts/subnets.txt
+             dest=/usr/local/sandvine/etc/subnets.txt
+             owner=sv_admin
+             group=sv_admin
+             mode=0644
+             backup=yes
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "rc.conf.default.cs" file
+  template: src=svpts/rc.conf.default.cs
+            dest=/usr/local/sandvine/etc/rc.conf.default.cs
+            owner=root
+            group=sv_service
+            mode=0644
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "diam_peer_config.xml" file
+  template: src=svpts/diam_peer_config.xml
+            dest=/usr/local/sandvine/etc/diam_peer_config.xml
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  notify: reload-sandvine

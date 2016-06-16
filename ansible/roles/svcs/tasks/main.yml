@@ -12,16 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Creating Cloud Services Main Repository - Production
-  template: src=common/Sandvine-CS-Main.repo
-            dest=/etc/yum.repos.d/Sandvine-CS-Main.repo
-            owner=root
-            group=root
-            mode=0644
-  when: release == 'prod'
-
-
-- name: Installing required packages and the CSD
+- name: centos6 - yum installing Cloud Services
   yum: pkg={{item}} state=latest
   with_items:
     - redis
@@ -33,7 +24,7 @@
     - global-attributes-broker
 
 
-- name: Managing Local Firewall Rules
+- name: centos6 - managing Firewall Rules
   command: "{{item}}"
   with_items:
   - lokkit --port=22:tcp --update
@@ -44,54 +35,20 @@
   when: is_container != 'yes'
 
 
-- name: Configuring Cloud Services Daemon
-  template: src=csd.conf
-            dest=/etc/csd.conf
-            owner=root
-            group=root
-            mode=0644
-            backup=yes
+- name: centos6 - service enabling Cloud Services daemons
+  service: name={{item}} state=started enabled=yes
+  with_items:
+    - csd
+    - influxdb
+    - redis
+    - mysqld
 
 
-- name: Configuring Redis
-  copy: src=redis.conf
-        dest=/etc/redis.conf
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-
-
-- name: Configuring InfluxDB
-  copy: src=config.toml
-        dest=/opt/influxdb/shared/config.toml
-        owner=influxdb
-        group=influxdb
-        mode=0644
-        backup=yes
-
-
-- name: Ensure CSD is running (and enable it at boot)
-  service: name=csd state=started enabled=yes
-
-
-- name: Ensure InfluxDB is running (and enable it at boot)
-  service: name=influxdb state=started enabled=yes
-
-
-- name: Ensure Redis is running (and enable it at boot)
-  service: name=redis state=started enabled=yes
-
-
-- name: Ensure MySQL is running (and enable it at boot)
-  service: name=mysqld state=started enabled=yes
-
-
-- name: Creating Cloud Services MySQL database
+- name: centos6 - mysql creating Cloud Services database
   mysql_db: name=cs state=present
   register: cs_db_created
 
-- name: Creating Cloud Services MySQL user and permissions
+- name: centos6 - mysql creating Cloud Services users and permissions
   mysql_user:
     host="{{cs_db_host}}"
     name="{{cs_db_user}}"
@@ -100,16 +57,20 @@
     state=present
   when: cs_db_created|changed
 
-- copy: src=mysql-schema.sql dest=/tmp
+- name: centos6 - copy Cloud Services database structure dump file
+  copy: src=mysql-schema.sql dest=/tmp
   when: cs_db_created|changed
 
-- mysql_db: name=cs state=import target=/tmp/mysql-schema.sql
+- name: centos6 - mysql creating Cloud Services database structure
+  mysql_db: name=cs state=import target=/tmp/mysql-schema.sql
   when: cs_db_created|changed
 
 
-- name: Workaround for InfluxDB Issue 3944
-  file: src=/lib64/libbz2.so.1.0.4 dest=/lib64/libbz2.so.1.0 state=link
+- name: centos6 - workaround for InfluxDB Issue 3944
+  file: src=/lib64/libbz2.so.1.0.4
+        dest=/lib64/libbz2.so.1.0
+        state=link
 
 
-- name: Cleanup YUM local cache
+- name: centos6 - cleanup YUM local cache
   command: yum clean all

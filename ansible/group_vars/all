@@ -65,7 +65,7 @@ ftp_username: customer.sandvine.com
 ftp_password: lerolero
 
 # Yum or APT Reposiory server:
-packages_server: "ftp.mydomain.com"
+packages_server: "archive.mydomain.com"
 
 # Sandvine's Release Code Name:
 release_code_name: "niagara"
@@ -94,10 +94,6 @@ cs_db: "cs"
 cs_db_host: "%"
 cs_db_user: "svadmin"
 cs_db_pass: "sandvine"
-
-# Usage of Sandvine / Cloud Services Auto Configuration books
-sv_auto_config: "yes"
-cs_auto_config: "yes"
 
 # Is it labified?
 labifyit: "no"
@@ -131,11 +127,25 @@ sde_version: "7.30"
 
 spb_version: "6.60"
 
-csd_version: "1.00"
+csd_version: "7.50"
+
+# Server to configure via Sandvine Auto Config
+setup_server: "none"
+setup_mode: "default"
+
+#
+# PTS PCI Setup (also DPDK)
+#
+
+pts_set_port_ctrl_1: "0000:00:03.0"
+pts_set_port_srvc_1: "0000:00:04.0"
+
+pts_set_port_dpdk_sub_1: "0000:00:05.0"
+pts_set_port_dpdk_int_1: "0000:00:06.0"
 
 
 #
-# DPDK Setup
+# Ubuntu's DPDK Setup
 #
 
 dpdk_nr_1g_pages: "1"

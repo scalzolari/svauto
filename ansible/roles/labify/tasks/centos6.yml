@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Ensure iptables is not running (and not enabled at boot)
+- name: centos6 - service disabling iptables firewall
   service: name=iptables state=stopped enabled=no
 
 
-- name: Configuring SSH Daemon - RootLogin / PassAuth enabled!
+- name: centos6 - copy SSH Daemon config - RootLogin & PassAuth enabled!
   copy: src=centos6/sshd_config
         dest=/etc/ssh/sshd_config
         owner=root
@@ -25,30 +25,31 @@
         backup=yes
 
 
-- name: Installing required packages for "labify-linux.sh" script
-  yum: pkg={{item}} state=installed
+- name: centos6 - yum installing required packages for "labify-linux.sh"
+  yum: pkg={{item}} state=latest
   with_items:
     - nfs-utils 
 
 
-- name: Ensure rpcbind is running (and enable it at boot)
-  service: name=rpcbind state=started enabled=yes
-
-- name: Ensure rpcidmapd is running (and enable it at boot)
-  service: name=rpcidmapd state=started enabled=yes
-
-- name: Ensure nfslock is running (and enable it at boot)
-  service: name=nfslock state=started enabled=yes
-
-- name: Ensure netfs is running (and enable it at boot)
-  service: name=netfs state=started enabled=yes
+- name: centos6 - service enabling NFS
+  service: name={{item}} enabled=yes
+  with_items:
+    - rpcbind
+    - rpcidmapd
+    - nfslock
+    - netfs
 
 
-- name: Labify 2
+- name: centos6 - copy Labify 2
   copy: src=centos6/fetchlabify
         dest=/etc/init.d/fetchlabify
         owner=root
         group=root
         mode=0755
 
-- file: src=/etc/init.d/fetchlabify dest=/etc/rc3.d/S90fetchlabify state=link force=yes
+
+- name: centos6 - service enabling fetchlabify
+  file: src=/etc/init.d/fetchlabify
+        dest=/etc/rc3.d/S90fetchlabify
+        state=link
+        force=yes

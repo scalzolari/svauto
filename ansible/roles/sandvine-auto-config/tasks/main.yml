@@ -12,27 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-- name: centos | include common book
-  include: centos-common.yml
-  when: base_os == 'centos7' or base_os == 'centos6'
-
-
-- name: centos7 | include custom book
-  include: centos7.yml
-  when: base_os == 'centos7'
+- name: Sandvine Auto Configuration book for SVPTS
+  include: svpts-auto-config.yml
+  when: setup_server == 'svpts'
 
 
-- name: centos6 | include custom book
-  include: centos6.yml
-  when: base_os == 'centos6' and disable_autoconf != 'yes'
+- name: Sandvine Auto Configuration book for SVSDE
+  include: svsde-auto-config.yml
+  when: setup_server == 'svsde'
 
 
-- name: centos | yum clean local cache
-  command: yum clean all
-  when: base_os == 'centos7' or base_os == 'centos6'
-
-
-- name: freebsd8 | include custom book
-  include: freebsd8.yml
-  when: base_os == 'freebsd8'
+- name: Sandvine Auto Configuration book for SVSPB
+  include: svspb-auto-config.yml
+  when: setup_server == 'svspb'

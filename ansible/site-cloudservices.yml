@@ -24,6 +24,7 @@
   - role: svspb
   - role: svreports
   - role: svcs-svspb
+  - role: cloudservices-auto-config
   - role: power-cycle
 
 - hosts: svsde-servers
@@ -36,6 +37,7 @@
   - role: svsubscribermapping
   - role: svcs-svsde
   - role: svcs
+  - role: cloudservices-auto-config
   - role: power-cycle
 
 - hosts: svpts-servers
@@ -46,6 +48,7 @@
   - role: svpts
   - role: svusagemanagementpts
   - role: svcs-svpts
+  - role: cloudservices-auto-config
   - role: power-cycle
 
 - hosts: svcs-servers
@@ -54,4 +57,5 @@
   roles:
   - role: bootstrap
   - role: svcs
+  - role: cloudservices-auto-config
   - role: power-cycle

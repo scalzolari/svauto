@@ -12,6 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: reload sandvine
-  shell: cd /usr/local/sandvine/etc ; svreload
-  when: deployment_mode != 'yes'
+- name: svspb - configuring "rc.conf" file
+  template: src=svspb/rc.conf
+            dest=/usr/local/sandvine/etc/rc.conf
+            owner=sv_admin
+            group=sv_admin
+            mode=0644
+            backup=yes
+  notify: reload-sandvine

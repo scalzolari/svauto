@@ -20,8 +20,3 @@
 - name: freebsd8 | include custom book
   include: freebsd8.yml
   when: base_os == 'freebsd8'
-
-
-- name: Sandvine Auto Configuration book for Cloud Services PTS
-  include: cs-auto-config.yml
-  when: cs_auto_config == 'yes'

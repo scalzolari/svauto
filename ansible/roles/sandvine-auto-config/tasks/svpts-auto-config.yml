@@ -12,50 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos | copy new "rc.conf" file
-  template: src=common/rc.conf
+- name: svpts - configuring "rc.conf" file
+  template: src=svpts/rc.conf
             dest=/usr/local/sandvine/etc/rc.conf
             owner=sv_admin
             group=sv_admin
             mode=0644
-  when: base_os == 'centos7' or base_os == 'centos6'
-  notify: reload sandvine
+            backup=yes
+  notify: reload-sandvine
 
 
-- name: freebsd8 | copy new "rc.conf" file
-  template: src=freebsd8/rc.conf
-            dest=/usr/local/sandvine/etc/rc.conf
-            owner=sv_admin
-            group=sv_admin
-            mode=0644
-  when: base_os == 'freebsd8'
-  notify: reload sandvine
-
-
-- name: copy new "policy.conf" file
-  template: src=common/policy.conf
+- name: svpts - configuring "policy.conf" file
+  template: src=svpts/policy.conf
             dest=/usr/local/sandvine/etc/policy.conf
             owner=sv_admin
             group=sv_admin
             mode=0644
             backup=yes
-  notify: reload sandvine
+  notify: reload-sandvine
 
 
-- name: copy new "subnets.txt" file
-  template: src=common/subnets.txt
+- name: svpts - configuring "subnets.txt" file
+  template: src=svpts/subnets.txt
             dest=/usr/local/sandvine/etc/subnets.txt
             owner=sv_admin
             group=sv_admin
             mode=0644
             backup=yes
-  notify: reload sandvine
-
-
-- name: centos | labify "rc.conf" by overwriting it
-  template: src=common/rc.conf_lab.j2
-            dest=/usr/local/sandvine/etc/rc.conf
-            owner=sv_admin
-            group=sv_admin
-            mode=0644
-  when: labifyit == 'yes'
+  notify: reload-sandvine

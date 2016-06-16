@@ -26,3 +26,12 @@
 
 - name: Do not allow Cloud Init to disable RootLogin and PasswordAuth on ssh
   shell: "if [ -f /etc/cloud/cloud.cfg ] ; then sed -i -e 's/disable_root:.*/disable_root: 0/' /etc/cloud/cloud.cfg ; sed -i -e 's/ssh_pwauth:.*/ssh_pwauth:   1/' /etc/cloud/cloud.cfg ; fi"
+
+
+- name: centos - pts - labify "rc.conf" by overwriting it
+  template: src=rc.conf_lab.j2
+            dest=/usr/local/sandvine/etc/rc.conf
+            owner=sv_admin
+            group=sv_admin
+            mode=0644
+  when: labifyit == 'yes' and setup_server == 'svpts'
