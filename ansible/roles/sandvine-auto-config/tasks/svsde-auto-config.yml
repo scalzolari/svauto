@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: svsde - configuring "rc.conf" file
-  template: src=svsde/rc.conf
+  template: src=svsde/rc.conf.j2
             dest=/usr/local/sandvine/etc/rc.conf
             owner=sv_admin
             group=sv_admin
@@ -23,10 +23,52 @@
 
 
 - name: svsde - configuring "policy.conf" file
-  template: src=svsde/policy.conf
+  template: src=svsde/policy.conf.j2
             dest=/usr/local/sandvine/etc/policy.conf
             owner=root
             group=sv_service
             mode=0644
             backup=yes
+  notify: reload-sandvine
+
+
+- name: svsde - configuring "diam_peer_config.xml" file
+  template: src=svcs-svsde/diam_peer_config.xml.j2
+            dest=/usr/local/sandvine/etc/diam_peer_config.xml
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  when: setup_mode == 'cloud-services'
+  notify: reload-sandvine
+
+
+- name: svsde - configuring the "logging_file_management.conf" to have smaller UDR size
+  template: src=svcs-svsde/logging_file_management.conf.j2
+            dest=/usr/local/sandvine/etc/logging_file_management.conf
+            owner=sv_admin
+            group=sv_admin
+            mode=0664
+            backup=yes
+  when: setup_mode == 'cloud-services'
+  notify: reload-sandvine
+
+
+- name: svsde - linking "csv_config.xml.proto" with "csv_config.xml"
+  file: src=/usr/local/sandvine/etc/csv_config.xml.proto
+        dest=/usr/local/sandvine/etc/csv_config.xml
+        state=link
+        force=yes
+  when: setup_mode == 'cloud-services'
+  notify: reload-sandvine
+
+
+- name: svsde - configuring "policy.sde.cs.mobile_quota.conf" file
+  template: src=svcs-svsde/policy.sde.cs.mobile_quota.conf.j2
+            dest=/usr/local/sandvine/etc/policy.sde.cs.mobile_quota.conf
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  when: setup_mode == 'cloud-services' and setup_sub_option == 'mdm'
   notify: reload-sandvine

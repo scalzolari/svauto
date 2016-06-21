@@ -1,0 +1,8 @@
+angular.module('app.config', [])
+{% if setup_sub_options == 'default' %}
+.constant('ENV', {"api":""})
+{% endif %}
+{% if setup_sub_options == 'mdm' %}
+.constant('ENV', {"api":"","GeolocationAPI":"https://www.googleapis.com/geolocation/v1/geolocate","GoogleAPIKey":"{{ google_api_key }}"})
+{% endif%}
+.constant('CONFIG', {"showApps":true,"enableCustomProtocols":true});

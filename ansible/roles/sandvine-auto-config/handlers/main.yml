@@ -15,3 +15,8 @@
 - name: reload-sandvine
   shell: cd /usr/local/sandvine/etc ; svreload
   when: deployment_mode != 'yes'
+
+
+- name: restart-cloudservices
+  shell: /etc/init.d/csd restart
+  when: deployment_mode != 'yes'

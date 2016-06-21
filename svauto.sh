@@ -39,15 +39,15 @@ case $i in
 		shift
 		;;
 
-	--stack=*)
+	--os-stack=*)
 
-		STACK="${i#*=}"
+		OS_STACK="${i#*=}"
 		shift
 		;;
 
-	--freebsd-pts=*)
+	--freebsd-pts)
 
-		FREEBSD_PTS="${i#*=}"
+		FREEBSD_PTS="yes"
 		shift
 		;;
 
@@ -105,6 +105,12 @@ case $i in
 		shift
 		;;
 
+	--config-only-mode)
+
+		CONFIG_ONLY_MODE="yes"
+		shift
+		;;
+
 	--operation-sandvine)
 
 		OPERATION_SANDVINE="yes"
@@ -120,6 +126,12 @@ case $i in
 	--operation-openstack)
 
 		OPERATION_OPENSTACK="yes"
+		shift
+		;;
+
+	--cloud-services-mode=*)
+
+		CLOUD_SERVICES_MODE="${i#*=}"
 		shift
 		;;
 
@@ -224,6 +236,21 @@ then
 fi
 
 
+#if [ -z $OPERATION_CLOUD_SERVICES ] || [ -z $OPERATION_SANDVINE ] || [ -z $OPERATION_OPENSTACK ]
+#then
+#
+#	echo
+#	echo "No operation mode was specified, use one of the following options:"
+#
+#	echo
+#	echo "--operation-sandvine, or --operation-cloud-services, or --operation-openstack, to \"~/svauto.sh\""
+#
+#	echo
+#	exit 1
+#
+#fi
+
+
 if [ "$OPERATION_OPENSTACK" == "yes" ]
 then
 
@@ -320,7 +347,7 @@ then
 		echo
 		echo "You did not specified the OpenStack Project name, by passing:"
 		echo
-		echo "--os-project=\"demo\" to ~/svauto.sh"
+		echo "--os-project=\"demo\" to \"~/svauto.sh\""
 
 		exit 1
 	fi
@@ -340,7 +367,7 @@ then
 	fi
 
 
-	if [ -z $STACK ]
+	if [ -z $OS_STACK ]
 	then
 		echo
 		echo "You did not specified the destination Stack to deploy Sandvine's RPM Packages."
@@ -367,7 +394,7 @@ then
 	fi
 
 
-	if heat stack-show $STACK 2>&1 > /dev/null
+	if heat stack-show $OS_STACK 2>&1 > /dev/null
 	then
 		echo
 		echo "Stack found, proceeding..."
@@ -378,16 +405,16 @@ then
 	fi
 
 
-	PTS_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-pts | awk $'{print $2}'` | awk $'{print $4}')
-	SDE_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-sde | awk $'{print $2}'` | awk $'{print $4}')
-	SPB_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-spb | awk $'{print $2}'` | awk $'{print $4}')
-#	CSD_FLOAT=$(nova floating-ip-list | grep `nova list | grep $STACK-csd | awk $'{print $2}'` | awk $'{print $4}')
+	PTS_FLOAT=$(nova floating-ip-list | grep `nova list | grep $OS_STACK-pts | awk $'{print $2}'` | awk $'{print $4}')
+	SDE_FLOAT=$(nova floating-ip-list | grep `nova list | grep $OS_STACK-sde | awk $'{print $2}'` | awk $'{print $4}')
+	SPB_FLOAT=$(nova floating-ip-list | grep `nova list | grep $OS_STACK-spb | awk $'{print $2}'` | awk $'{print $4}')
+#	CSD_FLOAT=$(nova floating-ip-list | grep `nova list | grep $OS_STACK-csd | awk $'{print $2}'` | awk $'{print $4}')
 
 
 	if [ -z $PTS_FLOAT ] || [ -z $SDE_FLOAT ] || [ -z $SPB_FLOAT ] #|| [ -z $CSD_FLOAT ]
 	then
 		echo
-		echo "Warning! No compatible Instances was detected on your \"$STACK\" Stack!"
+		echo "Warning! No compatible Instances was detected on your \"$OS_STACK\" Stack!"
 		echo "Possible causes are:"
 		echo
 		echo " * Missing Floating IP for one or more Sandvine's Instances."
@@ -399,7 +426,7 @@ then
 
 	echo
 	echo "The following Sandvine-compatible Instances (their Floating IPs) was detected on"
-	echo "your \"$STACK\" Stack:"
+	echo "your \"$OS_STACK\" Stack:"
 	echo
 	echo Floating IPs of:
 	echo
@@ -412,7 +439,7 @@ fi
 
 
 echo
-echo "Preparing the Ansible Playbooks to deploy Sandvine's RPM Packages..."
+echo "Preparing the Ansible Playbooks to deploy/configure Sandvine Platform..."
 
 
 if [ ! "$LABIFY" == "yes" ]
@@ -534,6 +561,8 @@ then
 
 	sed -i -e 's/lab_stack:.*/lab_stack: "yes"/g' ansible/group_vars/all
 
+	sed -i -e 's/packages_server:.*/packages_server: \"'$PRIVATE_PACKAGES_SERVER'\"/g' ansible/group_vars/all
+
 
 	git checkout ansible/hosts
 
@@ -570,19 +599,49 @@ else
 
 	if [ "$DEPLOYMENT_MODE" == "yes" ]
 	then
-		EXTRA_VARS="--extra-vars \"deployment_mode=yes\""
+		EXTRA_VARS="deployment_mode=yes"
 	fi
+
+
+	case $CLOUD_SERVICES_MODE in
+
+		default)
+			echo
+			echo "Cloud Services mode set to: \"default\"."
+
+			EXTRA_VARS="$EXTRA_VARS setup_sub_options=default"
+			;;
+
+		mdm)
+			echo
+			echo "Cloud Services mode set to: \"mdm\"."
+
+			EXTRA_VARS="$EXTRA_VARS setup_sub_options=mdm"
+			;;
+
+	esac
+
 
 
 	if [ "$OPERATION_SANDVINE" == "yes" ]
 	then
 
-		echo
-		echo "Configuring Sandvine Platform with Ansible..."
+		cd ansible/
 
-		echo
-		cd ansible
-		ansible-playbook site-sandvine.yml $EXTRA_VARS
+		if [ $CONFIG_ONLY_MODE == "yes" ]
+		then
+
+			echo
+			echo "Configuring Sandvine Platform with Ansible..."
+
+			ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+		else
+
+			echo
+			echo "Deploying Sandvine's RPM packages with Ansible..."
+
+			ansible-playbook site-sandvine.yml --extra-vars $EXTRA_VARS
+		fi
 
 	fi
 
@@ -590,12 +649,22 @@ else
 	if [ "$OPERATION_CLOUD_SERVICES" == "yes" ]
 	then
 
-		echo
-		echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
+		cd ansible/
 
-		echo
-		cd ansible
-		ansible-playbook site-cloudservices.yml $EXTRA_VARS
+		if [ $CONFIG_ONLY_MODE == "yes" ]
+		then
+
+			echo
+			echo "Configuring Sandvine Platform and Cloud Services (mode: \"$CLOUD_SERVICES_MODE\") with Ansible..."
+
+			ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+		else
+
+			echo
+			echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
+
+			ansible-playbook site-cloudservices.yml --extra-vars $EXTRA_VARS
+		fi
 
 	fi
 

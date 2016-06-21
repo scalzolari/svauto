@@ -14,14 +14,16 @@ read_rc_defaults="YES"
 install_base=/usr/local/sandvine
 # Change defaults below this line
 
+SVSUPPORT=none@localhost
+
 # Content from:
 # - https://git.sandvine.rocks/sandvine/blank-config/src/master/pts/rc.conf
 powerview_enabled="true"
 
 spb_servers={{ spb_srvc_ip }}
 
-cluster_name="sandvine"
-cluster_stat_name="sandvine"
+cluster_name="{{ cluster_name }}"
+cluster_stat_name="{{ cluster_name }}"
 
 # Lower RAM requirements
 hal_maxFlows=100000
@@ -31,11 +33,11 @@ ptsm_numHugePages=256
 #license_server_primary="licenser-server.placeholder.com"
 
 # Linux PTS config
-SetPort os-control 1-1 0000:00:03.0
-SetPort os-service 1-2 0000:00:04.0
+SetPort os-control 1-1 {{ pts_set_port_control_1_1 }}
+SetPort os-service 1-2 {{ pts_set_port_service_1_2 }}
 
-SetPort fastpath 1-3 0000:00:05.0
-SetPort fastpath 1-4 0000:00:06.0
+SetPort fastpath 1-3 {{ pts_set_port_fastpath_1_3 }}
+SetPort fastpath 1-4 {{ pts_set_port_fastpath_1_4 }}
 
 SetPortEnable 1-3
 SetPortEnable 1-4
@@ -46,6 +48,7 @@ SetPortRoleFunction 1-4 internet
 SetPortBridgeGroup 1-3 1
 SetPortBridgeGroup 1-4 1
 
+{% if setup_mode == 'cloud-services' %}
 diameter_stack_limitInMessageRate="false"
 diameter_stack_limitOutMessageRate="false"
 diameter_stack_enableCreationFailureLogging="true"
@@ -59,4 +62,4 @@ diameter_stack_maxMessageSize=16384
 diameter_stack_maxPerSessionBlockedMessages=32
 skip_header_counting_mode="padding min64bytes"
 ptsd_publicationInterval=60
-
+{% endif %}

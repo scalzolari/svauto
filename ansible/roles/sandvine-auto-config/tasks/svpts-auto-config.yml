@@ -13,7 +13,7 @@
 # limitations under the License.
 
 - name: svpts - configuring "rc.conf" file
-  template: src=svpts/rc.conf
+  template: src=svpts/rc.conf.j2
             dest=/usr/local/sandvine/etc/rc.conf
             owner=sv_admin
             group=sv_admin
@@ -23,20 +23,63 @@
 
 
 - name: svpts - configuring "policy.conf" file
-  template: src=svpts/policy.conf
+  template: src=svpts/policy.conf.j2
             dest=/usr/local/sandvine/etc/policy.conf
-            owner=sv_admin
-            group=sv_admin
+            owner=root
+            group=sv_service
             mode=0644
             backup=yes
   notify: reload-sandvine
 
 
 - name: svpts - configuring "subnets.txt" file
-  template: src=svpts/subnets.txt
-            dest=/usr/local/sandvine/etc/subnets.txt
-            owner=sv_admin
-            group=sv_admin
+  template: src=svpts/subnets.txt.j2
+             dest=/usr/local/sandvine/etc/subnets.txt
+             owner=sv_admin
+             group=sv_admin
+             mode=0644
+             backup=yes
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "rc.conf.default.cs" file
+  template: src=svcs-svpts/rc.conf.default.cs.j2
+            dest=/usr/local/sandvine/etc/rc.conf.default.cs
+            owner=root
+            group=sv_service
+            mode=0644
+  when: setup_mode == 'cloud-services'
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "diam_peer_config.xml" file
+  template: src=svcs-svpts/diam_peer_config.xml.j2
+            dest=/usr/local/sandvine/etc/diam_peer_config.xml
+            owner=root
+            group=sv_service
             mode=0644
             backup=yes
+  when: setup_mode == 'cloud-services'
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "policy.pts.cs.mobile_configurable.conf" file
+  template: src=svcs-svpts/policy.pts.cs.mobile_configurable.conf.j2
+            dest=/usr/local/sandvine/etc/policy.pts.cs.mobile_configurable.conf
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  when: setup_mode == 'cloud-services' and setup_sub_option == 'mdm'
+  notify: reload-sandvine
+
+
+- name: svpts - configuring "policy.pts.cs.record_generator.conf" file
+  template: src=svcs-svpts/policy.pts.cs.record_generator.conf.j2
+            dest=/usr/local/sandvine/etc/policy.pts.cs.record_generator.conf
+            owner=root
+            group=sv_service
+            mode=0644
+            backup=yes
+  when: setup_mode == 'cloud-services' and setup_sub_option == 'mdm'
   notify: reload-sandvine

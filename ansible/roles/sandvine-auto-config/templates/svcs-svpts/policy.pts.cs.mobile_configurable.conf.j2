@@ -1,0 +1,69 @@
+# Copyright 2016 Sandvine Incorporated ULC.  All rights reserved.
+# Use of this source code is governed by a license that can be
+# found in the LICENSE file.
+#
+# This file is used to store all things that can be configured manually by 
+# sales engineer
+
+# The shaper "MOBILE_UP" and "MOBILE_DOWN" are to be invoked when end user
+# configures traffic to be shaped when they are above certain threshold.  
+# Do NOT change the name of the shaper as policy file policy.pts.cs.mobile_quota.conf
+# depends on the name.  You can, however, configure your own rate, max_carryover, etc.  Note that the shaping action is unique per subscriber ipaddress.
+
+shaper "MOBILE_UP" rate {{ mobile_up_rate }} max_carryover 0%
+shaper "MOBILE_DOWN" rate {{ mobile_down_rate }} max_carryover 0%
+
+
+# Here, we need to allow certain traffic to go through in order to allow things
+# like http_response to work.  Add this for any traffic you want to be white
+# listed for blocking.  Note that the bytes for these traffic will still be
+# charged for the quota.
+define "IsWhitelisted" = Any (\
+    Flow.ApplicationProtocol is null, \
+    Flow.IsApplication({{ flow_is_application }}), \
+    IpInClass(Flow.Server.IpAddress, "portal"), \
+    OneOf(coalesce(Flow.Internet.UdpPort, 0), 67, 68) \
+    )
+
+# Configure how to ensure flow is redirect once.  In the reference implementation,
+# we will keep redirecting for 2 minutes.  If the portal page is capable of
+# setting spb subscriber attribute, this may be modified.
+
+# Function ReturnRedirectString will return the string that should be returned
+# for http_response
+function "ReturnRedirectString" (string "redirecturl") \
+   returns string "returnedString"
+{
+   if true then set returnedString =Concat("HTTP/1.1 307 Temporary Redirect\r\nLocation: ", \
+     redirecturl, "\r\n\r\n") 
+
+}
+
+local_attribute "Redirecting" type boolean
+
+function "ToRedirectOnce" (string "redirecturl") {
+    string "redirectString" = ReturnRedirectString(redirecturl: redirecturl)
+    if true then set Flow.Stream.ReadOnly = false
+    if true then http_response(redirectString)
+
+    # Now, indicate we have directed already
+    PolicyGroup {
+       if expr(Flow.Classifier.Service_RG = SERVICE_INTERNET) then \
+           set Flow.Subscriber.Attribute.InternetRedirected = true and  \
+           set Flow.Session.Attribute.Redirecting = true for 2 minutes
+       if expr(Flow.Classifier.Service_RG = SERVICE_INTRANET) then \
+           set Flow.Subscriber.Attribute.IntranetRedirected = true and  \
+           set Flow.Session.Attribute.Redirecting = true for 2 minutes
+       if true then set Flow.Subscriber.Attribute.RoamingRedirected = true and \
+           set Flow.Session.Attribute.Redirecting = true for 2 minutes
+    }
+}
+
+function "EnsureIsRedirectingOnce" (string "redirecturl") {
+   PolicyGroup all expr(Flow.Session.Attribute.Redirecting = true) {
+              string "redirectString" = ReturnRedirectString(redirecturl: redirecturl)
+              if true then set Flow.Stream.ReadOnly = false
+	      if true then http_response(redirectString) 
+
+  }
+}

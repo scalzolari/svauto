@@ -12,17 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: Configuring Cloud Services Daemon
-  template: src=svcs/csd.conf
+- name: svcs - configuring Cloud Services daemon
+  template: src=svcs/csd.conf.j2
             dest=/etc/csd.conf
             owner=root
             group=root
             mode=0644
             backup=yes
+  notify: restart-cloudservices
 
 
-- name: Configuring Redis
-  template: src=svcs/redis.conf
+- name: svcs - configuring Cloud Services JS
+  template: src=svcs/config.js.j2
+            dest=/var/lib/csd/public/config.js
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+  notify: restart-cloudservices
+
+
+- name: svcs - configuring Redis
+  template: src=svcs/redis.conf.j2
             dest=/etc/redis.conf
             owner=root
             group=root
@@ -30,8 +41,8 @@
             backup=yes
 
 
-- name: Configuring InfluxDB
-  template: src=svcs/config.toml
+- name: svcs - configuring InfluxDB
+  template: src=svcs/config.toml.j2
             dest=/opt/influxdb/shared/config.toml
             owner=influxdb
             group=influxdb

@@ -1,3 +1,4 @@
+{% if setup_mode == 'sandvine' %}
 subscriber_classes "internal"
 if true then count and count demographic
 
@@ -8,4 +9,17 @@ if ( server udp_port 1812 or server udp_port 1813 ) then tee from client \
 destination "sde_dhcp" ipmap mode encapsulation ip {{ sde_srvc_ip }} port 1067
 if ( server udp_port 67 or server udp_port 68 ) then tee from client \
  destination "sde_dhcp" and tee to client destination "sde_dhcp"
+{% endif %}
 
+{% if setup_mode == 'cloud-services' %}
+classifier "LinkData" type string
+if true then set Classifier.LinkData = "{{ classifier_linkdata }}"
+{% endif %}
+
+{% if setup_sub_options == 'default' %}
+include "/usr/local/sandvine/etc/policy.pts.cs.main.conf"
+{% endif %}
+
+{% if setup_sub_options == 'mdm' %}
+include "/usr/local/sandvine/etc/policy.pts.cs.mobile_main.conf"
+{% endif %}

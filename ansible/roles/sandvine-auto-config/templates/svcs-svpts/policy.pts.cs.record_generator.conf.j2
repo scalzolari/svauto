@@ -1,0 +1,140 @@
+##
+# UDR configuration
+#
+# This policy produces UDR records which include VOIP and RTT info
+# to be extracted from CS portal. It relies on sub mapping being active
+#
+
+## Generic RG policy
+
+## See file policy.pts.cs.stats_definition_config.conf for more context on these two defines:
+define "TotalUpBytes" = (EXCLUDE_DROPPED_FROM_UPSTREAM_UDR_STATS and Element.IsInline) ? Flow.Internet.Rx.TotalBytes : Flow.Subscriber.Tx.TotalBytes
+define "TotalUpPackets" = (EXCLUDE_DROPPED_FROM_UPSTREAM_UDR_STATS and Element.IsInline) ? Flow.Internet.Rx.TotalPackets : Flow.Subscriber.Tx.TotalPackets
+
+package record_generator \
+    application "RG" \
+    destination_realm "sandvine.com"\
+    subscriber_rx_count_mode "pts_received" \
+    subscriber_tx_count_mode "pts_received" \
+    max_event_attributes "14" \
+    event_bulk_size "5" \
+    service "1" \
+    name "Internet" \
+    time_interval "{{ rec_gen_time_interval }}" \
+    service "2" \
+    name "Intranet" \
+    time_interval "{{ rec_gen_time_interval }}" \
+    service "3" \
+    name "Roaming" \
+    time_interval "{{ rec_gen_time_interval }}"
+
+## Store HTTP Host and RTTs
+table "Flow_Info" \
+    (string "Host" default "", \
+    integer "cRTT" default 0, \
+    integer "sRTT" default 0) \
+    timeout 1 hour \
+    unique by(Flow)
+
+if expr(Flow.Client.Stream.Http.Host is not null) \
+    then set Table.Flow_Info.Host = Flow.Client.Stream.Http.Host
+
+if expr(Flow.Client.HandshakeRTT is not null) \
+    then set Table.Flow_Info.cRTT = Flow.Client.HandshakeRTT / 1000
+
+if expr(Flow.Server.HandshakeRTT is not null) \
+    then set Table.Flow_Info.sRTT = Flow.Server.HandshakeRTT / 1000
+
+## VOIP Specific items
+
+if expr(Flow.IsApplication("sip", "sip_data")) then count voip_qoe
+
+table "VOIP" \
+    (string "V_Call_ID",\
+      float "V_MOS" default 0,\
+      string "V_CallerTo" default "UNKNOWN",\
+      string "V_CallerFrom" default "UNKNOWN",\
+      float "V_Jitter_AVG_Server" default 0,\
+      float "V_Jitter_AVG_Client" default 0,\
+      float "V_Delay_AVG_Server" default 0,\
+      float "V_Delay_AVG_Client" default 0,\
+      integer "V_PacketsLost_Server" default 0,\
+      integer "V_PacketsLost_Client" default 0)\
+    timeout 4hour \
+    unique by (Table.VOIP.V_Call_ID)
+
+classifier "V_Call_ID" persist type string
+
+PolicyGroup expr(Flow.Application.Voip.CallId is not null and Flow.Classifier.V_Call_ID is null)
+{
+    Table.VOIP:cursor "row" = Table.VOIP.create(Flow.Application.Voip.CallId)
+    if true then set Flow.Classifier.V_Call_ID = Flow.Application.Voip.CallId
+}
+
+PolicyGroup expr(Flow.Classifier.V_Call_ID is not null) all
+{
+  Table.VOIP:cursor "row" = Table.VOIP[Flow.Classifier.V_Call_ID]
+
+  if expr(Flow.Subscriber.Tx.VoIP.MOS_CQ is not null) then \
+    row.set(V_MOS: Flow.Subscriber.Tx.VoIP.MOS_CQ)
+  if expr(Flow.Application.Voip.ToAddress is not null) then \
+    row.set(V_CallerTo: Flow.Application.Voip.ToAddress)
+  if expr(Flow.Application.Voip.FromAddress is not null) then \
+    row.set(V_CallerFrom: Flow.Application.Voip.FromAddress)
+}
+
+## Cut records
+
+#if expr(Flow.Subscriber.Tx.VoIP.MOS_CQ is not null) then \
+#  log values ("## MOS: ", Flow.Subscriber.Tx.VoIP.MOS_CQ)
+
+PolicyGroup expr(Flow.IsEnd)
+{
+    PolicyGroup all expr(Flow.IsApplication("sip_data") and Flow.Classifier.V_Call_ID is not null)
+    {
+        Table.VOIP:cursor "row" = Table.VOIP[Flow.Classifier.V_Call_ID]
+        if true then rg_LogEvent(\
+          EventType: "Flow", \
+          EventId: Flow, \
+          EventStatus: 0, \
+          SessionIp: Flow.Client.IpAddress, \
+          StartTime: now -Flow.Age, \
+          EndTime: now +1, \
+          EventAttribute1: IpToString(Flow.Server.IpAddress), \
+          EventAttribute2: Classifier.Application, \
+          EventAttribute3: (Element.IsInline)? Flow.Subscriber.Rx.TotalBytes : Flow.Internet.Tx.TotalBytes, \
+          EventAttribute4: TotalUpBytes, \
+          EventAttribute5: (Element.IsInline)? Flow.Subscriber.Rx.TotalPackets: Flow.Internet.Tx.TotalPackets, \
+          EventAttribute6: TotalUpPackets, \
+          EventAttribute7: Flow.Subscriber.Layer4Port, \
+          EventAttribute8: Flow.Internet.Layer4Port, \
+          EventAttribute9: Table.Flow_Info.Host, \
+          EventAttribute10: Table.Flow_Info.cRTT, \
+          EventAttribute11: Table.Flow_Info.sRTT, \
+          EventAttribute12: Join("|", row.V_MOS,row.V_CallerTo,row.V_CallerFrom))
+        #if true then log values ("### VOIP Flow END", Flow.Classifier.V_Call_ID, row.V_CallerTo) and \
+        #  delete_row Table.Flow_Info
+    }
+
+    if true then rg_LogEvent(\
+        EventType: "Flow", \
+        EventId: Flow, \
+        EventStatus: 0, \
+        SessionIp: Flow.Client.IpAddress, \
+        StartTime: now -Flow.Age, \
+        EndTime: now +1, \
+        EventAttribute1: IpToString(Flow.Server.IpAddress), \
+        EventAttribute2: Classifier.Application, \
+        EventAttribute3: (Element.IsInline)? Flow.Subscriber.Rx.TotalBytes : Flow.Internet.Tx.TotalBytes, \
+        EventAttribute4: TotalUpBytes, \
+        EventAttribute5: (Element.IsInline)? Flow.Subscriber.Rx.TotalPackets: Flow.Internet.Tx.TotalPackets, \
+        EventAttribute6: TotalUpPackets, \
+        EventAttribute7: Flow.Subscriber.Layer4Port, \
+        EventAttribute8: Flow.Internet.Layer4Port, \
+        EventAttribute9: Table.Flow_Info.Host, \
+        EventAttribute10: Table.Flow_Info.cRTT, \
+        EventAttribute11: Table.Flow_Info.sRTT) and \
+        delete_row Table.Flow_Info 
+        #and log values ("### Normal Flow END")
+}
+

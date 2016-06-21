@@ -1,0 +1,572 @@
+# Copyright 2016 Sandvine Incorporated ULC.  All rights reserved.
+# Use of this source code is governed by a license that can be
+# found in the LICENSE file.
+#
+# This file provides the cloud service mobile management functionality.
+
+# Note that this MUST match the PTS file policy.pts.cs.service_rg.conf
+package usage_server \
+   server_type "DiameterRf" \
+   service "1" name "Internet" \
+   service "2" name "Intranet" \
+   service "3" name "Roaming"
+
+# The table SubscriberToGroup will return the group associated with the
+# sub.  Unfortunately, we cannot call Usage.Property.GrouPlan directly 
+# as it returns no result.  As such, we will have to stored it in a table.
+# This allows to return the group name even in usage scope
+table "SubscriberToGroup" \ 
+   ( \
+     string "SubscriberName", \
+     string "GroupName" \
+   ) \
+   timeout none \
+   reset_timeout none \
+   persist true \
+   replicate true \
+   unique by (Table.SubscriberToGroup.SubscriberName)
+
+
+# function to return the shared quota name
+function "GetGroupPlan"(string "entityName") returns string "result"
+{
+  Table.SubscriberToGroup:cursor "toGroup" = Table.SubscriberToGroup[entityName]
+  if true then set result = toGroup.GroupName
+
+}
+
+# The quota manager package.
+# Update the quota as you see fit (before deployment).  Once it is 
+# deployed, you will need to move subscriber out of the plan and back to 
+# the plan - otherwise, it will not pick up the new quota for the rest of 
+# the month.
+# Note that the shared plan is used for calculation of summary of users quota only.  It is not enforced for now.
+package quota_manager \
+   enforcement_attribute "IntranetUsage integer" \
+   enforcement_attribute "InternetUsage integer" \
+   enforcement_attribute "RoamingUsage integer" \
+   enforcement_attribute "IntranetRedirected boolean" \
+   enforcement_attribute "InternetRedirected boolean" \
+   enforcement_attribute "RoamingRedirected boolean" \
+   enforcement_attribute "Plan string" \
+   quota_name "Internet" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "{{ quota_manager_report_thresholds }}" \
+     count_expression "Usage.Internet.Volume.TotalBytes" \
+     plan "NoQuota1" quota "1B" event_thresholds "100%"\
+     plan "Basic1" quota "{{ quota_internet_basic_1 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic2" quota "{{ quota_internet_basic_2 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic3" quota "{{ quota_internet_basic_3 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+   quota_name "Intranet" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "{{ quota_manager_report_thresholds }}" \
+     count_expression "Usage.Intranet.Volume.TotalBytes" \
+     plan "NoQuota1" quota "1B" event_thresholds "100%"\
+     plan "Basic1" quota "{{ quota_intranet_basic_1 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic2" quota "{{ quota_intranet_basic_2 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic3" quota "{{ quota_intranet_basic_3 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+   quota_name "Roaming" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "{{ quota_manager_report_thresholds }}" \
+     count_expression "Usage.Roaming.Volume.TotalBytes" \
+     plan "NoQuota1" quota "1B" event_thresholds "100%"\
+     plan "Basic1" quota "{{ quota_roaming_basic_1 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic2" quota "{{ quota_roaming_basic_2 }}" event_thresholds "{{ quota_manager_event_thresholds }}"\
+     plan "Basic3" quota "{{ quota_roaming_basic_3 }}" event_thresholds "{{ quota_manager_event_thresholds }}" \
+   quota_name "SharedInternet" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "100%" \
+     count_expression "Usage.Internet.Volume.TotalBytes" \
+     subscriber_name_expression "GetGroupPlan(entityName: Usage.Subscriber.Name)" \
+     plan "SharedQuota" quota "{{ quota_shared_internet }}" event_thresholds "100%"\
+   quota_name "SharedIntranet" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "100%" \
+     subscriber_name_expression "GetGroupPlan(entityName: Usage.Subscriber.Name)" \
+     count_expression "Usage.Intranet.Volume.TotalBytes" \
+     plan "SharedQuota" quota "{{ quota_shared_intranet }}" event_thresholds "100%"\
+   quota_name "SharedRoaming" \
+     period "monthly" \
+     rollover "1" \
+     report_thresholds "100%" \
+     subscriber_name_expression "GetGroupPlan(entityName: Usage.Subscriber.Name)" \
+     count_expression "Usage.Roaming.Volume.TotalBytes" \
+     plan "SharedQuota" quota "{{ quota_shared_roaming }}" event_thresholds "100%"
+
+
+# Define the default group - change this to the group that you want
+define "DefaultGroup" = "{{ default_group }}"
+
+
+# Define the subscriber attribute - this is used to indicate what threshold
+# level is reached
+attribute "IntranetUsage" type integer
+attribute "InternetUsage" type integer
+attribute "RoamingUsage" type integer
+
+# Define whether we have already redirected the user
+attribute "IntranetRedirected" type boolean
+attribute "InternetRedirected" type boolean
+attribute "RoamingRedirected" type boolean
+
+# Define what plan the subscriber is using
+attribute "Plan" type string
+attribute "GroupPlan" type string
+
+# Auto provision subscriber with default plan
+PolicyGroup all expr(Session.IsNew) {
+   string "DefaultPlan" = LookupGroupPlan(groupName: DefaultGroup)
+if expr(!QuotaManager_Internet_IsProvisioned(SubscriberName: Session.Subscriber.Name)) then \
+   set Session.Subscriber.Attribute.InternetUsage = 0 and \
+   QuotaManager_Internet_Provision(SubscriberName: Session.Subscriber.Name, \
+         Plan: DefaultPlan, \
+         DataSource: "auto-provision")
+
+if expr(!QuotaManager_Intranet_IsProvisioned(SubscriberName: Session.Subscriber.Name)) then \
+   set Session.Subscriber.Attribute.IntranetUsage = 0 and \
+   QuotaManager_Intranet_Provision(SubscriberName: Session.Subscriber.Name, \
+         Plan: DefaultPlan, \
+         DataSource: "auto-provision")
+
+if expr(!QuotaManager_Roaming_IsProvisioned(SubscriberName: Session.Subscriber.Name)) then \
+   set Session.Subscriber.Attribute.RoamingUsage = 0 and \
+   QuotaManager_Roaming_Provision(SubscriberName: Session.Subscriber.Name, \
+         Plan: DefaultPlan, \
+         DataSource: "auto-provision")
+
+}
+
+# Auto provision shared quota
+PolicyGroup all expr(Session.IsNew or Session.Subscriber.Attribute.Plan.IsUpdated ) {
+   string "groupPlanName" = Left(Session.Subscriber.Attribute.Plan, Length(Session.Subscriber.Attribute.Plan)-1)
+   if true then set Subscriber.Attribute.GroupPlan = groupPlanName 
+
+   if expr(!QuotaManager_SharedInternet_IsProvisioned(SubscriberName: groupPlanName)) then \
+   QuotaManager_SharedInternet_Provision(SubscriberName: groupPlanName, \
+         Plan: "SharedQuota", \
+         DataSource: "auto-provision")  
+   if expr(!QuotaManager_SharedIntranet_IsProvisioned(SubscriberName: groupPlanName)) then \
+   QuotaManager_SharedIntranet_Provision(SubscriberName: groupPlanName, \
+         Plan: "SharedQuota", \
+         DataSource: "auto-provision") 
+   if expr(!QuotaManager_SharedRoaming_IsProvisioned(SubscriberName: groupPlanName)) then \
+   QuotaManager_SharedRoaming_Provision(SubscriberName: groupPlanName, \
+         Plan: "SharedQuota", \
+         DataSource: "auto-provision") 
+
+   # Add the entry in the SubscriberToGroup table
+   Table.SubscriberToGroup:cursor "toGroup" = Table.SubscriberToGroup.Create(Session.Subscriber.Name)
+   if true then set toGroup.GroupName = groupPlanName
+}
+
+# Handle roll-over scenario 
+if expr(QuotaManager.Internet.RolloverOccurred) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+       SubscriberName: QuotaManager.Internet.RolloverOccurred.Subscriber.Name, \
+       Value: 0) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+       SubscriberName: QuotaManager.Internet.RolloverOccurred.Subscriber.Name, \
+       Value: false) 
+if expr(QuotaManager.Intranet.RolloverOccurred) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+       SubscriberName: QuotaManager.Intranet.RolloverOccurred.Subscriber.Name, \
+       Value: 0) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+       SubscriberName: QuotaManager.Intranet.RolloverOccurred.Subscriber.Name, \
+       Value: false) 
+if expr(QuotaManager.Roaming.RolloverOccurred) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+       SubscriberName: QuotaManager.Roaming.RolloverOccurred.Subscriber.Name, \
+       Value: 0) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+       SubscriberName: QuotaManager.Roaming.RolloverOccurred.Subscriber.Name, \
+       Value: false) 
+
+# No need to have enforcement attribute update on shared quota rollover as no 
+# action is done on it.
+
+# Handle provisioning of subscriber
+PolicyGroup all expr(QuotaManager.Provisioned.Success) \
+{
+  PolicyGroup {
+  # Everytime we move to real quota, we need to reset the threshold to 0
+  # first.  If it reaches threshold, threshold event will fire again
+  PolicyGroup expr(QuotaManager.Provisioned.WheelName = "Internet") \
+  {
+    if true then \
+    QuotaManager_Internet_Set_Enforcement_Attribute_Plan( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: QuotaManager.Provisioned.Plan) and \
+    QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: 0) and \
+    QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: false) 
+  }
+
+
+  PolicyGroup expr(QuotaManager.Provisioned.WheelName = "Intranet") \
+  {
+    if true then \
+    QuotaManager_Intranet_Set_Enforcement_Attribute_Plan( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: QuotaManager.Provisioned.Plan) and \
+    QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: 0) and \
+    QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: false) 
+  }
+
+  PolicyGroup expr(QuotaManager.Provisioned.WheelName = "Roaming")  \
+  {
+    if true then \
+    QuotaManager_Roaming_Set_Enforcement_Attribute_Plan( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: QuotaManager.Provisioned.Plan) and \
+    QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: 0) and \
+    QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+       SubscriberName: QuotaManager.Provisioned.Subscriber.Name, \
+       Value: false) 
+  }
+  }
+
+   # Add the entry in the SubscriberToGroup table
+   string "groupPlanName" = Left(QuotaManager.Provisioned.Plan, Length(QuotaManager.Provisioned.Plan)-1)
+   Table.SubscriberToGroup:cursor "toGroup" = Table.SubscriberToGroup.Create(QuotaManager.Provisioned.Subscriber.Name)
+   if true then set toGroup.GroupName = groupPlanName
+
+}
+
+# Note that I cannot group these into PolicyGroup becasue they are event based.
+# Also, since the name has to be defined during run time, I cannot put this into
+# nice functions.
+
+# First, take care of Internet wheel
+if expr(QuotaManager.Internet.NoQuota1.Event.Over100Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic1.Event.Over100Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic1.Event.Over75Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic1.Event.Over50Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic1.Event.Over25Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic2.Event.Over100Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic2.Event.Over75Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic2.Event.Over50Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic2.Event.Over25Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic3.Event.Over100Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic3.Event.Over75Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic3.Event.Over50Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Internet.Basic3.Event.Over25Percent) then \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetUsage( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Internet_Set_Enforcement_Attribute_InternetRedirected( \
+      SubscriberName: QuotaManager.Internet.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+# Next, take care of Intranet wheel
+if expr(QuotaManager.Intranet.NoQuota1.Event.Over100Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+
+if expr(QuotaManager.Intranet.Basic1.Event.Over100Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic1.Event.Over75Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic1.Event.Over50Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic1.Event.Over25Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic2.Event.Over100Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic2.Event.Over75Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic2.Event.Over50Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic2.Event.Over25Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic3.Event.Over100Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic3.Event.Over75Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic3.Event.Over50Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Intranet.Basic3.Event.Over25Percent) then \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetUsage( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Intranet_Set_Enforcement_Attribute_IntranetRedirected( \
+      SubscriberName: QuotaManager.Intranet.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+# Finally, take care of Roaming wheel 
+if expr(QuotaManager.Roaming.NoQuota1.Event.Over100Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.NoQuota1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic1.Event.Over100Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic1.Event.Over75Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic1.Event.Over50Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic1.Event.Over25Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic1.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic2.Event.Over100Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic2.Event.Over75Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic2.Event.Over50Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic2.Event.Over25Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic2.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic3.Event.Over100Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: 100) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over100Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic3.Event.Over75Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: 75) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over75Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic3.Event.Over50Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: 50) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over50Percent.Subscriber.Name, \
+      value: false ) 
+
+if expr(QuotaManager.Roaming.Basic3.Event.Over25Percent) then \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingUsage( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: 25) and \
+   QuotaManager_Roaming_Set_Enforcement_Attribute_RoamingRedirected( \
+      SubscriberName: QuotaManager.Roaming.Basic3.Event.Over25Percent.Subscriber.Name, \
+      value: false ) 
+
+
+
+

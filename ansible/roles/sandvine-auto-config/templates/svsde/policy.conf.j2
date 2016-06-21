@@ -1,3 +1,4 @@
+{% if setup_mode == 'sandvine' %}
 package subscriber_mapping \
   DHCPv4 "true" \
       deployment_role "Tee" \
@@ -13,4 +14,12 @@ package subscriber_mapping \
         subscriber_name "Radius.'Accounting-Request'.'Calling-Station-Id'" \
        session_ipv4_prefix "Radius.'Accounting-Request'.'Framed-IP-Address'" \
         session_id "Radius.'Accounting-Request'.'Acct-Session-Id'"
+{% endif %}
 
+{% if setup_sub_options == 'default' %}
+include "/usr/local/sandvine/etc/policy.sde.cs.main.conf"
+{% endif %}
+
+{% if setup_sub_options == 'mdm' %}
+include "/usr/local/sandvine/etc/policy.sde.cs.mobile_main.conf"
+{% endif %}

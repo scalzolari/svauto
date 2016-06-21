@@ -17,8 +17,8 @@ SVSUPPORT=none@localhost
 
 spb_spb_servers={{ spb_srvc_ip }}
 
-cluster_cluster_name="sandvine"
-cluster_stat_name="sandvine"
+cluster_name="{{ cluster_name }}"
+cluster_stat_name="{{ cluster_name }}"
 
 radius_RadiusServers="radiusRadiusServersRadiuscmFkaXVzX1JhZGl1c1NlcnZlcnNfcmFkaXVz"
 radiusRadiusServersRadiuscmFkaXVzX1JhZGl1c1NlcnZlcnNfcmFkaXVz__name="radius"
@@ -40,3 +40,9 @@ dhcpInterfaceV4DhcpZGhjcF9pbnRlcmZhY2VWNF9kaGNw__encapsulated="true"
 dhcpInterfaceV4DhcpZGhjcF9pbnRlcmZhY2VWNF9kaGNw__host="0.0.0.0"
 dhcpInterfaceV4DhcpZGhjcF9pbnRlcmZhY2VWNF9kaGNw__port="1067"
 
+{% if setup_mode == 'cloud-services' %}
+# SDE publish interval on every 60s
+spb_ptsd_publicationInterval=60
+
+msd_cli_sessionLimit="500"
+{% endif %}

@@ -3,16 +3,16 @@
 #
 
 [svsde-servers]
-#SDE_IP
+#SDE_IP setup_server=svsde setup_mode=cloud-services setup_sub_option=default
 #ec2-54-16X-Y3-1Z1.compute-1.amazonaws.com
 
 [svpts-servers]
-#PTS_IP base_os=centos7
+#PTS_IP base_os=centos7 setup_server=svpts setup_mode=cloud-services setup_sub_option=default
 #FREEBSD_PTS_IP ansible_python_interpreter=/usr/local/bin/python2.7
 #alex+instance+nubo
 
 [svspb-servers]
-#SPB_IP
+#SPB_IP setup_server=svspb setup_server=svspb setup_mode=cloud-services setup_sub_option=default
 #10.128.243.249
 
 [svcs-servers]

@@ -13,10 +13,31 @@
 # limitations under the License.
 
 - name: svspb - configuring "rc.conf" file
-  template: src=svspb/rc.conf
+  template: src=svspb/rc.conf.j2
             dest=/usr/local/sandvine/etc/rc.conf
             owner=sv_admin
             group=sv_admin
             mode=0644
             backup=yes
+  notify: reload-sandvine
+
+
+- name: svspb - configuring "java.security" file
+  template: src=svspb/java.security.j2
+            dest=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/lib/security/java.security
+            owner=root
+            group=root
+            mode=0644
+            backup=yes
+  notify: reload-sandvine
+
+
+- name: svspb - configuring "dataRetention.conf" file
+  template: src=svcs-svspb/dataRetention.conf.j2
+            dest=/usr/local/sandvine/etc/dataRetention.conf
+            owner=root
+            group=sv_service
+            mode=0600
+            backup=yes
+  when: setup_mode == 'cloud-services'
   notify: reload-sandvine

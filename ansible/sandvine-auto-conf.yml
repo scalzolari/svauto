@@ -12,6 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: reload-sandvine
-  shell: cd /usr/local/sandvine/etc ; svreload
-  when: deployment_mode != 'yes'
+#
+# The following hosts definitions, configured Sandvine Platform:
+#
+
+- hosts: svspb-servers
+  user: "{{regular_system_user}}"
+  become: yes
+  roles:
+  - role: sandvine-auto-config
+
+- hosts: svsde-servers
+  user: "{{regular_system_user}}"
+  become: yes
+  roles:
+  - role: sandvine-auto-config
+
+- hosts: svpts-servers
+  user: "{{regular_system_user}}"
+  become: yes
+  roles:
+  - role: sandvine-auto-config
+
+- hosts: svcs-servers
+  user: "{{regular_system_user}}"
+  become: yes
+  roles:
+  - role: sandvine-auto-config

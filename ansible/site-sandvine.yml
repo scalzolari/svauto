@@ -49,5 +49,5 @@
   roles:
   - role: bootstrap
   - role: svcs
-  - role: cloudservices-auto-config
+  - role: sandvine-auto-config
   - role: power-cycle

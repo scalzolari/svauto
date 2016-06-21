@@ -80,16 +80,6 @@
   service: name=postgresql-9.3 state=started enabled=yes
 
 
-
-- name: Creating new "java.security" file
-  copy: src=java.security
-        dest=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/lib/security/java.security
-        owner=root
-        group=root
-        mode=0644
-        backup=yes
-
-
 - name: Cleanup YUM local cache
   command: yum clean all
 

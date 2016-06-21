@@ -70,6 +70,9 @@ packages_server: "archive.mydomain.com"
 # Sandvine's Release Code Name:
 release_code_name: "niagara"
 
+# Sandvine Cluster Name:
+cluster_name: "sandvine"
+
 # Goes to PTS subnets.txt
 int_subnet: "10.192.0.0/16"
 ext_subnet: "0.0.0.0/0"
@@ -88,6 +91,9 @@ csd_ctrl_ip: "192.168.192.20"
 csd_srvc_ip: "192.168.192.140"
 
 ga_srvc_ip: "192.168.192.140"
+
+# PTS LinkData
+classifier_linkdata: "DEFAULT"
 
 # Cloud Services MySQL initial setup
 cs_db: "cs"
@@ -129,19 +135,65 @@ spb_version: "6.60"
 
 csd_version: "7.50"
 
-# Server to configure via Sandvine Auto Config
+
+#
+# The Sandvine Auto Config section
+#
+
+# Server to configure (supported: svpts, svsde, svspb, svcs):
 setup_server: "none"
-setup_mode: "default"
+
+# Setup Mode (supported: sandvine, cloud-services, cloud-services):
+setup_mode: "sandvine"
+
+# Setup Sub Options (supported: default, mdm)
+setup_sub_options: "mdm"
+
+
+#
+# Cloud Services Mobile Device Management options
+#
+
+default_group: "Basic"
+
+mobile_up_rate: "1000Kbps"
+mobile_down_rate: "1000Kbps"
+
+flow_is_application: "\"dns\", \"icmp\", \"snmp\", \"ssh\", \"bootp\", \"radius\""
+
+rec_gen_time_interval: "30seconds"
+
+quota_manager_report_thresholds: "25%,50%,75%,100%"
+quota_manager_event_thresholds: "25%,50%,75%,100%"
+
+quota_internet_basic_1: "1GB"
+quota_internet_basic_2: "2GB"
+quota_internet_basic_3: "3GB"
+
+quota_intranet_basic_1: "10GB"
+quota_intranet_basic_2: "20GB"
+quota_intranet_basic_3: "30GB"
+
+quota_roaming_basic_1: "100MB"
+quota_roaming_basic_2: "200MB"
+quota_roaming_basic_3: "300MB"
+
+quota_shared_internet: "100GB"
+quota_shared_intranet: "1000GB"
+quota_shared_roaming: "1GB"
+
+google_api_key: "AIzaSyAnoaDeoVU9ryr4-tg0eVSH9DbOul7VKxA"
 
 #
 # PTS PCI Setup (also DPDK)
 #
 
-pts_set_port_ctrl_1: "0000:00:03.0"
-pts_set_port_srvc_1: "0000:00:04.0"
+pts_set_port_control_1_1: "0000:00:03.0"
+pts_set_port_service_1_2: "0000:00:04.0"
 
-pts_set_port_dpdk_sub_1: "0000:00:05.0"
-pts_set_port_dpdk_int_1: "0000:00:06.0"
+pts_set_port_fastpath_1_3: "0000:00:05.0"
+pts_set_port_fastpath_1_4: "0000:00:06.0"
+pts_set_port_fastpath_1_5: "0000:00:07.0"
 
 
 #

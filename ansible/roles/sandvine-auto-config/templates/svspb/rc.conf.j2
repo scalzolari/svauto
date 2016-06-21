@@ -17,8 +17,8 @@ SVSUPPORT=none@localhost
 
 spb_servers={{ spb_srvc_ip }}
 
-cluster_name="sandvine"
-spb_cluster_name="sandvine"
+cluster_name="{{ cluster_name }}"
+spb_cluster_name="{{ cluster_name }}"
 
 spb_appsrv_bind_address="0.0.0.0"
 spb_appsrv_servlet_bind_address="0.0.0.0"
@@ -27,3 +27,9 @@ spb_appsrv_servlet_http_enable="true"
 
 spb_create_default_user="true"
 
+{% if setup_mode == 'cloud-services' %}
+# SPB publish interval on every 60s
+svcond_granularity_historical_networkelement_publishedexpression=60
+svcond_granularity_historical_networkelement_classifier_basic=60
+svcond_granularity_historical_networkelement_classifier_applicationprotocol=60
+{% endif %}
