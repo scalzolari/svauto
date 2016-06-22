@@ -35,11 +35,11 @@ packer_build_cs()
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# SPB 6.60 on CentOS 6 + Cloud Services
-	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.65 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT
 
 	# SPB 6.60 on CentOS 6 + Cloud Services - Labified
-	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.65 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --labify
 
 	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, DPDK 16.04, requires igb_uio
