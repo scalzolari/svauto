@@ -22,7 +22,7 @@ build_yum_repo_niagara()
 	#
 
 	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos7 --product=svpts --version=7.30.0351 --latest
-	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos7 --product=svprotocols --version=16.05.2121 --latest
+	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos7 --product=svprotocols --version=16.06.2109 --latest
 
 	# Usage Management PTS
 
@@ -31,7 +31,7 @@ build_yum_repo_niagara()
 	# Experimental
 
 	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svpts --version=7.30.0035 --latest
-	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos6 --product=svprotocols --version=16.05.2121 --latest
+	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos6 --product=svprotocols --version=16.06.2109 --latest
 
 	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svusagemanagementpts --version=5.20.0201 --latest
 
@@ -43,8 +43,8 @@ build_yum_repo_niagara()
 	# SDE stuff
 	#
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos7 --product=svsde --version=7.45.0205 --latest
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svsde --version=7.45.0205 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos7 --product=svsde --version=7.45.0305 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svsde --version=7.45.0305 --latest
 
 	# Usage Management
 
@@ -66,11 +66,11 @@ build_yum_repo_niagara()
 	# SPB stuff
 	#
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svspb --version=6.65.0019 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svspb --version=6.60.0575 --latest
 
 	# NDS
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svreports --version=6.65.0005 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svreports --version=6.60.0102 --latest
 
 
 	# Experimental
