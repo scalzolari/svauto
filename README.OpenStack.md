@@ -83,7 +83,7 @@ Make sure it is working:
 
 Then, you'll be able to deploy `OpenStack` by running:
 
-    bash <(curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/os-install-lbr.sh)
+    bash <(curl -s https://raw.githubusercontent.com/sandvine-eng/svauto/dev/scripts/os-install-lbr.sh)
 
 Well done!
 
@@ -112,7 +112,7 @@ Well done!
 
     sudo apt -y install git ansible
 
-    git clone -b dev https://github.com/tmartinx/svauto.git
+    git clone -b dev https://github.com/sandvine-eng/svauto.git
 
     cd svauto
 
@@ -126,7 +126,7 @@ Well done!
 
     sudo apt -y install git ansible
 
-    git clone -b dev https://github.com/tmartinx/svauto.git
+    git clone -b dev https://github.com/sandvine-eng/svauto.git
 
     cd svauto
 

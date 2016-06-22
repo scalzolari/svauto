@@ -97,7 +97,7 @@ if  [ ! -d ~/svauto ]; then
         echo
 
         cd ~
-        git clone -b dev https://github.com/tmartinx/svauto.git
+        git clone -b dev https://github.com/sandvine-eng/svauto.git
 else
         echo
         echo "Apparently, you already have SVAuto, enjoy it!"

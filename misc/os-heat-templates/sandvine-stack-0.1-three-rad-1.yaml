@@ -407,7 +407,7 @@ resources:
           default_user:
             name: "sandvine"
         runcmd:
-        - 'su -c "\curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/install-svauto.sh | bash -s" sandvine'
+        - 'su -c "\curl -s https://raw.githubusercontent.com/sandvine-eng/svauto/dev/scripts/install-svauto.sh | bash -s" sandvine'
 
   spb:
     type: OS::Nova::Server
@@ -507,7 +507,7 @@ resources:
           default_user:
             name: "sandvine"
         runcmd:
-        - 'su -c "\curl -s https://raw.githubusercontent.com/tmartinx/svauto/dev/scripts/install-svauto.sh | bash -s" sandvine'
+        - 'su -c "\curl -s https://raw.githubusercontent.com/sandvine-eng/svauto/dev/scripts/install-svauto.sh | bash -s" sandvine'
 
 outputs:
   pts_floating_ip:

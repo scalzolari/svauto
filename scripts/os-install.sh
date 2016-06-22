@@ -36,7 +36,7 @@ echo
 echo "Downloading SVAuto into your home directory..."
 echo
 cd ~
-git clone -b dev https://github.com/sandvine/svauto.git
+git clone -b dev https://github.com/sandvine-eng/svauto.git
 
 
 echo
