@@ -609,14 +609,14 @@ else
 			echo
 			echo "Cloud Services mode set to: \"default\"."
 
-			EXTRA_VARS="$EXTRA_VARS setup_sub_options=default"
+			EXTRA_VARS="$EXTRA_VARS setup_sub_option=default"
 			;;
 
 		mdm)
 			echo
 			echo "Cloud Services mode set to: \"mdm\"."
 
-			EXTRA_VARS="$EXTRA_VARS setup_sub_options=mdm"
+			EXTRA_VARS="$EXTRA_VARS setup_sub_option=mdm"
 			;;
 
 	esac

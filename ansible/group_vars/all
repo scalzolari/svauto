@@ -147,7 +147,7 @@ setup_server: "none"
 setup_mode: "sandvine"
 
 # Setup Sub Options (supported: default, mdm)
-setup_sub_options: "mdm"
+setup_sub_option: "mdm"
 
 
 #
@@ -182,7 +182,7 @@ quota_shared_internet: "100GB"
 quota_shared_intranet: "1000GB"
 quota_shared_roaming: "1GB"
 
-google_api_key: "AIzaSyAnoaDeoVU9ryr4-tg0eVSH9DbOul7VKxA"
+google_api_key: "none"
 
 #
 # PTS PCI Setup (also DPDK)

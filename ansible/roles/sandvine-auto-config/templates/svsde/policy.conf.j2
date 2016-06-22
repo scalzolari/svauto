@@ -16,10 +16,10 @@ package subscriber_mapping \
         session_id "Radius.'Accounting-Request'.'Acct-Session-Id'"
 {% endif %}
 
-{% if setup_sub_options == 'default' %}
+{% if setup_sub_option == 'default' %}
 include "/usr/local/sandvine/etc/policy.sde.cs.main.conf"
 {% endif %}
 
-{% if setup_sub_options == 'mdm' %}
+{% if setup_sub_option == 'mdm' %}
 include "/usr/local/sandvine/etc/policy.sde.cs.mobile_main.conf"
 {% endif %}

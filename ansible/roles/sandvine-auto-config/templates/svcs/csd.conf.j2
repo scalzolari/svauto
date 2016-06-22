@@ -82,15 +82,15 @@
 		<!-- Downstream is the expected maximum downstream system is provisioned for -->
 		<Downstream>20Mbps</Downstream>
 		<!-- Valid deployment type is standalone, cpe, and cloud_mdm -->
-{% if setup_sub_options == 'default' %}
+{% if setup_sub_option == 'default' %}
 		<DeploymentType>standalone</DeploymentType>
 {% endif %}
-{% if setup_sub_options == 'mdm' %}
+{% if setup_sub_option == 'mdm' %}
 		<DeploymentType>cloud_mdm</DeploymentType>
 {% endif %}
 	</DefaultConfiguration>
 
-{% if setup_sub_options == 'mdm' %}
+{% if setup_sub_option == 'mdm' %}
         <!-- Configuration for cloud service mobile device management -->
 	<MobileDeviceManagement>
 		<!-- Address to access SDE SOAP Server -->
