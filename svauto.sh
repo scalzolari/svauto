@@ -561,7 +561,7 @@ then
 
 	sed -i -e 's/lab_stack:.*/lab_stack: "yes"/g' ansible/group_vars/all
 
-	sed -i -e 's/packages_server:.*/packages_server: \"'$PRIVATE_PACKAGES_SERVER'\"/g' ansible/group_vars/all
+	sed -i -e 's/packages_server:.*/packages_server: \"'$SVAUTO_MAIN_HOST'\"/g' ansible/group_vars/all
 
 
 	git checkout ansible/hosts
