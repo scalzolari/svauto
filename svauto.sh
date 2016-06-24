@@ -603,7 +603,7 @@ else
 	fi
 
 
-	case $CLOUD_SERVICES_MODE in
+	case "$CLOUD_SERVICES_MODE" in
 
 		default)
 			echo
@@ -628,19 +628,31 @@ else
 
 		cd ansible/
 
-		if [ $CONFIG_ONLY_MODE == "yes" ]
+		if [ "$CONFIG_ONLY_MODE" == "yes" ]
 		then
 
 			echo
 			echo "Configuring Sandvine Platform with Ansible..."
 
-			ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+			if [ -z "$EXTRA_VARS" ]
+			then
+				ansible-playbook sandvine-auto-conf.yml
+			else
+				ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+			fi
+
 		else
 
 			echo
 			echo "Deploying Sandvine's RPM packages with Ansible..."
 
-			ansible-playbook site-sandvine.yml --extra-vars $EXTRA_VARS
+			if [ -z "$EXTRA_VARS" ]
+			then
+				ansible-playbook site-sandvine.yml
+			else
+				ansible-playbook site-sandvine.yml --extra-vars $EXTRA_VARS
+			fi
+
 		fi
 
 	fi
@@ -651,19 +663,31 @@ else
 
 		cd ansible/
 
-		if [ $CONFIG_ONLY_MODE == "yes" ]
+		if [ "$CONFIG_ONLY_MODE" == "yes" ]
 		then
 
 			echo
-			echo "Configuring Sandvine Platform and Cloud Services (mode: \"$CLOUD_SERVICES_MODE\") with Ansible..."
+			echo "Configuring Sandvine Platform and Cloud Services with Ansible..."
 
-			ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+			if [ -z "$EXTRA_VARS" ]
+			then
+				ansible-playbook sandvine-auto-conf.yml
+			else
+				ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+			fi
+
 		else
 
 			echo
 			echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
 
-			ansible-playbook site-cloudservices.yml --extra-vars $EXTRA_VARS
+			if [ -z "$EXTRA_VARS" ]
+			then
+				ansible-playbook site-cloudservices.yml
+			else
+				ansible-playbook site-cloudservices.yml --extra-vars $EXTRA_VARS
+			fi
+
 		fi
 
 	fi

@@ -141,13 +141,13 @@ csd_version: "7.50"
 #
 
 # Server to configure (supported: svpts, svsde, svspb, svcs):
-setup_server: "none"
+setup_server: "null"
 
-# Setup Mode (supported: sandvine, cloud-services, cloud-services):
-setup_mode: "sandvine"
+# Setup Mode (supported: sandvine, cloud-services):
+setup_mode: "null"
 
 # Setup Sub Options (supported: default, mdm)
-setup_sub_option: "default"
+setup_sub_option: "null"
 
 
 #
