@@ -111,21 +111,9 @@ case $i in
 		shift
 		;;
 
-	--operation-sandvine)
+	--operation=*)
 
-		OPERATION_SANDVINE="yes"
-		shift
-		;;
-
-	--operation-cloud-services)
-
-		OPERATION_CLOUD_SERVICES="yes"
-		shift
-		;;
-
-	--operation-openstack)
-
-		OPERATION_OPENSTACK="yes"
+		OPERATION="${i#*=}"
 		shift
 		;;
 
@@ -236,22 +224,22 @@ then
 fi
 
 
-#if [ -z $OPERATION_CLOUD_SERVICES ] || [ -z $OPERATION_SANDVINE ] || [ -z $OPERATION_OPENSTACK ]
-#then
-#
-#	echo
-#	echo "No operation mode was specified, use one of the following options:"
-#
-#	echo
-#	echo "--operation-sandvine, or --operation-cloud-services, or --operation-openstack, to \"~/svauto.sh\""
-#
-#	echo
-#	exit 1
-#
-#fi
+if [ -z "$OPERATION" ]
+then
+
+	echo
+	echo "No operation mode was specified, use one of the following options:"
+
+	echo
+	echo "--operation=sandvine, or --operation=cloud-services, or --operation=openstack, to \"~/svauto.sh\""
+
+	echo
+	exit 1
+
+fi
 
 
-if [ "$OPERATION_OPENSTACK" == "yes" ]
+if [ "$OPERATION" == "openstack" ]
 then
 
 	echo
@@ -623,7 +611,7 @@ else
 
 
 
-	if [ "$OPERATION_SANDVINE" == "yes" ]
+	if [ "$OPERATION" == "sandvine" ]
 	then
 
 		cd ansible/
@@ -658,7 +646,7 @@ else
 	fi
 
 
-	if [ "$OPERATION_CLOUD_SERVICES" == "yes" ]
+	if [ "$OPERATION" == "cloud-services" ]
 	then
 
 		cd ansible/

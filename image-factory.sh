@@ -103,6 +103,18 @@ case $i in
 		shift
 		;;
 
+        --operation=*)
+
+                OPERATION="${i#*=}"
+                shift
+                ;;
+
+        --cloud-services-mode=*)
+
+                CLOUD_SERVICES_MODE="${i#*=}"
+                shift
+                ;;
+
 	--vm-xml)
 
 		VM_XML="yes"
@@ -387,6 +399,25 @@ fi
 if [ "$LABIFY" == "yes" ]; then
 	EXTRA_VARS="$EXTRA_VARS labifyit="yes""
 fi
+
+
+case "$OPERATION" in
+
+	sandvine)
+		EXTRA_VARS="$EXTRA_VARS setup_mode="sandvine""
+		;;
+
+	cloud-services)
+		EXTRA_VARS="$EXTRA_VARS setup_mode="cloud-services""
+		;;
+
+        *)
+		echo
+		echo "Usage: $0 --operation={sandvine|cloudservices}"
+		exit 1
+		;;
+
+esac
 
 
 case "$PRODUCT" in
