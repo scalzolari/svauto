@@ -23,9 +23,9 @@ ansible_playbook_builder()
 	do
 	case $i in
 
-	        --base-os=*)
+	        --ansible-remote-user=*)
 
-	                BASE_OS="${i#*=}"
+	                ANSIBLE_REMOTE_USER="${i#*=}"
 	                shift
 	                ;;
 
@@ -47,36 +47,12 @@ ansible_playbook_builder()
 
 
 	echo "- hosts: $ANSIBLE_HOSTS"
-
-	case "$BASE_OS" in
-
-	        ubuntu*)
-	                echo "  user: sandvine"
-	                echo "  become: yes"
-	                ;;
-
-	        centos*)
-	                echo "  user: root"
-	                echo "  become: yes"
-	                ;;
-
-	        *)
-	                echo
-	                echo "Usage: $0 --base-os={ubuntu14|ubuntu16|centos6|centos7}"
-	                exit 1
-	                ;;
-
-	esac
-
+	echo "  user: "$ANSIBLE_REMOTE_USER""
+	echo "  become: yes"
 	echo "  roles:"
 
 	for X in $ROLES; do
 	        echo "  - role: "$X""
 	done
-
-	if [ "$LABIFY" == "yes" ]
-	then
-	        echo "  - role: labify"
-	fi
 
 }

@@ -26,8 +26,13 @@
         state=absent
   with_items:
     - /etc/udev/rules.d/70-persistent-net.rules
-    - /etc/serial
   when: deployment_mode == 'yes'
+
+
+- name: centos - removing /etc/serial file
+  file: path=/etc/serial
+        state=absent
+  when: deployment_mode == 'yes' and setup_server != 'svspb'
 
 
 - name: centos - removing SSH Host keys

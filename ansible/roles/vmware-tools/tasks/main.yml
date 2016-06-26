@@ -12,13 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- include: centos6.yml
+- name: centos6 - include playbook
+  include: centos6.yml
   when: base_os == 'centos6'
 
 
-- include: centos7.yml
+- name: centos7 - include playbook
+  include: centos7.yml
   when: base_os == 'centos7'
 
 
-- include: ubuntu.yml
+- name: ubuntu - include playbook
+  include: ubuntu.yml
   when: base_os == 'ubuntu16' or base_os == 'ubuntu14'

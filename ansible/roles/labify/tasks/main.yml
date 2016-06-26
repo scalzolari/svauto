@@ -21,7 +21,8 @@
 
 
 - name: This image was kickstarted
-  command: touch /etc/LINUXKSIMAGE
+  file: path=/etc/LINUXKSIMAGE
+        state=touch
 
 
 - name: Do not allow Cloud Init to disable RootLogin and PasswordAuth on ssh
@@ -34,4 +35,4 @@
             owner=sv_admin
             group=sv_admin
             mode=0644
-  when: labifyit == 'yes' and setup_server == 'svpts'
+  when: setup_server == 'svpts'

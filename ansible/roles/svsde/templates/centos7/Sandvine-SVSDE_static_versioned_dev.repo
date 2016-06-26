@@ -4,7 +4,7 @@
 
 [sandvine-svsde]
 name=Sandvine-$releasever - SVSDE (Sandvine Service Delivery Engine)
-baseurl=ftp://{{ packages_server }}/images/Linux/RHEL7-x64/SDE/svsde-LNX-{{sde_version}}
+baseurl=ftp://{{ static_packages_server }}/images/Linux/RHEL7-x64/SDE/svsde-LNX-{{sde_version}}
 enabled=1
 protect=0
 gpgcheck=0

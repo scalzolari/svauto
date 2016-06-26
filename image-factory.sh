@@ -35,7 +35,7 @@ case $i in
 		shift
 		;;
 
-	# --roles will deprecate: product, product-variant and labify (probably).
+	# --roles will deprecate: product, product-variant and etc
         --roles=*)
 
                 ALL_ROLES="${i#*=}"
@@ -176,12 +176,6 @@ case $i in
 		shift
 		;;
 
-	--labify)
-
-		LABIFY="yes"
-		shift
-		;;
-
 	--dry-run)
 
 		DRY_RUN="yes"
@@ -194,15 +188,8 @@ done
 
 BUILD_RAND=$(openssl rand -hex 4)
 
-
-if [ "$LABIFY" == "yes" ]
-then
-	PACKER_FILES=build-lab-$PRODUCT-$BUILD_RAND-packer-files
-	OUTPUT_DIR=build-lab-$PRODUCT-$BUILD_RAND-output-dir
-else
-	PACKER_FILES=build-$PRODUCT-$BUILD_RAND-packer-files
-	OUTPUT_DIR=build-$PRODUCT-$BUILD_RAND-output-dir
-fi
+PACKER_FILES=build-$PRODUCT-$BUILD_RAND-packer-files
+OUTPUT_DIR=build-$PRODUCT-$BUILD_RAND-output-dir
 
 
 echo
@@ -373,7 +360,7 @@ if [ "$DISABLE_AUTOCONF" == "yes" ] ; then
 fi
 
 if [ "$STATIC_REPO" == "yes" ] ; then
-	EXTRA_VARS="$EXTRA_VARS static_repo="true""
+	EXTRA_VARS="$EXTRA_VARS static_repo="true" static_packages_server="$STATIC_PACKAGES_SERVER""
 fi
 
 if [ "$VERSIONED_REPO" == "yes" ]; then
@@ -394,10 +381,6 @@ fi
 
 if [ "$SETUP_DEFAULT_INT_SH" == "yes" ]; then
 	EXTRA_VARS="$EXTRA_VARS centos7_vmware_net_hack="yes""
-fi
-
-if [ "$LABIFY" == "yes" ]; then
-	EXTRA_VARS="$EXTRA_VARS labifyit="yes""
 fi
 
 
@@ -462,7 +445,7 @@ sed -i -e 's/"--extra-vars \\"\\""/"--extra-vars  \\"'"$EXTRA_VARS"'\\""/g' $PAC
 
 
 # Creating Ansible top-level Playbook file
-ansible_playbook_builder --base-os=$BASE_OS --ansible-hosts=$PRODUCT-servers --roles=$ALL_ROLES > $PLAYBOOK_FILE
+ansible_playbook_builder --ansible-remote-user="root" --ansible-hosts=$PRODUCT-servers --roles=$ALL_ROLES > $PLAYBOOK_FILE
 
 
 echo

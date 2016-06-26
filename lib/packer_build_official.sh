@@ -23,37 +23,6 @@ packer_build_official()
 
 
 	#
-	# Examples
-	#
-
-	# Ubuntu Trusty 14.04.3 - Blank server
-#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
-
-	# Ubuntu Trusty 14.04.3 - SVAuto bootstraped
-#	./image-factory.sh --release=dev --base-os=ubuntu14 --base-os-upgrade --product=ubuntu --version=14.04 --product-variant=r1 --qcow2 --md5sum --sha1sum \
-#		--roles=bootstrap,post-cleanup $DRY_RUN_OPT
-
-	# Ubuntu Xenial 16.04 - Blank server
-#	./image-factory.sh --release=dev --base-os=ubuntu16 --base-os-upgrade --product=ubuntu --version=16.04 --product-variant=r1 --qcow2 --md5sum --sha1sum
-
-	# CentOS 6 - SVAuto bootstraped - Old Linux 2.6
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=centos --version=6 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
-
-	# CentOS 6 - SVAuto bootstraped - Linux 3.18 from Xen 4.4 CentOS Repo - Much better KVM / Xen support
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=centos --version=6 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
-
-	# CentOS 7 - SVAuto bootstraped - Old Linux 3.10
-#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
-
-	# CentOS 7 - SVAuto bootstraped - Linux 3.18 from Xen 4.6 CentOS Repo - Much better KVM / Xen support
-#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=centos --version=7.1 --product-variant=sv-1 --qcow2 --vm-xml --md5sum --sha1sum \
-#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,post-cleanup $DRY_RUN_OPT
-
-
-	#
 	# STABLE
 	#
 
@@ -61,25 +30,21 @@ packer_build_official()
 #	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
-	# PTS 7.30 on CentOS 7 - Linux 3.10, DPDK 2.2, requires igb_uio
+	# PTS 7.30 on CentOS 7 - Linux 3.10, DPDK 16.04, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
-	# SDE 7.45 on CentOS 6
+	# SDE 7.45 on CentOS 7
 	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
-	# SDE 7.45 on CentOS 7
-	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
-
        	# SDE 7.45 on CentOS 6
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --operation=sandvine
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
 	# SPB 6.60 on CentOS 6 - No NDS
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svspb,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svspb,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
 
 	#
@@ -90,17 +55,25 @@ packer_build_official()
 #	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --operation=sandvine
 
-	# PTS 7.40 on CentOS 7 - Linux 3.10, old DPDK 1.8, requires igb_uio
+	# PTS 7.40 on CentOS 7 - Linux 3.10, DPDK 1.8, requires igb_uio
 #	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --operation=sandvine
 
-	# PTS 7.40 on CentOS 6 - Linux 3.18 from Xen 4.4 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	# PTS 7.40 on CentOS 6 - Linux 3.18 from Xen 4.6 Repo + DPDK 16.04 with Xen Support, no igb_uio needed
 #	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo --operation=sandvine
 
-	# PTS 7.40 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 2.1 with Xen Support, no igb_uio needed
+	# PTS 7.40 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 16.04 with Xen Support, no igb_uio needed
 #	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
 #		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --versioned-repo --experimental-repo --operation=sandvine
+
+	# SDE 7.45 on CentOS 6 - Linux 3.18
+#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
+
+	# SDE 7.45 on CentOS 7 - Linux 3.18
+#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.45 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \
+#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
 	# SDE 7.45 on CentOS 7
 #	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --md5sum --sha1sum \

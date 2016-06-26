@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+source svauto.conf
+
 source lib/os-deploy.sh
 
 source lib/move2webroot.sh
@@ -23,7 +25,10 @@ source lib/build-yum-repo-niagara.sh
 
 source lib/packer_build_cs_release.sh
 source lib/packer_build_cs.sh
+source lib/packer_build_cs_lab.sh
+
 source lib/packer_build_official.sh
+
 source lib/packer_build_sandvine.sh
 
 source lib/ansible-playbook-builder.sh

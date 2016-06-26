@@ -55,6 +55,10 @@ ovs_dpdk: "no"
 # Stack running at the lab?
 lab_stack: "no"
 
+# NIC Interface ordering via PCI ID
+eth0_pci_id: "0000:00:03.0"
+eth1_pci_id: "0000:00:04.0"
+
 
 #
 # Sandvine Platform Definitions
@@ -66,9 +70,11 @@ ftp_password: lerolero
 
 # Yum or APT Reposiory server:
 packages_server: "archive.mydomain.com"
+static_packages_server: "archive.mydomain.com"
 
 # Sandvine's Release Code Name:
 release_code_name: "niagara"
+release_code_number: "16.06"
 
 # Sandvine Cluster Name:
 cluster_name: "sandvine"
@@ -100,9 +106,6 @@ cs_db: "cs"
 cs_db_host: "%"
 cs_db_user: "svadmin"
 cs_db_pass: "sandvine"
-
-# Is it labified?
-labifyit: "no"
 
 # Is Experimental Repo:
 is_experimental: "no"
@@ -200,8 +203,10 @@ pts_set_port_fastpath_1_5: "0000:00:07.0"
 # Ubuntu's DPDK Setup
 #
 
+grub_nr_1g_pages: "64"
+
 dpdk_nr_1g_pages: "1"
-dpdk_nr_2m_pages: "64"
+dpdk_nr_2m_pages: "32"
 
 dpdk_bus: "pci"
 

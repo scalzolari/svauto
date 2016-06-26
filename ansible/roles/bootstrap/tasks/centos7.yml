@@ -12,12 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos7 - config /etc/hosts
-  shell: HOSTNAME=$(cat /etc/hostname | cut -d \. -f 1) ; DOMAIN=$(cat /etc/hostname | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
-  when: disable_autoconf != 'yes'
-
-
-- name: centos7 - copy "hostname-fix" init script
+- name: centos7 - copy "etc-hosts-fix" init script
   copy: src=centos7/etc-hosts-fix
         dest=/etc/init.d/etc-hosts-fix
         owner=root
@@ -25,8 +20,8 @@
         mode=0755
   when: disable_autoconf != 'yes'
 
-- name: centos7 - service hostname-fix enabled
-  service: name=etc-hosts-fix state=started enabled=yes
+- name: centos7 - service "etc-hosts-fix" enabled
+  service: name=etc-hosts-fix state=restarted enabled=yes
   when: disable_autoconf != 'yes'
 
 
@@ -143,6 +138,7 @@
         owner=root
         group=root
         mode=0644
+  when: centos7_vmware_net_hack != 'yes'
 
 
 - name: centos - copy vmxnet3 udev rules
@@ -151,6 +147,7 @@
         owner=root
         group=root
         mode=0644
+  when: centos7_vmware_net_hack != 'yes'
 
 
 - name: centos7 - copy Setup Default Interface Script

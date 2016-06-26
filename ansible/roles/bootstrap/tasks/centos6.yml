@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: centos6 - config /etc/hosts
-  shell: HOSTNAME=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 1) ; DOMAIN=$(grep ^HOSTNAME /etc/sysconfig/network | cut -d \=  -f 2 | cut -d \. -f 2) ; if ! grep -q "$HOSTNAME" /etc/hosts ; then echo "127.0.1.1 $HOSTNAME.$DOMAIN $HOSTNAME" >> /etc/hosts ; fi
-  when: disable_autoconf != 'yes'
-
-
 - name: centos6 - copy "hostname-fix" init script
   copy: src=centos6/hostname-fix
         dest=/etc/init.d/hostname-fix
@@ -39,7 +34,7 @@
   when: disable_autoconf != 'yes'
 
 - name: centos6 - service etc-hosts-fix enabled
-  service: name=etc-hosts-fix state=started enabled=yes
+  service: name=etc-hosts-fix state=restarted enabled=yes
   when: disable_autoconf != 'yes'
 
 

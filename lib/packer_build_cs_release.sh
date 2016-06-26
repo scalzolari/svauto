@@ -48,26 +48,14 @@ packer_build_cs_release()
 	./image-factory.sh --release=prod --base-os=centos6 --base-os-upgrade --product=cs-svsde --version=$SANDVINE_RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT --operation=cloud-services
 
-	# SDE 7.45 on CentOS 6 + Cloud Services SDE + Cloud Services Daemon (back / front) - Labified
-#	./image-factory.sh --release=prod --base-os=centos6 --base-os-upgrade --product=cs-svsde --version=$SANDVINE_RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT --operation=cloud-services
-
 	# SPB 6.60 on CentOS 6 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos6 --base-os-upgrade --product=cs-svspb --version=$SANDVINE_RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT --operation=cloud-services
-
-	# SPB 6.60 on CentOS 6 - Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos6 --base-os-upgrade --product=cs-svspb --version=$SANDVINE_RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT --operation=cloud-services
 
 	# PTS 7.30 on CentOS 7 + Cloud Services customizations
 	./image-factory.sh --release=prod --base-os=centos7 --base-os-upgrade --product=cs-svpts --version=$SANDVINE_RELEASE --qcow2 --ova --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup $DRY_RUN_OPT --operation=cloud-services \
 		--lock-el7-kernel-upgrade
-
-	# PTS 7.30 on CentOS 7 + Cloud Services customizations - Labified
-#	./image-factory.sh --release=prod --base-os=centos7 --base-os-upgrade --product=cs-svpts --version=$SANDVINE_RELEASE --qcow2 --vmdk --vm-xml --md5sum --sha1sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,vmware-tools,cleanrepo,post-cleanup --labify $DRY_RUN_OPT --operation=cloud-services
 
 
 	if [ "$HEAT_TEMPLATES_CS" == "yes" ]
@@ -137,43 +125,13 @@ packer_build_cs_release()
 	
 			find packer/build* -name "*.raw" -exec rm -f {} \;
 	
-#			find packer/build-lab* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.md5" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB\;
 			find packer/build* -name "*.sha1" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.qcow2c" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.vmdk" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.vhd*" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-#			find packer/build-lab* -name "*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE_LAB \;
 			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_CS_RELEASE \;
-
-
-#			echo
-#			echo "Merging MD5SUMS files together..."
-
-#			cd $WEB_ROOT_CS_RELEASE_LAB
-
-#			cat *.md5 > MD5SUMS
-#			rm -f *.md5
-
-#			echo
-#			echo "Merging SHA1SUMS files together..."
-
-#			cat *.sha1 > SHA1SUMS
-#			rm -f *.sha1
-
-#			cd - &>/dev/null
 
 
 			echo

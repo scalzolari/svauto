@@ -18,8 +18,6 @@
 TODAY=$(date +"%Y%m%d")
 
 
-source svauto.conf
-
 source lib/include-tools.inc
 
 
@@ -215,7 +213,7 @@ then
 
 	git checkout ansible/hosts ansible/group_vars/all
 
-	rm -rf build-date.txt packer/build* tmp/cs-rel/* tmp/cs/* tmp/sv/*
+	rm -rf build-date.txt packer/build* tmp/cs-rel/* tmp/cs/* tmp/sv/* ansible/tmp/*
 
 	echo
 
@@ -299,6 +297,7 @@ fi
 if [ "$PACKER_BUILD_CS" == "yes" ]
 then
 
+	packer_build_cs_lab
 	packer_build_cs
 
 	exit 0
@@ -445,6 +444,8 @@ then
 	sed -i -e 's/^#SPB_IP/'$SPB_FLOAT'/g' ansible/hosts
 #	sed -i -e 's/^#CSD_IP/'$CSD_FLOAT'/g' ansible/hosts
 
+	sed -i -e 's/packages_server:.*/packages_server: \"'$SVAUTO_MAIN_HOST'\"/g' ansible/group_vars/all
+
 fi
 
 
@@ -585,6 +586,9 @@ then
 
 else
 
+	BUILD_RAND=$(openssl rand -hex 4)
+
+
 	if [ "$DEPLOYMENT_MODE" == "yes" ]
 	then
 		EXTRA_VARS="deployment_mode=yes"
@@ -610,11 +614,11 @@ else
 	esac
 
 
-
 	if [ "$OPERATION" == "sandvine" ]
 	then
 
 		cd ansible/
+
 
 		if [ "$CONFIG_ONLY_MODE" == "yes" ]
 		then
@@ -622,11 +626,24 @@ else
 			echo
 			echo "Configuring Sandvine Platform with Ansible..."
 
+
+			PLAYBOOK_FILE="tmp/sandvine-auto-config-"$BUILD_RAND".yml"
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+				--roles=sandvine-auto-config > $PLAYBOOK_FILE
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
+
+
 			if [ -z "$EXTRA_VARS" ]
 			then
-				ansible-playbook sandvine-auto-conf.yml
+				ansible-playbook $PLAYBOOK_FILE
 			else
-				ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
 			fi
 
 		else
@@ -634,11 +651,40 @@ else
 			echo
 			echo "Deploying Sandvine's RPM packages with Ansible..."
 
+
+			PLAYBOOK_FILE="tmp/site-sandvine-"$BUILD_RAND".yml"
+
+			if [ "$DEPLOYMENT_MODE" == "yes" ]
+			then
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+					--roles=bootstrap,svpts,sandvine-auto-config,power-cycle > $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+					--roles=bootstrap,svsde,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+					--roles=bootstrap,svspb,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+
+			else
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+					--roles=bootstrap,svpts,sandvine-auto-config > $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+					--roles=bootstrap,svsde,sandvine-auto-config >> $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+					--roles=bootstrap,svspb,sandvine-auto-config >> $PLAYBOOK_FILE
+
+			fi
+
+
 			if [ -z "$EXTRA_VARS" ]
 			then
-				ansible-playbook site-sandvine.yml
+				ansible-playbook $PLAYBOOK_FILE
 			else
-				ansible-playbook site-sandvine.yml --extra-vars $EXTRA_VARS
+				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
 			fi
 
 		fi
@@ -657,11 +703,24 @@ else
 			echo
 			echo "Configuring Sandvine Platform and Cloud Services with Ansible..."
 
+
+			PLAYBOOK_FILE="tmp/sandvine-auto-config-"$BUILD_RAND".yml"
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+				--roles=sandvine-auto-config > $PLAYBOOK_FILE
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
+
+			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
+
+
 			if [ -z "$EXTRA_VARS" ]
 			then
-				ansible-playbook sandvine-auto-conf.yml
+				ansible-playbook $PLAYBOOK_FILE
 			else
-				ansible-playbook sandvine-auto-conf.yml --extra-vars $EXTRA_VARS
+				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
 			fi
 
 		else
@@ -669,11 +728,40 @@ else
 			echo
 			echo "Deploying Sandvine's RPM Packages plus Cloud Services with Ansible..."
 
+
+			PLAYBOOK_FILE="tmp/site-cloudservices-"$BUILD_RAND".yml"
+
+			if [ "$DEPLOYMENT_MODE" == "yes" ]
+			then
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,power-cycle > $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+
+			else
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
+					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config > $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
+					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config >> $PLAYBOOK_FILE
+
+				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
+					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config >> $PLAYBOOK_FILE
+
+			fi
+
+
 			if [ -z "$EXTRA_VARS" ]
 			then
-				ansible-playbook site-cloudservices.yml
+				ansible-playbook $PLAYBOOK_FILE
 			else
-				ansible-playbook site-cloudservices.yml --extra-vars $EXTRA_VARS
+				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
 			fi
 
 		fi
