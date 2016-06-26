@@ -563,7 +563,7 @@ then
 		for X in $LIST
 		do
 
-			echo "File: \"$X.sah256\"..."
+			echo "File: \"$X.sha256\"..."
 
 			sha256sum "$X" >> "$X".sha256
 
