@@ -35,7 +35,7 @@ packer_build_official()
 		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
 	# SDE 7.45 on CentOS 7
-	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --sha256sum \
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svsde --version=7.45 --qcow2 --ova --vhd --vm-xml --sha256sum \
 		--roles=cloud-init,bootstrap,grub-conf,svsde,svusagemanagement,svsubscribermapping,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
 
        	# SDE 7.45 on CentOS 6
