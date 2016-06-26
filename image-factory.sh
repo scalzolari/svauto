@@ -164,15 +164,9 @@ case $i in
 		shift
 		;;
 
-	--sha1sum)
+	--sha256sum)
 
-		SHA1SUM="yes"
-		shift
-		;;
-
-	--md5sum)
-
-		MD5SUM="yes"
+		SHA256SUM="yes"
 		shift
 		;;
 
@@ -488,22 +482,11 @@ then
 		echo
 		echo "Converting "$PACKER_VM_NAME" RAW image to Compressed QCoW2..."
 		qemu-img convert -p -f raw -O qcow2 -c packer/$OUTPUT_DIR/"$PACKER_VM_NAME".raw packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.qcow2c
-
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.qcow2c.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.qcow2c | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.qcow2c.md5
-		fi
-
-		if [ "$SHA1SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.qcow2c.sha1 SHA1SUM file"
-			sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.qcow2c | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.qcow2c.sha1
-		fi
 	fi
 
 
 	if [ "$OVA" == "yes" ]; then
+
 		echo
 		echo "Creating "$PACKER_VM_NAME".ova file"
 
@@ -535,17 +518,6 @@ then
 
 		cd - &>/dev/null
 
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME".ova.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME".ova | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME".ova.md5
-		fi
-
-		if [ "$SHA1SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME".ova.sha1 SHA1SUM file"
-			sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME".ova | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME".ova.sha1
-		fi
 	fi
 
 
@@ -553,18 +525,6 @@ then
 		echo
 		echo "Converting "$PACKER_VM_NAME" RAW image to VMDK format..."
 		qemu-img convert -p -f raw -O vmdk -o adapter_type=lsilogic packer/$OUTPUT_DIR/"$PACKER_VM_NAME".raw packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vmdk
-
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.vmdk.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vmdk | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vmdk.md5
-		fi
-
-		if [ "$SHA1SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.vmdk.sha1 SHA1SUM file"
-			sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vmdk | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vmdk.sha1
-		fi
 	fi
 
 
@@ -572,18 +532,6 @@ then
 		echo
 		echo "Converting "$PACKER_VM_NAME" RAW image to VHD format..."
 		qemu-img convert -p -f raw -O vpc -o subformat=dynamic packer/$OUTPUT_DIR/"$PACKER_VM_NAME".raw packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhd
-
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.vhd.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhd | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhd.md5
-		fi
-
-                if [ "$SHA1SUM" == "yes" ]; then
-                        echo
-                        echo "Creating "$PACKER_VM_NAME"-disk1.vhd.sha1 SHA1SUM file"
-                        sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhd | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhd.sha1
-                fi
 	fi
 
 
@@ -591,18 +539,6 @@ then
 		echo
 		echo "Converting "$PACKER_VM_NAME" RAW image to VHDX format..."
 		qemu-img convert -p -f raw -O vhdx -o subformat=dynamic packer/$OUTPUT_DIR/"$PACKER_VM_NAME".raw packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhdx
-
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.vhdx.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhdx | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhdx.md5
-		fi
-
-                if [ "$SHA1SUM" == "yes" ]; then
-                        echo
-                        echo "Creating "$PACKER_VM_NAME"-disk1.vhdx.sha1 SHA1SUM file"
-                        sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhdx | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vhdx.sha1
-                fi
 	fi
 
 
@@ -610,18 +546,30 @@ then
 		echo
 		echo "Converting "$PACKER_VM_NAME" RAW image to VDI format..."
 		qemu-img convert -p -f raw -O vdi packer/$OUTPUT_DIR/"$PACKER_VM_NAME".raw packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vdi
+	fi
 
-		if [ "$MD5SUM" == "yes" ]; then
-			echo
-			echo "Creating "$PACKER_VM_NAME"-disk1.vdi.md5 MD5SUM file"
-			md5sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vdi | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vdi.md5
-		fi
 
-                if [ "$SHA1SUM" == "yes" ]; then
-                        echo
-                        echo "Creating "$PACKER_VM_NAME"-disk1.vdi.sha1 SHA1SUM file"
-                        sha1sum packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vdi | sed -e 's/packer\/'"$OUTPUT_DIR"'\///g' > packer/$OUTPUT_DIR/"$PACKER_VM_NAME"-disk1.vdi.sha1
-                fi
+	if [ "$SHA256SUM" == "yes" ]; then
+
+		echo
+		echo "Creating SHA256SUMs of files located here: \"packer/$OUTPUT_DIR/\"..."
+
+		cd packer/$OUTPUT_DIR/
+
+		LIST=`ls -1 | grep -v \.raw | grep -v \.ovf | grep -v \.mf | grep -v \.descriptor | xargs`
+
+		echo
+
+		for X in $LIST
+		do
+
+			echo "File: \"$X.sah256\"..."
+
+			sha256sum "$X" >> "$X".sha256
+
+		done
+
+		cd - &>/dev/null
 	fi
 
 
