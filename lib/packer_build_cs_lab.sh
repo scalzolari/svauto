@@ -34,13 +34,9 @@ packer_build_cs_lab()
 	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --product-variant=cs-1 --operation=cloud-services --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
 		--roles=cloud-init,bootstrap,grub-conf,svspb,svmcdtext,svreports,svcs-svspb,sandvine-auto-config,vmware-tools,labify,post-cleanup $DRY_RUN_OPT
 
-	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, DPDK 16.04, requires igb_uio - Labified - Regular builds, no hack needed
-	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --operation=cloud-services --qcow2 --vhd --vm-xml --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,vmware-tools,labify,post-cleanup $DRY_RUN_OPT
-
-	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, DPDK 16.04, requires igb_uio - Labified - Includes the VMWare hack for the lab
-	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --operation=cloud-services --vmdk --md5sum --sha1sum \
-		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,vmware-tools,labify,post-cleanup $DRY_RUN_OPT
+	# PTS 7.30 on CentOS 7 + Cloud Services - Linux 3.10, DPDK 16.04, requires igb_uio - Labified
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --product-variant=cs-1 --operation=cloud-services --qcow2 --vmdk --vhd --vm-xml --md5sum --sha1sum \
+		--roles=cloud-init,bootstrap,grub-conf,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,vmware-tools,labify,post-cleanup $DRY_RUN_OPT \
 		--setup-default-interface-script
 
 
