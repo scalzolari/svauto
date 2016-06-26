@@ -1,19 +1,21 @@
 {% if setup_mode == 'sandvine' %}
-package subscriber_mapping \
-  DHCPv4 "true" \
-      deployment_role "Tee" \
-  RADIUS "true" \
-      deployment_role "Tee" \
-      trigger"Mapping" \
-        condition "Radius.'Accounting-Request'.'Acct-Status-Type' = 1 or Radius.'Accounting-Request'.'Acct-Status-Type' = 7" \
-        subscriber_name "Radius.'Accounting-Request'.'Calling-Station-Id'" \
-        session_ipv4_prefix "Radius.'Accounting-Request'.'Framed-IP-Address'" \
-        session_id "Radius.'Accounting-Request'.'Acct-Session-Id'" \
-      trigger "UnMapping" \
-        condition "Radius.'Accounting-Request'.'Acct-Status-Type' = 2 or Radius.'Accounting-Request'.'Acct-Status-Type' = 8" \
-        subscriber_name "Radius.'Accounting-Request'.'Calling-Station-Id'" \
-       session_ipv4_prefix "Radius.'Accounting-Request'.'Framed-IP-Address'" \
-        session_id "Radius.'Accounting-Request'.'Acct-Session-Id'"
+# SDE Policy example:
+
+#package subscriber_mapping \
+#  DHCPv4 "true" \
+#      deployment_role "Tee" \
+#  RADIUS "true" \
+#      deployment_role "Tee" \
+#      trigger"Mapping" \
+#        condition "Radius.'Accounting-Request'.'Acct-Status-Type' = 1 or Radius.'Accounting-Request'.'Acct-Status-Type' = 7" \
+#        subscriber_name "Radius.'Accounting-Request'.'Calling-Station-Id'" \
+#        session_ipv4_prefix "Radius.'Accounting-Request'.'Framed-IP-Address'" \
+#        session_id "Radius.'Accounting-Request'.'Acct-Session-Id'" \
+#      trigger "UnMapping" \
+#        condition "Radius.'Accounting-Request'.'Acct-Status-Type' = 2 or Radius.'Accounting-Request'.'Acct-Status-Type' = 8" \
+#        subscriber_name "Radius.'Accounting-Request'.'Calling-Station-Id'" \
+#       session_ipv4_prefix "Radius.'Accounting-Request'.'Framed-IP-Address'" \
+#        session_id "Radius.'Accounting-Request'.'Acct-Session-Id'"
 {% endif %}
 
 {% if setup_sub_option == 'default' %}
