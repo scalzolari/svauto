@@ -617,6 +617,9 @@ else
 	if [ "$OPERATION" == "sandvine" ]
 	then
 
+		EXTRA_VARS="$EXTRA_VARS setup_mode=sandvine"
+
+
 		cd ansible/
 
 
@@ -629,6 +632,9 @@ else
 
 			PLAYBOOK_FILE="tmp/sandvine-auto-config-"$BUILD_RAND".yml"
 
+			echo
+			echo "Creating Ansible Playbook: \"$PLAYBOOK_FILE\"."
+
 			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
 				--roles=sandvine-auto-config > $PLAYBOOK_FILE
 
@@ -639,12 +645,12 @@ else
 				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
 
 
-			if [ -z "$EXTRA_VARS" ]
-			then
-				ansible-playbook $PLAYBOOK_FILE
-			else
-				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
-			fi
+			echo
+			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\":"
+			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
+			echo
+
+			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
 		else
 
@@ -653,6 +659,9 @@ else
 
 
 			PLAYBOOK_FILE="tmp/site-sandvine-"$BUILD_RAND".yml"
+
+			echo
+			echo "Creating Ansible Playbook: \"$PLAYBOOK_FILE\"."
 
 			if [ "$DEPLOYMENT_MODE" == "yes" ]
 			then
@@ -680,12 +689,12 @@ else
 			fi
 
 
-			if [ -z "$EXTRA_VARS" ]
-			then
-				ansible-playbook $PLAYBOOK_FILE
-			else
-				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
-			fi
+			echo
+			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
+			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
+			echo
+
+			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
 		fi
 
@@ -695,7 +704,11 @@ else
 	if [ "$OPERATION" == "cloud-services" ]
 	then
 
+		EXTRA_VARS="$EXTRA_VARS setup_mode=cloud-services"
+
+
 		cd ansible/
+
 
 		if [ "$CONFIG_ONLY_MODE" == "yes" ]
 		then
@@ -705,6 +718,9 @@ else
 
 
 			PLAYBOOK_FILE="tmp/sandvine-auto-config-"$BUILD_RAND".yml"
+
+			echo
+			echo "Creating Ansible Playbook: \"$PLAYBOOK_FILE\"."
 
 			ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
 				--roles=sandvine-auto-config > $PLAYBOOK_FILE
@@ -716,12 +732,12 @@ else
 				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
 
 
-			if [ -z "$EXTRA_VARS" ]
-			then
-				ansible-playbook $PLAYBOOK_FILE
-			else
-				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
-			fi
+			echo
+			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
+			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
+			echo
+
+			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
 		else
 
@@ -730,6 +746,9 @@ else
 
 
 			PLAYBOOK_FILE="tmp/site-cloudservices-"$BUILD_RAND".yml"
+
+			echo
+			echo "Creating Ansible Playbook: \"$PLAYBOOK_FILE\"."
 
 			if [ "$DEPLOYMENT_MODE" == "yes" ]
 			then
@@ -757,12 +776,12 @@ else
 			fi
 
 
-			if [ -z "$EXTRA_VARS" ]
-			then
-				ansible-playbook $PLAYBOOK_FILE
-			else
-				ansible-playbook $PLAYBOOK_FILE --extra-vars $EXTRA_VARS
-			fi
+			echo
+			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
+			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
+			echo
+
+			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
 		fi
 

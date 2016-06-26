@@ -55,4 +55,6 @@ ansible_playbook_builder()
 	        echo "  - role: "$X""
 	done
 
+	echo ""
+
 }
