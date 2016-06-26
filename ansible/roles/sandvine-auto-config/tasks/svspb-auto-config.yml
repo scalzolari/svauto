@@ -25,7 +25,7 @@
 - name: svspb - configuring "java.security" file
   lineinfile: dest=/usr/lib/jvm/jre-1.7.0-openjdk.x86_64/lib/security/java.security
               regexp='^jdk.tls.disabledAlgorithms'
-              line='%jdk.tls.disabledAlgorithms=DH keySize < 768'
+              line='jdk.tls.disabledAlgorithms=DH keySize < 768'
               state=present
   notify: reload-sandvine
 
