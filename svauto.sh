@@ -645,10 +645,11 @@ else
 				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
 
 
-			echo
-			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\":"
-			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
-			echo
+                        echo
+                        echo "Running Ansible:"
+                        echo
+                        echo "ansible-playbook $PLAYBOOK_FILE --extra-vars \"$EXTRA_VARS\""
+                        echo
 
 			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
@@ -689,10 +690,11 @@ else
 			fi
 
 
-			echo
-			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
-			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
-			echo
+                        echo
+                        echo "Running Ansible:"
+                        echo
+                        echo "ansible-playbook $PLAYBOOK_FILE --extra-vars \"$EXTRA_VARS\""
+                        echo
 
 			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
@@ -732,10 +734,11 @@ else
 				--roles=sandvine-auto-config >> $PLAYBOOK_FILE
 
 
-			echo
-			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
-			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
-			echo
+                        echo
+                        echo "Running Ansible:"
+                        echo
+                        echo "ansible-playbook $PLAYBOOK_FILE --extra-vars \"$EXTRA_VARS\""
+                        echo
 
 			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
 
@@ -777,8 +780,9 @@ else
 
 
 			echo
-			echo "Running Ansible Playbook: \"$PLAYBOOK_FILE\"."
-			echo "With the following \"extra-vars\": \"$EXTRA_VARS\"."
+			echo "Running Ansible:"
+			echo
+			echo "ansible-playbook $PLAYBOOK_FILE --extra-vars \"$EXTRA_VARS\""
 			echo
 
 			ansible-playbook $PLAYBOOK_FILE --extra-vars "$EXTRA_VARS"
