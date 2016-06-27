@@ -28,3 +28,6 @@
   shell: service scdpd stop
   when: base_os == 'centos6'
   ignore_errors: yes
+
+
+- pause: seconds=15

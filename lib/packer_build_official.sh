@@ -44,7 +44,7 @@ packer_build_official()
 
 	# SPB 6.60 on CentOS 6 - No NDS
 	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.60 --qcow2 --ova --vhd --vm-xml --sha256sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,sandvine-auto-config,vmware-tools,post-cleanup $DRY_RUN_OPT --operation=sandvine
+		--roles=cloud-init,bootstrap,grub-conf,svspb,sandvine-auto-config,vmware-tools,post-cleanup,power-cycle $DRY_RUN_OPT --operation=sandvine
 
 
 	#

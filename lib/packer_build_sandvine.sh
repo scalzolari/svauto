@@ -44,6 +44,6 @@ packer_build_sandvine()
 
 	# Linux SVSPB 6.65 on CentOS 6
 	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svspb --version=6.65.0019 --product-variant=vpl-1 --operation=sandvine --qcow2 --ova --vhd --vm-xml --sha256sum \
-		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup --disable-autoconf --static-repo --versioned-repo
+		--roles=cloud-init,bootstrap,grub-conf,svspb,vmware-tools,post-cleanup,power-cycle --disable-autoconf --static-repo --versioned-repo
 
 }

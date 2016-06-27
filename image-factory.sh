@@ -409,6 +409,7 @@ case "$PRODUCT" in
 
         *svspb)
 		EXTRA_VARS=""$EXTRA_VARS" spb_version="$VERSION" setup_server="svspb""
+		sed -i -e 's/"shutdown_command":.*/"shutdown_command": "",/g' $PACKER_FILE
 		;;
 
 	svcs)
