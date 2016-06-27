@@ -41,9 +41,5 @@
 
 
 - name: centos - write zeroes
-  shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY
+  shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY ; sync
   when: deployment_mode == 'yes'
-
-
-- name: centos - running sync
-  shell: sync
