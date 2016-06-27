@@ -45,7 +45,7 @@ echo
 echo "Bridge Mode: Open vSwitch"
 echo
 cd ~/svauto
-./svauto.sh --operation-openstack --br-mode=OVS --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --deployment-mode --ovs-hybrid-firewall
+./svauto.sh --operation=openstack --br-mode=OVS --use-dummies --base-os=ubuntu16 --base-os-upgrade=yes --openstack-release=mitaka --deployment-mode --ovs-hybrid-firewall
 
 
 echo
