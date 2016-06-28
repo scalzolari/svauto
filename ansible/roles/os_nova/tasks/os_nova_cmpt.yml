@@ -56,6 +56,3 @@
         mode=0640
         backup=yes
   notify: restart-nova-compute
-
-
-- meta: flush_handlers

@@ -54,6 +54,3 @@
 
 - name: Populating Nova API Database
   shell: su -s /bin/sh -c "nova-manage api_db sync" nova
-
-
-- meta: flush_handlers

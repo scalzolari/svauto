@@ -69,6 +69,3 @@
         backup=yes
   when: br_mode == 'LBR'
   notify: reload-sysctl
-
-
-- meta: flush_handlers

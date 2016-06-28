@@ -20,3 +20,6 @@
 - name: ubuntu - Including Nova Compute Tasks
   include: os_nova_cmpt.yml
   when: os_nova_cmpt == 'yes'
+
+
+- meta: flush_handlers

@@ -12,16 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - Including Neutron Controller Handlers
-  include: os_neutron_ctrl.yml
-  when: os_neutron_ctrl == 'yes'
+- name: restart-neutron-lbr
+  service: name=neutron-linuxbridge-agent state=restarted enabled=yes
+
+- name: restart-neutron-ovs
+  service: name=neutron-openvswitch-agent state=restarted enabled=yes
 
 
-- name: ubuntu - Including Neutron Network Handlers
-  include: os_neutron_net.yml
-  when: os_neutron_net == 'yes'
+- name: restart-neutron
+  service: name=neutron-server state=restarted enabled=yes
 
 
-- name: ubuntu - Including Neutron Compute Handlers
-  include: os_neutron_cmpt.yml
-  when: os_neutron_cmpt == 'yes'
+- name: restart-neutron-agents
+  service: name={{item}} state=restarted enabled=yes
+  with_items:
+    - neutron-l3-agent
+    - neutron-dhcp-agent
+    - neutron-metadata-agent
+
+- name: restart-neutron-lbr
+  service: name=neutron-linuxbridge-agent state=restarted enabled=yes
+
+- name: restart-neutron-ovs
+  service: name=neutron-openvswitch-agent state=restarted enabled=yes
+
+
+- name: reload-sysctl
+  command: sysctl -p

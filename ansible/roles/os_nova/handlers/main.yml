@@ -12,11 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - Including Nova Controller Handlers
-  include: os_nova_ctrl.yml
-  when: os_nova_ctrl == 'yes'
+- name: restart-nova-compute
+  service: name=nova-compute state=restarted enabled=yes
 
+- name: restart-libvirt-bin
+  service: name=libvirt-bin state=restarted enabled=yes
 
-- name: ubuntu - Including Nova Compute Handlers
-  include: os_nova_cmpt.yml
-  when: os_nova_cmpt == 'yes'
+- name: restart-nova
+  service: name={{item}} state=restarted enabled=yes
+  with_items:
+    - nova-api
+    - nova-cert
+    - nova-conductor
+    - nova-scheduler
+    - nova-spiceproxy
+    - nova-consoleauth

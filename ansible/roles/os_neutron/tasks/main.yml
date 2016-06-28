@@ -25,3 +25,6 @@
 - name: ubuntu - Including Neutron Compute Tasks
   include: os_neutron_cmpt.yml
   when: os_neutron_cmpt == 'yes'
+
+
+- meta: flush_handlers
