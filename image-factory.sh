@@ -476,6 +476,9 @@ else
 			then
 				echo
 				echo "Packer build okay, proceeding..."
+
+				break
+
 			else
 				echo
 				echo "Packer build failed! Trying it again (\"$TRIES\" of \"$MAX_TRIES\")..."
@@ -492,7 +495,7 @@ else
 			echo
 			echo "WARNING!!!"
 			echo
-			echo "Three attempts of Packer builds failed! ABORTING!!!"
+			echo "$MAX_TRIES attempts of Packer builds failed! ABORTING!!!"
 
 			exit 1
 
