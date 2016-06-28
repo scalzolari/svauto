@@ -19,7 +19,7 @@
 # the required values as arguments, for example:
 
 
-source svauto.conf
+source lib/include-tools.inc
 
 
 for i in "$@"
@@ -165,7 +165,7 @@ case "$RELEASE" in
 
         dev)
 
-                UPSTREAM_HOST="$PRIVATE_PACKAGES_SERVER"
+                UPSTREAM_HOST="$STATIC_PACKAGES_SERVER"
                 ;;
 
         *)
