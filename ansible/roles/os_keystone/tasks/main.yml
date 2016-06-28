@@ -21,15 +21,8 @@
     - keystone
 
 
-- name: Stopping Keystone
-  service: name=keystone state=stopped
-
-
-- name: Disabling Keystone Upstart Service, it now runs under Apache WSGI
-  lineinfile: dest=/etc/init/keystone.override
-              line="manual"
-              state=present
-              create=true
+- name: Stopping and disabling Keystone (it runs under Apache)
+  service: name=keystone state=stopped enabled=no
 
 
 - name: Removing non-used sqlite database
