@@ -222,6 +222,31 @@ then
 fi
 
 
+if [ "$BOOTSTRAP_SVAUTO" == "yes" ]
+then
+
+	echo
+	echo "Installing SVAuto dependencies via APT:"
+	echo
+
+	sudo ~/svauto/scripts/bootstrap-svauto.sh
+
+	exit 0
+
+fi
+
+
+if [ "$BUILD_YUM_REPO" == "yes" ]
+then
+
+	build_yum_repo_agawa
+	build_yum_repo_niagara
+
+	exit 0
+
+fi
+
+
 if [ -z "$OPERATION" ]
 then
 
@@ -245,31 +270,6 @@ then
 	echo
 
 	os_deploy
-
-	exit 0
-
-fi
-
-
-if [ "$BOOTSTRAP_SVAUTO" == "yes" ]
-then
-
-	echo
-	echo "Installing SVAuto dependencies via APT:"
-	echo
-
-	sudo ~/svauto/scripts/bootstrap-svauto.sh
-
-	exit 0
-
-fi
-
-
-if [ "$BUILD_YUM_REPO" == "yes" ]
-then
-
-	build_yum_repo_agawa
-	build_yum_repo_niagara
 
 	exit 0
 
