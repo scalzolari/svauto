@@ -21,7 +21,7 @@ build_yum_repo_niagara()
 	# PTS stuff
 	#
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos7 --product=svpts --version=7.30.0385 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos7 --product=svpts --version=7.30.0386 --latest
 	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos7 --product=svprotocols --version=16.06.2109 --latest
 
 	# Usage Management PTS
@@ -30,7 +30,7 @@ build_yum_repo_niagara()
 
 	# Experimental
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svpts --version=7.30.0035 --latest
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svpts --version=7.30.0386 --latest
 	./yum-repo-builder.sh --release-code-name=rolling --release=dev --base-os=centos6 --product=svprotocols --version=16.06.2109 --latest
 
 	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svusagemanagementpts --version=5.20.0201 --latest
