@@ -116,6 +116,7 @@
     - dmidecode
     - man-pages
     - tcpreplay
+    - yum-utils
     - bind-utils
     - traceroute
     - conntrack-tools

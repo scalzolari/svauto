@@ -89,6 +89,7 @@
     - tcpreplay
     - man-pages
     - firewalld
+    - yum-utils
     - bind-utils
     - conntrack-tools
     - libhugetlbfs-utils
