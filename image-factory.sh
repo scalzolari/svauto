@@ -115,6 +115,12 @@ case $i in
                 shift
                 ;;
 
+	--packer-max-tries=*)
+
+		MAX_TRIES="${i#*=}"
+		shift
+		;;
+
 	--vm-xml)
 
 		VM_XML="yes"
@@ -443,30 +449,74 @@ sed -i -e 's/"--extra-vars \\"\\""/"--extra-vars  \\"'"$EXTRA_VARS"'\\""/g' $PAC
 ansible_playbook_builder --ansible-remote-user="root" --ansible-hosts=$PRODUCT-servers --roles=$ALL_ROLES > $PLAYBOOK_FILE
 
 
-echo
-echo "Packer is now building: "$PACKER_VM_NAME" with Ansible..."
-
-
 if [ "$DRY_RUN" == "yes" ]
 then
 
 	echo
 	echo "Dry run called, not running Packer, to run it manually, you can type:"
 
+	echo
 	echo packer build packer/$PACKER_FILES/$PACKER_VM_NAME-packer.yaml
 
 else
 
-	if packer build packer/$PACKER_FILES/$PACKER_VM_NAME-packer.yaml
+	if [ ! -z $MAX_TRIES ] && [ $MAX_TRIES -gt 1 ]
 	then
-	        echo
-	        echo "Packer build okay, proceeding..."
+
+		TRIES=1
+
+		while [ $TRIES -lt $MAX_TRIES ]
+		do
+
+			echo
+			echo "Packer is now building: "$PACKER_VM_NAME" with Ansible (try: $TRIES)..."
+			echo
+
+			if packer build packer/$PACKER_FILES/$PACKER_VM_NAME-packer.yaml
+			then
+				echo
+				echo "Packer build okay, proceeding..."
+			else
+				echo
+				echo "Packer build failed! Trying it again (\"$TRIES\" of \"$MAX_TRIES\")..."
+
+				((TRIES++))
+
+			fi
+
+		done
+
+		if [ $TRIES == $MAX_TRIES ]
+		then
+
+			echo
+			echo "WARNING!!!"
+			echo
+			echo "Three attempts of Packer builds failed! ABORTING!!!"
+
+			exit 1
+
+		fi
+
 	else
+
 		echo
-	        echo "WARNING!!!"
+		echo "Packer is now building: "$PACKER_VM_NAME" with Ansible..."
 		echo
-	        echo "Packer build failed! ABORTING!!!"
-	        exit 1
+
+		if packer build packer/$PACKER_FILES/$PACKER_VM_NAME-packer.yaml
+		then
+		        echo
+		        echo "Packer build okay, proceeding..."
+		else
+			echo
+		        echo "WARNING!!!"
+			echo
+		        echo "Packer build failed! ABORTING!!!"
+
+		        exit 1
+		fi
+
 	fi
 
 fi
