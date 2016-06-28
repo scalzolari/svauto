@@ -608,22 +608,30 @@ then
 		echo
 		echo "Creating SHA256SUMs of files located here: \"packer/$OUTPUT_DIR/\"..."
 
-		cd packer/$OUTPUT_DIR/
+		if [ -d packer/"$OUTPUT_DIR"/ ]
+		then
 
-		LIST=`ls -1 | grep -v \.raw | grep -v \.ovf | grep -v \.mf | grep -v \.descriptor | xargs`
+			cd packer/"$OUTPUT_DIR"/
 
-		echo
+			LIST=`ls -1 | grep -v \.raw | grep -v \.ovf | grep -v \.mf | grep -v \.descriptor | grep -v \.xml | xargs`
 
-		for X in $LIST
-		do
+			echo
 
-			echo "File: \"$X.sha256\"..."
+			for X in $LIST
+			do
+				echo "File: \"$X.sha256\"..."
+				sha256sum "$X" >> "$X".sha256
+			done
 
-			sha256sum "$X" >> "$X".sha256
+			cd - &>/dev/null
 
-		done
+		else
 
-		cd - &>/dev/null
+			echo
+			echo "Warning! Can not find the packer/\"$OUTPUT_DIR\" subdir."
+
+		fi
+
 	fi
 
 
