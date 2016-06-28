@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - yum cleaning up cache
-  shell: apt-get clean
+- name: centos - yum cleaning up cache
+  shell: yum clean all
 
 
-- name: ubuntu - apt autoremoving unused packages, old kernels
-  shell: apt-get -y autoremove
-
-
-- name: ubuntu - dpkg autoremoving remainings of uninstalled packages
-  shell: purge_uninstalled_packages=$(dpkg -l | grep ^rc | awk $'{print $2}' | xargs) ; if [ ! -z "$purge_uninstalled_packages" ] ; then dpkg -P $purge_uninstalled_packages ; fi
+- name: centos - removing /etc/serial file
+  file: path=/etc/serial
+        state=absent
+  when: setup_server != 'svspb'

@@ -12,13 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: ubuntu - yum cleaning up cache
-  shell: apt-get clean
+- name: ubuntu - include config
+  include: ubuntu.yml
+  when: base_os == 'ubuntu14' or base_os == 'ubuntu16'
 
 
-- name: ubuntu - apt autoremoving unused packages, old kernels
-  shell: apt-get -y autoremove
+- name: centos - include config
+  include: centos.yml
+  when: base_os == 'centos7' or base_os == 'centos6'
 
 
-- name: ubuntu - dpkg autoremoving remainings of uninstalled packages
-  shell: purge_uninstalled_packages=$(dpkg -l | grep ^rc | awk $'{print $2}' | xargs) ; if [ ! -z "$purge_uninstalled_packages" ] ; then dpkg -P $purge_uninstalled_packages ; fi
+- name: common - deleting files
+  file: path={{ item }}
+        state=absent
+  with_items:
+    - /etc/udev/rules.d/70-persistent-net.rules
+
+
+- name: common - removing SSH Host keys
+  shell: rm -f /etc/ssh/ssh_host_*
+
+
+- name: common - write zeroes, remove it and sync
+  shell: dd if=/dev/zero of=/EMPTY bs=1M || /bin/true ; rm -f /EMPTY ; sync

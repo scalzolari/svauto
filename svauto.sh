@@ -668,24 +668,24 @@ else
 			then
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
-					--roles=bootstrap,svpts,sandvine-auto-config,power-cycle > $PLAYBOOK_FILE
+					--roles=bootstrap,svpts,sandvine-auto-config,post-clean,power-cycle > $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
-					--roles=bootstrap,svsde,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+					--roles=bootstrap,svsde,sandvine-auto-config,post-clean,power-cycle >> $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
-					--roles=bootstrap,svspb,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+					--roles=bootstrap,svspb,sandvine-auto-config,post-clean,power-cycle >> $PLAYBOOK_FILE
 
 			else
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
-					--roles=bootstrap,svpts,sandvine-auto-config > $PLAYBOOK_FILE
+					--roles=bootstrap,svpts,sandvine-auto-config,post-clean > $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
-					--roles=bootstrap,svsde,sandvine-auto-config >> $PLAYBOOK_FILE
+					--roles=bootstrap,svsde,sandvine-auto-config,post-clean >> $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
-					--roles=bootstrap,svspb,sandvine-auto-config >> $PLAYBOOK_FILE
+					--roles=bootstrap,svspb,sandvine-auto-config,post-clean >> $PLAYBOOK_FILE
 
 			fi
 
@@ -757,24 +757,24 @@ else
 			then
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
-					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,power-cycle > $PLAYBOOK_FILE
+					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,post-clean,power-cycle > $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
-					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,post-clean,power-cycle >> $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
-					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config,power-cycle >> $PLAYBOOK_FILE
+					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config,post-clean,power-cycle >> $PLAYBOOK_FILE
 
 			else
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svpts-servers \
-					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config > $PLAYBOOK_FILE
+					--roles=bootstrap,svpts,svusagemanagementpts,svcs-svpts,sandvine-auto-config,post-clean > $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svsde-servers \
-					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config >> $PLAYBOOK_FILE
+					--roles=bootstrap,svsde,svusagemanagement,svsubscribermapping,svcs-svsde,svcs,sandvine-auto-config,post-clean >> $PLAYBOOK_FILE
 
 				ansible_playbook_builder --ansible-remote-user=\"{{\ regular_system_user\ }}\" --ansible-hosts=svspb-servers \
-					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config >> $PLAYBOOK_FILE
+					--roles=bootstrap,svspb,svreports,svcs-svspb,sandvine-auto-config,post-clean >> $PLAYBOOK_FILE
 
 			fi
 
