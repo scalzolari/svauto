@@ -20,13 +20,29 @@ powerview_enabled="true"
 
 spb_servers={{ spb_srvc_ip }}
 
-cluster_name="sandvine"
-cluster_stat_name="sandvine"
+cluster_name="{{ cluster_name }}"
+cluster_stat_name="{{ cluster_name }}"
 
 # Lower RAM requirements
 hal_maxFlows=100000
 ptsm_numHugePages=256
 
 # License Server
-license_server_primary="wtllab-productlicense-1"
+license_server_primary="{{ license_server }}"
+
+{% if setup_mode == 'cloud-services' %}
+diameter_stack_limitInMessageRate="false"
+diameter_stack_limitOutMessageRate="false"
+diameter_stack_enableCreationFailureLogging="true"
+diameter_stack_maxOutgoingPendingRequests=16000
+diameter_stack_maxOutgoingPerPeerMessages=2000
+diameter_stack_maxOutgoingPerPeerBlockedMessages=2000
+diameter_stack_pendingAnswerTimeoutMS=3000
+diameter_stack_incomingMaxAgeEarlyThresholdMS=2000
+diameter_stack_incomingMaxAgeThresholdIncrementMS=1000
+diameter_stack_maxMessageSize=16384
+diameter_stack_maxPerSessionBlockedMessages=32
+skip_header_counting_mode="padding min64bytes"
+ptsd_publicationInterval=60
+{% endif %}
 

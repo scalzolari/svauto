@@ -152,6 +152,8 @@ setup_mode: "null"
 # Setup Sub Options (supported: default, mdm)
 setup_sub_option: "null"
 
+# The PTS License Server
+license_server: "licenser-server.placeholder.com"
 
 #
 # Cloud Services Mobile Device Management options

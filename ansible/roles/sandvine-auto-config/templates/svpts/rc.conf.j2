@@ -30,7 +30,12 @@ hal_maxFlows=100000
 ptsm_numHugePages=256
 
 # License Server
-#license_server_primary="licenser-server.placeholder.com"
+{% if release == 'prod' %}
+#license_server_primary="{{ license_server }}"
+{% endif %}
+{% if release == 'dev' %}
+license_server_primary="{{ license_server }}"
+{% endif %}
 
 # Linux PTS config
 SetPort os-control 1-1 {{ pts_set_port_control_1_1 }}
