@@ -19,7 +19,6 @@
             group=sv_admin
             mode=0644
             backup=yes
-  notify: reload-sandvine
 
 
 - name: svspb - configuring "java.security" file
@@ -27,7 +26,6 @@
               regexp='^jdk.tls.disabledAlgorithms'
               line='jdk.tls.disabledAlgorithms=DH keySize < 768'
               state=present
-  notify: reload-sandvine
 
 
 - name: svspb - configuring "dataRetention.conf" file
@@ -38,4 +36,3 @@
             mode=0600
             backup=yes
   when: setup_mode == 'cloud-services'
-  notify: reload-sandvine

@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: reload-sandvine
-  shell: cd /usr/local/sandvine/etc ; svreload
-  when: deployment_mode != 'yes'
-
-
 - name: restart-cloudservices
   shell: /etc/init.d/csd restart
   when: deployment_mode != 'yes'

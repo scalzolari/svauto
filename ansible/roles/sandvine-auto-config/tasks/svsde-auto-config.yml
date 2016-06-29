@@ -19,7 +19,6 @@
             group=sv_admin
             mode=0644
             backup=yes
-  notify: reload-sandvine
 
 
 - name: svsde - configuring "policy.conf" file
@@ -29,7 +28,6 @@
             group=sv_service
             mode=0644
             backup=yes
-  notify: reload-sandvine
 
 
 - name: svsde - configuring "diam_peer_config.xml" file
@@ -40,7 +38,6 @@
             mode=0644
             backup=yes
   when: setup_mode == 'cloud-services'
-  notify: reload-sandvine
 
 
 - name: svsde - configuring the "logging_file_management.conf" to have smaller UDR size
@@ -51,7 +48,6 @@
             mode=0664
             backup=yes
   when: setup_mode == 'cloud-services'
-  notify: reload-sandvine
 
 
 - name: svsde - linking "csv_config.xml.proto" with "csv_config.xml"
@@ -60,7 +56,6 @@
         state=link
         force=yes
   when: setup_mode == 'cloud-services'
-  notify: reload-sandvine
 
 
 - name: svsde - configuring "policy.sde.cs.mobile_quota.conf" file
@@ -71,4 +66,3 @@
             mode=0644
             backup=yes
   when: setup_mode == 'cloud-services' and setup_sub_option == 'mdm'
-  notify: reload-sandvine
