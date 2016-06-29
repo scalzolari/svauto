@@ -30,8 +30,8 @@ packer_build_sandvine()
 
 	# Linux SVPTS 7.30 on CentOS 6 with Linux 3.18 from Xen 4.6 official repo
 	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.30.0386 --product-variant=vpl-1 --operation=sandvine --qcow2 --ova --vhd --vm-xml --sha256sum \
-		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup-image --disable-autoconf --static-repo --versioned-repo
-#		--packer-max-tries=3
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup-image --disable-autoconf --static-repo --versioned-repo \
+		--packer-max-tries=3
 
 
 	# Linux SVSDE 7.45 on CentOS 6
