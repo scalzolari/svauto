@@ -26,10 +26,6 @@ packer_build_official()
 	# STABLE
 	#
 
-	# PTS 7.30 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --sha256sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup-image $DRY_RUN_OPT --operation=sandvine
-
 	# PTS 7.30 on CentOS 7 - Linux 3.10, DPDK 16.04, requires igb_uio
 	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --sha256sum \
 		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --operation=sandvine \
@@ -55,17 +51,21 @@ packer_build_official()
 	# EXPERIMENTAL
 	#
 
+	# PTS 7.30 on CentOS 6 - Linux 3.18 from Xen 4.6 Repo + DPDK 16.04 with Xen Support, no igb_uio needed
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.30 --qcow2 --ova --vhd --vm-xml --sha256sum \
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,vmware-tools,post-cleanup-image $DRY_RUN_OPT --operation=sandvine
+
 	# PTS 7.40 on CentOS 6 - Linux 2.6, old DPDK 1.8, requires igb_uio
 #	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --sha256sum \
 #		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --versioned-repo --operation=sandvine
 
-	# PTS 7.40 on CentOS 7 - Linux 3.10, DPDK 1.8, requires igb_uio
-#	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --sha256sum \
-#		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --versioned-repo --operation=sandvine
+	# PTS 7.40 on CentOS 7 - Linux 3.10, DPDK 16.04, requires igb_uio
+	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.40 --qcow2 --ova --vhd --vm-xml --sha256sum \
+		--roles=cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --versioned-repo --operation=sandvine
 
 	# PTS 7.40 on CentOS 6 - Linux 3.18 from Xen 4.6 Repo + DPDK 16.04 with Xen Support, no igb_uio needed
-#	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --sha256sum \
-#		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --versioned-repo --experimental-repo --operation=sandvine
+	./image-factory.sh --release=dev --base-os=centos6 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --sha256sum \
+		--roles=centos-xen,cloud-init,bootstrap,grub-conf,svpts,sandvine-auto-config,vmware-tools,post-cleanup-image $DRY_RUN_OPT --versioned-repo --experimental-repo --operation=sandvine
 
 	# PTS 7.40 on CentOS 7 - Linux 3.18 from Xen 4.6 Repo + DPDK 16.04 with Xen Support, no igb_uio needed
 #	./image-factory.sh --release=dev --base-os=centos7 --base-os-upgrade --product=svpts --version=7.40 --product-variant=xen-1 --qcow2 --ova --vhd --vm-xml --sha256sum \
@@ -110,7 +110,7 @@ packer_build_official()
 			cp misc/os-heat-templates/sandvine-stack-nubo-0.1* tmp/sv
 
 			sed -i -e 's/{{pts_image}}/svpts-7.30-1-centos7-amd64/g' tmp/sv/*.yaml
-			sed -i -e 's/{{sde_image}}/svsde-7.30-1-centos6-amd64/g' tmp/sv/*.yaml
+			sed -i -e 's/{{sde_image}}/svsde-7.45-1-centos6-amd64/g' tmp/sv/*.yaml
 			sed -i -e 's/{{spb_image}}/svspb-6.60-1-centos6-amd64/g' tmp/sv/*.yaml
 			#sed -i -e 's/{{csd_image}}/svcsd-7.40-csd-1-centos6-amd64/g' tmp/sv/*.yaml
 
@@ -160,35 +160,12 @@ packer_build_official()
 
 			find packer/build* -name "*.raw" -exec rm -f {} \;
 
-
-#			find packer/build-lab* -name "*.sha256" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 			find packer/build* -name "*.sha256" -exec mv {} $WEB_ROOT_STOCK \;
-
-#			find packer/build-lab* -name "*.xml" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 			find packer/build* -name "*.xml" -exec mv {} $WEB_ROOT_STOCK \;
-
-#			find packer/build-lab* -name "*.qcow2c" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 			find packer/build* -name "*.qcow2c" -exec mv {} $WEB_ROOT_STOCK \;
-
-#			find packer/build-lab* -name "*.vmdk" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 #			find packer/build* -name "*.vmdk" -exec mv {} $WEB_ROOT_STOCK \;
-
-#			find packer/build-lab* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 			find packer/build* -name "*.vhd*" -exec mv {} $WEB_ROOT_STOCK \;
-
-#			find packer/build-lab* -name "*.ova" -exec mv {} $WEB_ROOT_STOCK_LAB \;
 			find packer/build* -name "*.ova" -exec mv {} $WEB_ROOT_STOCK \;
-
-
-#			echo
-#			echo "Merging SHA256SUMS files together (lab)..."
-
-#			cd $WEB_ROOT_STOCK_LAB
-
-#			cat *.sha256 > SHA256SUMS
-#			rm -f *.sha256
-
-#			cd - &>/dev/null
 
 
 			echo
