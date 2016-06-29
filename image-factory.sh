@@ -282,7 +282,7 @@ if [ "$OVF" == "yes" ]
 then
 
 	echo
-	echo "Creating "$PACKER_VM_NAME" VM OVF file for "$PACKER_VM_NAME"..."
+	echo "Creating "$PACKER_VM_NAME" VM OVF file..."
 
 	if [ "$PRODUCT" == "svpts" ] || [ "$PRODUCT" == "cs-svpts" ] ; then
 		cp packer/ovf-template-4nic.ovf packer/$PACKER_FILES/"$PACKER_VM_NAME".ovf
@@ -319,7 +319,7 @@ if [ "$VM_XML" == "yes" ]
 then
 
 	echo
-	echo "Creating "$PACKER_VM_NAME" VM XML file for "$PACKER_VM_NAME"..."
+	echo "Creating "$PACKER_VM_NAME" VM XML file..."
 
 	case "$BASE_OS" in
 
