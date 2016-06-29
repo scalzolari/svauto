@@ -75,6 +75,6 @@ build_yum_repo_niagara()
 
 	# Experimental
 
-	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svspb --version=7.00.0037 --latest-of-serie
+	./yum-repo-builder.sh --release-code-name=niagara --release=dev --base-os=centos6 --product=svspb --version=7.00.0044 --latest-of-serie
 
 }
