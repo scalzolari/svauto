@@ -103,4 +103,4 @@
 
 
 - name: centos - yum excluding the kernel out from upgrades (DPDK issue)
-  lineinfile: dest=/etc/yum.conf line="exclude=kernel"
+  lineinfile: dest=/etc/yum.conf line="exclude=kernel* dpdk"
