@@ -391,7 +391,7 @@ case "$OPERATION" in
 		;;
 
 	cloud-services)
-		EXTRA_VARS="$EXTRA_VARS setup_mode="cloud-services""
+		EXTRA_VARS="$EXTRA_VARS setup_mode="cloud-services" setup_sub_option="default""
 		;;
 
         *)
