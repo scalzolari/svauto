@@ -43,7 +43,7 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
-#  - role: post-cleanup
+  - role: post-cleanup
 
 - hosts: os_controller_nodes
   user: "{{regular_system_user}}"
@@ -71,7 +71,7 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
-#  - role: post-cleanup
+  - role: post-cleanup
 
 - hosts: os_network_nodes
   user: "{{regular_system_user}}"
@@ -79,7 +79,7 @@
   roles:
   - role: bootstrap
   - role: os_neutron
-#  - role: post-cleanup
+  - role: post-cleanup
 
 - hosts: os_compute_nodes
   user: "{{regular_system_user}}"
@@ -89,7 +89,7 @@
   - role: hyper_kvm
   - role: os_nova
   - role: os_neutron
-#  - role: post-cleanup
+  - role: post-cleanup
 
 - hosts: os_vagrant_aio
   user: "{{regular_system_user}}"
@@ -118,4 +118,4 @@
   - role: os_heat
 #  - role: os_manila
 #  - role: os_ceilometer
-#  - role: post-cleanup
+  - role: post-cleanup
