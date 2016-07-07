@@ -181,7 +181,7 @@ os_deploy()
 	sed -i -e 's/yourdomain.com/'$DOMAIN'/g' ansible/group_vars/all
 	
 	
-	# Configuring site-openstack.yml and some roles
+	# Configuring ansible/group_vars/all and ansible/hosts
 	echo
 	echo "* Your current \"$WHOAMI\" user..."
 	
@@ -195,16 +195,16 @@ os_deploy()
 	
 	
 	# Configuring the default interface
-	PRIMARY_INTERFACE=$(ip r | grep default | awk '{print $5}')
+	OS_MGMT=$(ip r | grep default | awk '{print $5}')
 	
 	echo 
 	echo "Your primary network interface is:"
-	echo "dafault route via:" $PRIMARY_INTERFACE
+	echo "dafault route via:" $OS_MGMT
 	
 	echo
 	echo "* Preparing Ansible variable based on current default primary interface..."
 	
-	sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
+	sed -i -e 's/{{OS_MGMT_NIC}}/'$OS_MGMT'/' ansible/hosts
 	
 	
 	if [ "$DRY_RUN" == "yes" ]

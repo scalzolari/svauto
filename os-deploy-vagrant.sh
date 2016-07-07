@@ -69,7 +69,7 @@ echo "dafault route via:" $DEFAULT_GW_INT
 echo
 echo "Preparing Ansible variable based on current default gateway interface..."
 
-sed -i -e 's/primary_interface_name:.*/primary_interface_name: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
+sed -i -e 's/os_mgmt:.*/os_mgmt: "'$PRIMARY_INTERFACE'"/' ansible/group_vars/all
 
 
 echo

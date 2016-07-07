@@ -38,7 +38,7 @@
 
 - name: ubuntu - copy primary network interface config (DHCP)
   template: src=ubuntu-common/primary_interface_dhcp_cfg
-            dest=/etc/network/interfaces.d/{{primary_interface_name}}.cfg
+            dest=/etc/network/interfaces.d/{{os_mgmt}}.cfg
             owner=root
             group=root
             mode=0644
@@ -104,7 +104,7 @@
 
 
 - name: ubuntu - iptables rule for OpenStack AIO demo box
-  iptables: table=nat chain=POSTROUTING out_interface="{{primary_interface_name}}" jump=MASQUERADE comment="Masquerade rule for OpenStack demo box"
+  iptables: table=nat chain=POSTROUTING out_interface="{{os_mgmt}}" jump=MASQUERADE comment="Masquerade rule for OpenStack demo box"
 
  
 - name: ubuntu - re-read facts after configuring network interfaces

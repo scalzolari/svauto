@@ -1,2 +1,2 @@
-auto {{primary_interface_name}}
-iface {{primary_interface_name}} inet dhcp
+auto {{os_mgmt}}
+iface {{os_mgmt}} inet dhcp

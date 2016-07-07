@@ -24,16 +24,16 @@
 #
 
 [os_aio]
-#localhost ansible_connection=local os_nova_ctrl=yes os_nova_cmpt=yes os_neutron_ctrl=yes os_neutron_net=yes
+#localhost ansible_connection=local os_nova_ctrl=yes os_nova_cmpt=yes os_neutron_ctrl=yes os_neutron_net=yes os_mgmt={{OS_MGMT_NIC}} os_external=dummy0 os_data=dummy1
 
 [os_controller_nodes]
-#192.168.122.10 os_nova_ctrl=yes os_neutron_ctrl=yes
+#192.168.122.10 os_nova_ctrl=yes os_neutron_ctrl=yes os_mgmt=eth0 os_srvc=eth1
 
 [os_network_nodes]
-#jdoe+instance+cloud os_neutron_net=yes
+#192.168.122.11 os_neutron_net=yes os_mgmt=eth0 os_srvc=eth1 os_external=eth2 os_data=eth3
 
 [os_compute_nodes]
-#192.168.122.40 os_nova_cmpt=yes os_neutron_cmpt=yes
+#192.168.122.20 os_nova_cmpt=yes os_neutron_cmpt=yes os_mgmt=eth0 os_srvc=eth1 os_data=eth2
 
 [os_vagrant_aio]
 #os ansible_ssh_user=vagrant ansible_ssh_host=localhost ansible_ssh_port=2222 os_nova_ctrl=yes os_nova_cmpt=yes os_neutron_ctrl=yes os_neutron_net=yes

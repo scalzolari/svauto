@@ -129,7 +129,7 @@
   when: br_mode == 'OVS'
 
 - name: Configuring Open vSwitch Bridge Port
-  openvswitch_port: bridge=br-ex port="{{neutron_external_interface}}" state=present
+  openvswitch_port: bridge=br-ex port="{{os_external}}" state=present
   when: br_mode == 'OVS'
 
 - name: Enabling br-ex Interface

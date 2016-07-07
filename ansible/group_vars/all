@@ -242,10 +242,11 @@ os_neutron_ctrl: "no"
 os_neutron_net: "no"
 os_neutron_cmpt: "no"
 
-primary_interface_name: "eth0"
-
-neutron_external_interface: "dummy0"
-neutron_data_interface: "dummy1"
+os_mgmt: "eth0"
+os_srvc: "eth0"
+os_external: "dummy0"
+os_data: "dummy1"
+os_cinder: "dummy2"
 
 br_mode: "LBR"
 
