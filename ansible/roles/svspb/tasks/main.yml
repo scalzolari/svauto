@@ -61,6 +61,13 @@
   when: base_os == 'centos6'
 
 
+- name: Creating the serviceChannel subdir
+  file: path=/usr/local/sandvine/run/serviceChannel
+        state=directory
+        mode=0755
+        recurse=yes
+
+
 - name: Installing required packages and the SVSPB
   yum: pkg={{item}} state=latest
   with_items:
