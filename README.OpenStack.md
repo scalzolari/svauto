@@ -124,6 +124,7 @@ Let's find out the available interfaces on the your server:
     [   12.724885] igb 0000:04:00.1 enp4s0f1: renamed from eth5
 
 Let's pick the following two interfaces:
+
     enp4s0f0 --> subscribers
     enp4s0f1 --> internet
 
@@ -152,7 +153,7 @@ Let's bring the interfaces up:
 
 ## 8- Configure Linux Bridges within ml2 plugin configuration file
 
-Now, there is a need to map both eth2 and eth3 into OpenStack Neutron.
+Now, there is a need to map both enp4s0f0 and enp40f1 into OpenStack Neutron.
 Edit the /etc/neutron/plugins/ml2/linuxbridge_agent.ini file and add the newly created interfaces:
 
     [linux_bridge]
@@ -178,7 +179,7 @@ Update it as follows:
     "create_network:provider:network_type": "rule:regular_user",
     "create_network:provider:physical_network": "rule:regular_user",
     "create_network:provider:segmentation_id": "rule:regular_user",
- ....
+
     "update_network:provider:network_type": "rule:regular_user",
     "update_network:provider:physical_network": "rule:regular_user",
     "update_network:provider:segmentation_id": "rule:regular_user",
