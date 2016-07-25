@@ -170,7 +170,7 @@ Edit the /etc/neutron/plugins/ml2/linuxbridge_agent.ini file and add the newly c
 
     physical_interface_mappings = external:dummy0,vxlan:dummy1,physflat1:enp4s0f0,physflat2:enp4s0f1
 
-## Modify Policy.json rules
+## 9- Modify Policy.json rules
 
 Now, there is one last file that needs to be changed, by default, OpenStack policies does not allow regular users to directly wire Instances to physical networks (only VXLANs areallowed), so, to change that, there is a need to edit the /etc/neutron/policy.json file.
 Update it as follows:
@@ -196,83 +196,20 @@ Once the system is back up please access Horizon by using the following credenti
     Password: demo_pass
 
 
-# Advanced Procedure
+# Additional Notes
 
-1- Add the following entries to your `/etc/network/interfaces` file:
+## IPV6 settings
 
-    # Fake External Interface
-    allow-hotplug dummy0
-    iface dummy0 inet static
-      address 172.31.254.129
-      netmask 25
+We recently noticed a problem with neutron and ipv6. Please make sure ipv6 is disabled on the host by adding the following lines in sysctl.conf:
 
-    # VXLAN Data Path
-    allow-hotplug dummy1
-    iface dummy1 inet static
-      mtu 1550
-      address 10.0.0.1
-      netmask 24
+    net.ipv6.conf.all.disable_ipv6=1
+    net.ipv6.conf.default.disable_ipv6=1
+    net.ipv6.conf.lo.disable_ipv6=1
 
-*NOTE: Dummy interfaces can be managed by ansible (hardcoded settings)*
 
-## For local deployments:
+## Linux Bridge ageing
 
-1- Install Ansible to deploy your `OpenStack`:
+Please do not forget to execute the following script every time a new stack is deployed:
 
-    sudo apt -y install git ansible
-
-    git clone -b dev https://github.com/sandvine-eng/svauto.git
-
-    cd svauto
-
-    ./svauto.sh --operation-openstack
-
-## For remote deployments:
-
-1- Make sure you can ssh to your servers using key authentication.
-
-2- Install Ansible to deploy your `OpenStack`:
-
-    sudo apt -y install git ansible
-
-    git clone -b dev https://github.com/sandvine-eng/svauto.git
-
-    cd svauto
-
-Configure the file `group_vars/all` according to your remote computer.
-
-Pay an extra attention to the templates: `nova.conf`, `cinder.conf` and `ml2_conf.ini`, reconfigure those if required.
-
-Add your remote computer `FQDN` or `IP Address` to the `hosts` file, within group `all-in-one`, for example.
-
-Then, run `Ansible`:
-
-    ansible-playbook site-openstack.yml
-
-**NOTE:** You can take a look at the script `svauto.sh --operation-openstack` to see what needs to be changed before running `Ansible`.
-
-# Extra info
-
-There is a few assumptions here, like for example:
-
-A- Your remote server have its *default / primary* interface named `eth0`, the **my_ip** config option at `nova.conf` and `cinder.conf`;
-
-B- The `br-ex` `Neutron` interface is bridged against the `dummy0` interface (`ml2_conf.ini`), it have the subnet `172.31.254.128/25`, so, it is the *default gateway* of ALL `Neutron Namespaces` of this deployment. Usually, we must use a real interface for `br-ex`, where the IP 172.31.254.129 should be configured in an `Upstream Router`, outside of `OpenStack`, and NOT here, at the `dummy0` interface.
-
-Details:
-
-    http://docs.openstack.org/liberty/install-guide/install/apt/content/ch_basic_environment.html#basics-neutron-networking-network-node
-
-C- Because the `br-ex` is bridged against the `dummy0` interface, you'll need to create a `iptables masquerade` rule, so your `Instances` can reach the Internet through real `eth0`.
-
-Example:
-
-    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-
-D- The `vxlan` `Neutron` data network, will be created on top of a `dummy1`, it is really fast but, only works for our `all-in-one` deplyments (`ml2_conf.ini`).
-
-TODO:
-
-- Automate the Network Interfaces management with Ansible.
-
-- Create a "setup / install" script, which will prompt some questions for the user, about local / remote setups, to simplify the instructions presented here.
+    linux-bridge-setageing.sh --os-projet=demo --os-stack=<YOUR_STACK_NAME>
+ 
